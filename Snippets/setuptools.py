@@ -6,6 +6,33 @@ import os
 import os.path
 import re
 import sys
+import distutils.cmd
+import distutils.command.build
+
+class build_plus(distutils.command.build.build):
+    def __init__(self, dist):
+        def has_icons(self):
+            return self.icons
+
+        def has_l10n(self):
+            return self.l10n
+
+        def has_help(self):
+            return self.help
+
+        distutils.command.build.build.__init__(self, dist)
+        self.user_options.extend([("l10n", "l", "use the localsation"),
+                             ("icons", "i", "use icons"),
+                             ("help", "h", "use help system")])
+        self.sub_commands.extend([('build_help', has_help),
+                             ('build_icons', has_icons),
+                             ('build_l10n', has_l10n)])
+
+    def initialize_options(self):
+        distutils.command.build.build.initialize_options(self)
+        self.l10n = False
+        self.icons = False
+        self.help = False
 
 class build_help(distutils.cmd.Command):
 
