@@ -1,0 +1,14 @@
+To make use of the distuils extension add the following line to the beginning
+of your setup.py:
+
+from Snippets.distutils import build_plus, build_l10n
+
+Add the following option to setup call:
+
+cmdclass = { "build" : build_plus,
+             "build_l10n" :  build_l10n }
+
+And set the following options in your setup.cfg:
+
+[build]
+l10n=True
