@@ -1,0 +1,5 @@
+[build]
+l10n=True
+merge-files=[TARGETPATH, [FILE1.in, FILE2.in]
+domain=python-snippets
+

@@ -38,6 +38,15 @@ class build_help(distutils.cmd.Command):
 
     description = "build the documentation"
 
+    user_options= [('help_dir', 'h', 'help directory of the source tree')]
+
+    def initialize_options(self):
+        self.help_dir = None
+
+    def finalize_options(self):
+        if self.help_dir is None:
+            self.help_dir = os.join.path("help")
+
     def run(self):
         data_files = self.distribution.data_files
 
@@ -45,14 +54,17 @@ class build_help(distutils.cmd.Command):
         for filepath in glob.glob("help/*"):
             lang = filepath[len("help/"):]
             print " Language: %s" % lang
-            path_xml = os.path.join("share/gnome/help/gnome-app-install/",
+            path_xml = os.path.join("share/gnome/help",
+                                    self.distribution.name,
                                     lang)
-            path_figures = os.path.join("share/gnome/help/gnome-app-install/",
+            path_figures = os.path.join("share/gnome/help",
+                                        self.distribution.name,
                                         lang, "figures")
             data_files.append((path_xml, (glob.glob("%s/*.xml" % filepath))))
             data_files.append((path_figures,
                                (glob.glob("%s/figures/*.png" % filepath))))
-        data_files.append(('share/omf/gnome-app-install',
+        data_files.append((os.path.join('share/omf',
+                                         self.distribution.name),
                            glob.glob("help/*/*.omf")))
 
 class build_icons(distutils.cmd.Command):
@@ -127,12 +139,17 @@ class build_l10n(distutils.cmd.Command):
                                glob.glob(os.path.join(mo_dir, "*"))))
 
 
-        # nerge -in files (.desktop or .xml) with translation
-        for file in self.merge_files:
-            if file.endswith(".in"):
-                file_merged = os.path.basename(file[:-3])
-            else:
-                file_merged = os.path.basename(file)
-            file_merged = os.path.join("build", file_merged)
-            os.system("intltool-merge -d po %s %s" % (file, file_merged))
+        # merge -in files (.desktop or .xml) with translation
+        for (target, files) in self.merge_files:
+            files_merged = []
+            for file in files:
+                if file.endswith(".in"):
+                    file_merged = os.path.basename(file[:-3])
+                else:
+                    file_merged = os.path.basename(file)
+                os.makedirs(os.path.join("build", target)
+                file_merged = os.path.join("build", target, file_merged)
+                os.system("intltool-merge -d po %s %s" % (file, file_merged))
+                files_merged.append(file_merged)
+            data_files.append((target, files_merged))
 
