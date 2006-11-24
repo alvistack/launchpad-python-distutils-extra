@@ -1,4 +1,4 @@
-Source: python-snippets
+Source: python-distutils-plus
 Section: unknown
 Priority: optional
 XS-Python-Version: all
@@ -6,14 +6,12 @@ Maintainer: Sebastian Heinlein <glatzor@ubuntu.com>
 Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5) 
 Standards-Version: 3.7.2
 
-Package: python-snippets
+Package: python-distutils-plus
 Architecture: all
 XB-Python-Version: ${python:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
-Description:  a collection of small and perhaps helpful python snippets
- This package includes the following small python code snippets:
-  * ReleaseNoteViewer - an enahanced gtk.TreeView
-  * HelpViewer - tries to start a help viewer in different desktop envs
-  * distutils - integrates gettext, scrollkeeper and icons into distutils
-  * SimpleGladeApp - use glade user interfaces with ease in your application
-  .
+Description: enhancements of python's distutils
+ This package provides additional functions in distutils. It allows you to
+ easily integrate gettext, icons and GNOME documenatation into your
+ build and installation process.
+ .

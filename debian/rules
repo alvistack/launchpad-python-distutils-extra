@@ -2,7 +2,7 @@
 # Sample debian/rules that uses cdbs.  Originaly written by Robert Millan.
 # This file is public domain.
   
-DEB_TAR_SRCDIR                  := python-snippets-0.0.1
+DEB_TAR_SRCDIR                  := python-distutils-plus-0.0.1
 DEB_AUTO_CLEANUP_RCS            := yes
 
 DEB_PYTHON_SYSTEM=pycentral
