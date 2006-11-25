@@ -147,7 +147,7 @@ class build_l10n(distutils.cmd.Command):
                     file_merged = os.path.basename(file[:-3])
                 else:
                     file_merged = os.path.basename(file)
-                os.makedirs(os.path.join("build", target)
+                os.makedirs(os.path.join("build", target))
                 file_merged = os.path.join("build", target, file_merged)
                 os.system("intltool-merge -d po %s %s" % (file, file_merged))
                 files_merged.append(file_merged)
