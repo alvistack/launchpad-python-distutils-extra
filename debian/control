@@ -1,4 +1,4 @@
-Source: python-distutils-plus
+Source: python-distutils-extra
 Section: unknown
 Priority: optional
 XS-Python-Version: all
@@ -6,12 +6,12 @@ Maintainer: Sebastian Heinlein <glatzor@ubuntu.com>
 Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5) 
 Standards-Version: 3.7.2
 
-Package: python-distutils-plus
+Package: python-distutils-extra
 Architecture: all
 XB-Python-Version: ${python:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
-Description: enhancements of python's distutils
+Description: enhancements to python's distutils
  This package provides additional functions in distutils. It allows you to
- easily integrate gettext, icons and GNOME documenatation into your
+ easily integrate gettext, icons and GNOME documentation into your
  build and installation process.
  .
