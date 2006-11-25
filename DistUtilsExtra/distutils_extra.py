@@ -77,13 +77,13 @@ class build_icons(distutils.cmd.Command):
 
     def finalize_options(self):
         if self.icon_dir is None:
-            self.icon_dir = os.join.path("data","icons")
+            self.icon_dir = os.path.join("data","icons")
 
     def run(self):
         data_files = self.distribution.data_files
 
         for size in glob.glob(os.path.join(self.icon_dir, "*")):
-            for category in glob.glob(os.join.path(size, "*")):
+            for category in glob.glob(os.path.join(size, "*")):
                 icons = []
                 for icon in glob.glob(os.path.join(category,"*")):
                     icons.append(icon)
@@ -96,13 +96,17 @@ class build_l10n(distutils.cmd.Command):
 
     description = "integrate the gettext framework"
 
-    user_options = [('merge-files=', 'm', '.in files that should be merged '
-                     'with translations'),
+    user_options = [('merge-desktop-files=', 'm', '.desktop..in files that '
+                                                  'should be merged '
+                                                  'with translations'),
+                    ('merge-xml-files=', 'x', '.xml.in files that should be '
+                                                  'merged with translations'),
                     ('domain=', 'd', 'gettext domain'),
                     ('bug-contact=', 'c', 'msgid bug contact address')]
 
     def initialize_options(self):
-        self.merge_files = []
+        self.merge_desktop_files = []
+        self.merge_xml_files = []
         self.domain = None
         self.bug_contact = None
 
@@ -136,19 +140,24 @@ class build_l10n(distutils.cmd.Command):
                                                       "LC_MESSAGES"))
             data_files.append((targetpath, (mo_file,)))
 
-        # merge -in files (.desktop or .xml) with translation
-        for (target, files) in eval(self.merge_files):
-            build_target = os.path.join("build", target)
-            files_merged = []
-            for file in files:
-                if file.endswith(".in"):
-                    file_merged = os.path.basename(file[:-3])
-                else:
-                    file_merged = os.path.basename(file)
+        # merge .in with translation
+        for intltool_type in (self.merge_xml_files, self.merge_desktop_files):
+            try:
+                eval(intltool_type)
+            except:
+                continue
+            for (target, files) in eval(intltool_type):
+                build_target = os.path.join("build", target)
+                files_merged = []
+                for file in files:
+                    if file.endswith(".in"):
+                        file_merged = os.path.basename(file[:-3])
+                    else:
+                        file_merged = os.path.basename(file)
                 if not os.path.exists(build_target): 
                     os.makedirs(build_target)
                 file_merged = os.path.join(build_target, file_merged)
                 os.system("intltool-merge po %s %s" % (file, file_merged))
                 files_merged.append(file_merged)
-            data_files.append((target, files_merged))
+                data_files.append((target, files_merged))
 
