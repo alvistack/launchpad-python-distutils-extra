@@ -10,6 +10,7 @@ import distutils.command.build
 
 class build_extra(distutils.command.build.build):
     def __init__(self, dist):
+        distutils.command.build.build.__init__(self, dist)
         def has_icons(self):
             return self.icons
 
@@ -19,7 +20,6 @@ class build_extra(distutils.command.build.build):
         def has_help(self):
             return self.help
 
-        distutils.command.build.build.__init__(self, dist)
         self.user_options.extend([("l10n", "l", "use the localsation"),
                              ("icons", "i", "use icons"),
                              ("help", "h", "use help system")])
@@ -44,7 +44,7 @@ class build_help(distutils.cmd.Command):
 
     def finalize_options(self):
         if self.help_dir is None:
-            self.help_dir = os.join.path("help")
+            self.help_dir = os.path.join("help")
 
     def run(self):
         data_files = self.distribution.data_files
@@ -54,16 +54,16 @@ class build_help(distutils.cmd.Command):
             lang = filepath[len("help/"):]
             print " Language: %s" % lang
             path_xml = os.path.join("share/gnome/help",
-                                    self.distribution.name,
+                                    self.distribution.metadata.name,
                                     lang)
             path_figures = os.path.join("share/gnome/help",
-                                        self.distribution.name,
+                                        self.distribution.metadata.name,
                                         lang, "figures")
             data_files.append((path_xml, (glob.glob("%s/*.xml" % filepath))))
             data_files.append((path_figures,
                                (glob.glob("%s/figures/*.png" % filepath))))
         data_files.append((os.path.join('share/omf',
-                                         self.distribution.name),
+                                         self.distribution.metadata.name),
                            glob.glob("help/*/*.omf")))
 
 class build_icons(distutils.cmd.Command):
@@ -112,7 +112,7 @@ class build_l10n(distutils.cmd.Command):
 
     def finalize_options(self):
         if self.domain is None:
-            self.domain = self.distribution.name
+            self.domain = self.distribution.metadata.name
 
     def run(self):
         """
