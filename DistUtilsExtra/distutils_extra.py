@@ -126,29 +126,29 @@ class build_l10n(distutils.cmd.Command):
         # Merge new strings into the po files
         for po_file in glob.glob("po/*.po"):
             lang = os.path.basename(po_file[:-3])
-            mo_dir =  os.join-path("build", "mo", lang, "LC_MESSAGES")
-            os.system("mkdir -p %s" % mo_dir)
-            os.system("msgfmt %s -o %s" % (os.path.basename(po_file),
-                                           os.join.path(mo_dir, 
-                                                        self.domain+".mo")))
+            mo_dir =  os.path.join("build", "mo", lang, "LC_MESSAGES")
+            mo_file = os.path.join(mo_dir, "%s.mo" % self.domain)
+            if not os.path.exists(mo_dir):
+                os.makedirs(mo_dir)
+            os.system("msgfmt %s -o %s" % (po_file, mo_file))
 
             targetpath = os.path.dirname(os.path.join("share/locale",lang,
                                                       "LC_MESSAGES"))
-            data_files.append((targetpath,
-                               glob.glob(os.path.join(mo_dir, "*"))))
-
+            data_files.append((targetpath, (mo_file,)))
 
         # merge -in files (.desktop or .xml) with translation
-        for (target, files) in self.merge_files:
+        for (target, files) in eval(self.merge_files):
+            build_target = os.path.join("build", target)
             files_merged = []
             for file in files:
                 if file.endswith(".in"):
                     file_merged = os.path.basename(file[:-3])
                 else:
                     file_merged = os.path.basename(file)
-                os.makedirs(os.path.join("build", target))
-                file_merged = os.path.join("build", target, file_merged)
-                os.system("intltool-merge -d po %s %s" % (file, file_merged))
+                if not os.path.exists(build_target): 
+                    os.makedirs(build_target)
+                file_merged = os.path.join(build_target, file_merged)
+                os.system("intltool-merge po %s %s" % (file, file_merged))
                 files_merged.append(file_merged)
             data_files.append((target, files_merged))
 
