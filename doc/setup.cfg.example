@@ -1,5 +1,6 @@
 [build]
 l10n=True
-merge-files=[TARGETPATH, [FILE1.in, FILE2.in]
-domain=python-snippets
 
+[build_l10n]
+domain=gnome-app-install
+merge-files=[("share/applications/", ("data/gnome-app-install.desktop.in","data/gdebi.desktop.in")),]
