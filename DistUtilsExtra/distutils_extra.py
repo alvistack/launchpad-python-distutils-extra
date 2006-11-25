@@ -101,12 +101,24 @@ class build_l10n(distutils.cmd.Command):
                                                   'with translations'),
                     ('merge-xml-files=', 'x', '.xml.in files that should be '
                                                   'merged with translations'),
+                    ('merge-schemas-files=', 's', '.schemas.in files that should be '
+                                                  'merged with translations'),
+                    ('merge-ba-files=', 'b', 'bonobo-activation files that should be '
+                                                  'merged with translations'),
+                    ('merge-rfc822deb-files=', 'd', 'RFC822 files that should be '
+                                                  'merged with translations'),
+                    ('merge-key-files=', 'k', '.key.in files that should be '
+                                                  'merged with translations'),
                     ('domain=', 'd', 'gettext domain'),
                     ('bug-contact=', 'c', 'msgid bug contact address')]
 
     def initialize_options(self):
         self.merge_desktop_files = []
         self.merge_xml_files = []
+        self.merge_key_files = []
+        self.merge_schemas_files = []
+        self.merge_ba_files = []
+        self.merge_rfc822deb_files = []
         self.domain = None
         self.bug_contact = None
 
@@ -125,9 +137,16 @@ class build_l10n(distutils.cmd.Command):
         command = ""
         if self.bug_contact is not None:
             command = "XGETTEXT_ARGS=--msgidbug-address=s " % self.bug_contact
-        command = "%s intltool-update -p -g %s" % (command, self.domain)
+        command = "cd po; %s intltool-update -p -g %s" % (command, self.domain)
+        os.system(command)
 
         # Merge new strings into the po files
+        command = ""
+        if self.bug_contact is not None:
+            command = "XGETTEXT_ARGS=--msgidbug-address=s " % self.bug_contact
+        command = "cd po; %s intltool-update -r -g %s" % (command, self.domain)
+        os.system(command)
+
         for po_file in glob.glob("po/*.po"):
             lang = os.path.basename(po_file[:-3])
             mo_dir =  os.path.join("build", "mo", lang, "LC_MESSAGES")
@@ -141,12 +160,17 @@ class build_l10n(distutils.cmd.Command):
             data_files.append((targetpath, (mo_file,)))
 
         # merge .in with translation
-        for intltool_type in (self.merge_xml_files, self.merge_desktop_files):
+        for (intltool_type, option) in ((self.merge_xml_files, "-x"),
+                                        (self.merge_desktop_files, "-d"),
+                                        (self.merge_schemas_files, "-s"),
+                                        (self.merge_rfc822deb_files, "-r"),
+                                        (self.merge_ba_files, "-b"),
+                                        (self.merge_key_files, "-k"),):
             try:
-                eval(intltool_type)
+                intltool_type = eval(intltool_type)
             except:
                 continue
-            for (target, files) in eval(intltool_type):
+            for (target, files) in intltool_type:
                 build_target = os.path.join("build", target)
                 files_merged = []
                 for file in files:
@@ -157,7 +181,8 @@ class build_l10n(distutils.cmd.Command):
                 if not os.path.exists(build_target): 
                     os.makedirs(build_target)
                 file_merged = os.path.join(build_target, file_merged)
-                os.system("intltool-merge po %s %s" % (file, file_merged))
+                os.system("intltool-merge %s po %s %s" % (option, file, 
+                                                          file_merged))
                 files_merged.append(file_merged)
                 data_files.append((target, files_merged))
 
