@@ -1,7 +1,7 @@
 To make use of the distuils extension add the following line to the beginning
 of your setup.py:
 
-from DistUtilsPlus.distutils import build_plus, build_l10n
+from DistUtilsExtra.distutils import build_extra, build_l10n
 
 Add the following option to setup call:
 
