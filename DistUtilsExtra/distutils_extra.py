@@ -6,7 +6,6 @@ import os
 import os.path
 import re
 import sys
-import distutils.cmd
 import distutils.command.build
 
 class build_extra(distutils.command.build.build):
@@ -121,8 +120,8 @@ class build_l10n(distutils.cmd.Command):
         # Update the pot file
         command = ""
         if self.bug_contact is not None:
-            command =+ "XGETTEXT_ARGS=--msgidbug-address=s " % self.bug_contact
-        command =+ "intltool-update -p -g %s" % self.domain
+            command = "XGETTEXT_ARGS=--msgidbug-address=s " % self.bug_contact
+        command = "%s intltool-update -p -g %s" % (command, self.domain)
 
         # Merge new strings into the po files
         for po_file in glob.glob("po/*.po"):
