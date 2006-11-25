@@ -9,7 +9,7 @@ import sys
 import distutils.cmd
 import distutils.command.build
 
-class build_plus(distutils.command.build.build):
+class build_extra(distutils.command.build.build):
     def __init__(self, dist):
         def has_icons(self):
             return self.icons
