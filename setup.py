@@ -5,10 +5,10 @@ import glob, os, commands, sys
 
 
 setup(
-    name = 'python-snippets',
+    name = 'python-distutils-extra',
     version = '0.0.1',
-    description = 'Abstratcion of the sources.list',
-    packages = ['Snippets'],
+    description = 'Add support for i10n, documentation and icons to distutils',
+    packages = ['DistUtilsExtra'],
     license = 'GNU GPL',
     platforms = 'posix',
 )
