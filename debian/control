@@ -9,7 +9,7 @@ Standards-Version: 3.7.2
 Package: python-distutils-extra
 Architecture: all
 XB-Python-Version: ${python:Versions}
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, intltool
 Description: enhancements to python's distutils
  This package provides additional functions in distutils. It allows you to
  easily integrate gettext, icons and GNOME documentation into your
