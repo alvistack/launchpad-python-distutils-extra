@@ -1,9 +1,9 @@
 Source: python-distutils-extra
-Section: unknown
+Section: devel
 Priority: optional
 XS-Python-Version: all
 Maintainer: Sebastian Heinlein <glatzor@ubuntu.com>
-Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5) 
+Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5), python-all-dev 
 Standards-Version: 3.7.2
 
 Package: python-distutils-extra
@@ -14,4 +14,3 @@ Description: enhancements to python's distutils
  This package provides additional functions in distutils. It allows you to
  easily integrate gettext, icons and GNOME documentation into your
  build and installation process.
- .
