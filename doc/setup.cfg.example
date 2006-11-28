@@ -1,6 +1,9 @@
 [build]
 l10n=True
+icons=True
+help=True
 
 [build_l10n]
-domain=gnome-app-install
-merge-files=[("share/applications/", ("data/gnome-app-install.desktop.in","data/gdebi.desktop.in")),]
+domain=update-manager
+merge_desktop_files=[("share/applications", ("data/update-manager.desktop.in",))]
+merge_schemas_files=[("share/gconf/schemas", ("data/update-manager.schemas.in",))]
