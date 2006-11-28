@@ -35,7 +35,7 @@ class build_extra(distutils.command.build.build):
 
 class build_help(distutils.cmd.Command):
 
-    description = "build the documentation"
+    description = "install a docbook based documentation"
 
     user_options= [('help_dir', 'h', 'help directory of the source tree')]
 
@@ -96,21 +96,20 @@ class build_l10n(distutils.cmd.Command):
 
     description = "integrate the gettext framework"
 
-    user_options = [('merge-desktop-files=', 'm', '.desktop..in files that '
-                                                  'should be merged '
-                                                  'with translations'),
+    user_options = [('merge-desktop-files=', 'm', '.desktop.in files that '
+                                                  'should be merged'),
                     ('merge-xml-files=', 'x', '.xml.in files that should be '
-                                                  'merged with translations'),
-                    ('merge-schemas-files=', 's', '.schemas.in files that should be '
-                                                  'merged with translations'),
-                    ('merge-ba-files=', 'b', 'bonobo-activation files that should be '
-                                                  'merged with translations'),
-                    ('merge-rfc822deb-files=', 'd', 'RFC822 files that should be '
-                                                  'merged with translations'),
+                                              'merged'),
+                    ('merge-schemas-files=', 's', '.schemas.in files that '
+                                                  'should be merged'),
+                    ('merge-ba-files=', 'b', 'bonobo-activation files that '
+                                             'should be merged'),
+                    ('merge-rfc822deb-files=', 'd', 'RFC822 files that should '
+                                                    'be merged'),
                     ('merge-key-files=', 'k', '.key.in files that should be '
-                                                  'merged with translations'),
+                                              'merged'),
                     ('domain=', 'd', 'gettext domain'),
-                    ('bug-contact=', 'c', 'msgid bug contact address')]
+                    ('bug-contact=', 'c', 'contact address for msgid bugs')]
 
     def initialize_options(self):
         self.merge_desktop_files = []
@@ -128,7 +127,7 @@ class build_l10n(distutils.cmd.Command):
 
     def run(self):
         """
-        Update the language files, create mo file out of them and add them
+        Update the language files, generate mo files and add them
         to the to be installed files
         """
         data_files = self.distribution.data_files
