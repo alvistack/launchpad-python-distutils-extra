@@ -1,5 +1,5 @@
 Source: python-distutils-extra
-Section: devel
+Section: python
 Priority: optional
 XS-Python-Version: all
 Maintainer: Sebastian Heinlein <glatzor@ubuntu.com>
