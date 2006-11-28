@@ -1,5 +1,5 @@
-python-distutils-extra (0.0.1) feisty; urgency=low
+python-distutils-extra (0.90) feisty; urgency=low
 
   * Initial Release.
 
- -- Sebastian Heinlein <glatzor@ubuntu.com>  Sun,  3 Sep 2006 20:26:28 +0200
+ -- Sebastian Heinlein <glatzor@ubuntu.com>  Sun,  28 Nov 2006 20:26:28 +0200
