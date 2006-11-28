@@ -1,8 +1,8 @@
-This is python-snippets, written and maintained by Sebastian Heinlein <glatzor@ubuntu.com>
+This is python-distutils-extra, written and maintained by Sebastian Heinlein <glatzor@ubuntu.com>
 on Sun,  3 Sep 2006 20:26:28 +0200.
 
 The original source can always be found at:
-	ftp://ftp.debian.org/dists/unstable/main/source/
+	http://bzr.glatzor.de/python-distutils
 
 Copyright Holder:  Sebastian Heinlein
 
