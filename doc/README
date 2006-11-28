@@ -1,0 +1,26 @@
+To make use of the distutils extenstions, you have to import the corresponding methods at the beginning of your setup.py:
+
+from DistUtilsExtra.distutils import build_extra, build_l10n
+
+Furthermore you have to map the methods to the extended ones:
+
+cmdclass = { "build" : build_extra,
+             "build_l10n" :  build_l10n }
+
+Finally you have to enable the use of the extension in your setup.cfg:
+
+[build]
+l10n=True
+
+See the setup.cfg.example for a more complex layout.
+
+Currently there are the following extensions available:
+
+build_extra: initiates the extensions
+build_l10n: provides gettext integration
+build_icons: installs icons
+build_help: installs a docbook based documentation
+
+I hope that this code could help you to make your live easier,
+
+Sebastian
