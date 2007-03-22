@@ -132,6 +132,14 @@ class build_l10n(distutils.cmd.Command):
         """
         data_files = self.distribution.data_files
 
+        # Print a warning if there is a Makefile that would overwrite our
+        # values
+        if os.path.exists("po/Makefile"):
+            print "WARNING: Intltool will use the values specified from the "
+                  "         existing po/Makefile in favor of the vaules"
+                  "         from setup.cfg."
+                  "         Remove the Makefile to avoid problems."
+
         # Update the pot file
         command = ""
         if self.bug_contact is not None:
