@@ -1,3 +1,9 @@
+python-distutils-extra (0.90ubuntu1) feisty; urgency=low
+
+  * Add a FAQ
+
+ -- Sebastian Heinlein <sebi@sebi-laptop>  Thu, 22 Mar 2007 16:42:39 +0100
+
 python-distutils-extra (0.90) feisty; urgency=low
 
   * Initial Release.
