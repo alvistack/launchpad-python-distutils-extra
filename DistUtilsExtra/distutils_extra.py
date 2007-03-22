@@ -163,8 +163,7 @@ WARNING: Intltool will use the values specified from the
                 os.makedirs(mo_dir)
             os.system("msgfmt %s -o %s" % (po_file, mo_file))
 
-            targetpath = os.path.dirname(os.path.join("share/locale",lang,
-                                                      "LC_MESSAGES"))
+            targetpath = os.path.join("share/locale", lang, "LC_MESSAGES")
             data_files.append((targetpath, (mo_file,)))
 
         # merge .in with translation
