@@ -151,7 +151,7 @@ WARNING: Intltool will use the values specified from the
         # Merge new strings into the po files
         command = ""
         if self.bug_contact is not None:
-            command = "XGETTEXT_ARGS=--msgidbug-address=s " % self.bug_contact
+            command = "XGETTEXT_ARGS=--msgidbug-address=%s " % self.bug_contact
         command = "cd po; %s intltool-update -r -g %s" % (command, self.domain)
         os.system(command)
 
