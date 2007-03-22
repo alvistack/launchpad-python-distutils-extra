@@ -9,6 +9,8 @@ DEB_PYTHON_SYSTEM=pycentral
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/python-distutils.mk
 
+DEB_BUILD_PROG:=debuild --preserve-envvar PATH --preserve-envvar CCACHE_DIR -us -uc $(DEB_BUILD_PROG_OPTS)
+
 arch-build::
 	rm -rf debian/arch-build
 	mkdir -p debian/arch-build/$(DEB_SOURCE_PACKAGE)-$(DEB_VERSION)
