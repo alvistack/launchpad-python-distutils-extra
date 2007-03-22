@@ -144,7 +144,7 @@ WARNING: Intltool will use the values specified from the
         # Update the pot file
         command = ""
         if self.bug_contact is not None:
-            command = "XGETTEXT_ARGS=--msgidbug-address=s " % self.bug_contact
+            command = "XGETTEXT_ARGS=--msgidbug-address=%s " % self.bug_contact
         command = "cd po; %s intltool-update -p -g %s" % (command, self.domain)
         os.system(command)
 
