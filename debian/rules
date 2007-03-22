@@ -8,3 +8,9 @@ DEB_PYTHON_SYSTEM=pycentral
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/python-distutils.mk
+
+arch-build::
+	rm -rf debian/arch-build
+	mkdir -p debian/arch-build/$(DEB_SOURCE_PACKAGE)-$(DEB_VERSION)
+	tar -c --exclude=arch-build --no-recursion -f - `bzr inventory` | (cd debian/arch-build/$(DEB_SOURCE_PACKAGE)-$(DEB_VERSION);tar xf -)
+	(cd debian/arch-build/$(DEB_SOURCE_PACKAGE)-$(DEB_VERSION) && $(DEB_BUILD_PROG))
