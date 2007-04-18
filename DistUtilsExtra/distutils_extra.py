@@ -49,10 +49,10 @@ class build_help(distutils.cmd.Command):
     def run(self):
         data_files = self.distribution.data_files
 
-        print "Setting up help files..."
+        self.announce("Setting up help files...")
         for filepath in glob.glob("help/*"):
             lang = filepath[len("help/"):]
-            print " Language: %s" % lang
+            self.announce(" Language: %s" % lang)
             path_xml = os.path.join("share/gnome/help",
                                     self.distribution.metadata.name,
                                     lang)
@@ -135,11 +135,11 @@ class build_l10n(distutils.cmd.Command):
         # Print a warning if there is a Makefile that would overwrite our
         # values
         if os.path.exists("po/Makefile"):
-            print """
+            self.announce("""
 WARNING: Intltool will use the values specified from the
          existing po/Makefile in favor of the vaules
          from setup.cfg.
-         Remove the Makefile to avoid problems."""
+         Remove the Makefile to avoid problems.""")
 
         # Update the pot file
         command = ""
