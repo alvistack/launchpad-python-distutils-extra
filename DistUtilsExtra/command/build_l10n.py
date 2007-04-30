@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+"""distutils_extra.command.build_l10n
+
+Implements the Distutils 'build_l10n' command."""
 
 import distutils
 import glob
@@ -7,90 +9,6 @@ import os.path
 import re
 import sys
 import distutils.command.build
-
-class build_extra(distutils.command.build.build):
-    def __init__(self, dist):
-        distutils.command.build.build.__init__(self, dist)
-        def has_icons(self):
-            return self.icons
-
-        def has_l10n(self):
-            return self.l10n
-
-        def has_help(self):
-            return self.help
-
-        self.user_options.extend([("l10n", "l", "use the localsation"),
-                             ("icons", "i", "use icons"),
-                             ("help", "h", "use help system")])
-        self.sub_commands.extend([('build_help', has_help),
-                             ('build_icons', has_icons),
-                             ('build_l10n', has_l10n)])
-
-    def initialize_options(self):
-        distutils.command.build.build.initialize_options(self)
-        self.l10n = False
-        self.icons = False
-        self.help = False
-
-class build_help(distutils.cmd.Command):
-
-    description = "install a docbook based documentation"
-
-    user_options= [('help_dir', 'h', 'help directory of the source tree')]
-
-    def initialize_options(self):
-        self.help_dir = None
-
-    def finalize_options(self):
-        if self.help_dir is None:
-            self.help_dir = os.path.join("help")
-
-    def run(self):
-        data_files = self.distribution.data_files
-
-        print "Setting up help files..."
-        for filepath in glob.glob("help/*"):
-            lang = filepath[len("help/"):]
-            print " Language: %s" % lang
-            path_xml = os.path.join("share/gnome/help",
-                                    self.distribution.metadata.name,
-                                    lang)
-            path_figures = os.path.join("share/gnome/help",
-                                        self.distribution.metadata.name,
-                                        lang, "figures")
-            data_files.append((path_xml, (glob.glob("%s/*.xml" % filepath))))
-            data_files.append((path_figures,
-                               (glob.glob("%s/figures/*.png" % filepath))))
-        data_files.append((os.path.join('share/omf',
-                                         self.distribution.metadata.name),
-                           glob.glob("help/*/*.omf")))
-
-class build_icons(distutils.cmd.Command):
-
-    description = "select all icons for installation"
-
-    user_options= [('icon_dir', 'i', 'icon directory of the source tree')]
-
-    def initialize_options(self):
-        self.icon_dir = None
-
-    def finalize_options(self):
-        if self.icon_dir is None:
-            self.icon_dir = os.path.join("data","icons")
-
-    def run(self):
-        data_files = self.distribution.data_files
-
-        for size in glob.glob(os.path.join(self.icon_dir, "*")):
-            for category in glob.glob(os.path.join(size, "*")):
-                icons = []
-                for icon in glob.glob(os.path.join(category,"*")):
-                    icons.append(icon)
-                    data_files.append(("share/icons/hicolor/%s/%s" % \
-                                       (os.path.basename(size), \
-                                        os.path.basename(category)), \
-                                        icons))
 
 class build_l10n(distutils.cmd.Command):
 
@@ -135,11 +53,11 @@ class build_l10n(distutils.cmd.Command):
         # Print a warning if there is a Makefile that would overwrite our
         # values
         if os.path.exists("po/Makefile"):
-            print """
+            self.announce("""
 WARNING: Intltool will use the values specified from the
          existing po/Makefile in favor of the vaules
          from setup.cfg.
-         Remove the Makefile to avoid problems."""
+         Remove the Makefile to avoid problems.""")
 
         # Update the pot file
         command = ""
@@ -193,3 +111,4 @@ WARNING: Intltool will use the values specified from the
                 files_merged.append(file_merged)
                 data_files.append((target, files_merged))
 
+# class build
