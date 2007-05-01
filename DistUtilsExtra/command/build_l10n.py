@@ -14,20 +14,20 @@ class build_l10n(distutils.cmd.Command):
 
     description = "integrate the gettext framework"
 
-    user_options = [('merge-desktop-files=', 'm', '.desktop.in files that '
-                                                  'should be merged'),
-                    ('merge-xml-files=', 'x', '.xml.in files that should be '
-                                              'merged'),
-                    ('merge-schemas-files=', 's', '.schemas.in files that '
-                                                  'should be merged'),
-                    ('merge-ba-files=', 'b', 'bonobo-activation files that '
-                                             'should be merged'),
-                    ('merge-rfc822deb-files=', 'd', 'RFC822 files that should '
-                                                    'be merged'),
-                    ('merge-key-files=', 'k', '.key.in files that should be '
-                                              'merged'),
-                    ('domain=', 'd', 'gettext domain'),
-                    ('bug-contact=', 'c', 'contact address for msgid bugs')]
+    user_options = [('merge-desktop-files=', None, '.desktop.in files that '
+                                                   'should be merged'),
+                    ('merge-xml-files=', None, '.xml.in files that should be '
+                                               'merged'),
+                    ('merge-schemas-files=', None, '.schemas.in files that '
+                                                   'should be merged'),
+                    ('merge-ba-files=', None, 'bonobo-activation files that '
+                                              'should be merged'),
+                    ('merge-rfc822deb-files=', None, 'RFC822 files that should '
+                                                     'be merged'),
+                    ('merge-key-files=', None, '.key.in files that should be '
+                                               'merged'),
+                    ('domain=', None, 'gettext domain'),
+                    ('bug-contact=', None, 'contact address for msgid bugs')]
 
     def initialize_options(self):
         self.merge_desktop_files = []
