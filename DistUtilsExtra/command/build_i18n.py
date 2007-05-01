@@ -1,6 +1,6 @@
-"""distutils_extra.command.build_l10n
+"""distutils_extra.command.build_i18n
 
-Implements the Distutils 'build_l10n' command."""
+Implements the Distutils 'build_i18n' command."""
 
 import distutils
 import glob
@@ -10,23 +10,24 @@ import re
 import sys
 import distutils.command.build
 
-class build_l10n(distutils.cmd.Command):
+class build_i18n(distutils.cmd.Command):
 
     description = "integrate the gettext framework"
 
-    user_options = [('merge-desktop-files=', None, '.desktop.in files that '
-                                                   'should be merged'),
-                    ('merge-xml-files=', None, '.xml.in files that should be '
-                                               'merged'),
-                    ('merge-schemas-files=', None, '.schemas.in files that '
-                                                   'should be merged'),
-                    ('merge-ba-files=', None, 'bonobo-activation files that '
-                                              'should be merged'),
-                    ('merge-rfc822deb-files=', None, 'RFC822 files that should '
-                                                     'be merged'),
-                    ('merge-key-files=', None, '.key.in files that should be '
-                                               'merged'),
-                    ('domain=', None, 'gettext domain'),
+    user_options = [('desktop-files=', None, '.desktop.in files that '
+                                             'should be merged'),
+                    ('xml-files=', None, '.xml.in files that should be '
+                                         'merged'),
+                    ('schemas-files=', None, '.schemas.in files that '
+                                             'should be merged'),
+                    ('ba-files=', None, 'bonobo-activation files that '
+                                        'should be merged'),
+                    ('rfc822deb-files=', None, 'RFC822 files that should '
+                                               'be merged'),
+                    ('key-files=', None, '.key.in files that should be '
+                                         'merged'),
+                    ('domain=', 'd', 'gettext domain'),
+                    ('po-dir=', 'p', 'directory that holds the i18n files'),
                     ('bug-contact=', None, 'contact address for msgid bugs')]
 
     def initialize_options(self):
@@ -38,10 +39,13 @@ class build_l10n(distutils.cmd.Command):
         self.merge_rfc822deb_files = []
         self.domain = None
         self.bug_contact = None
+        self.po_dir = None
 
     def finalize_options(self):
         if self.domain is None:
             self.domain = self.distribution.metadata.name
+        if self.po_dir is None:
+            self.po_dir = "po"
 
     def run(self):
         """
@@ -52,7 +56,7 @@ class build_l10n(distutils.cmd.Command):
 
         # Print a warning if there is a Makefile that would overwrite our
         # values
-        if os.path.exists("po/Makefile"):
+        if os.path.exists("%s/Makefile" % self.po_dir):
             self.announce("""
 WARNING: Intltool will use the values specified from the
          existing po/Makefile in favor of the vaules
@@ -63,17 +67,21 @@ WARNING: Intltool will use the values specified from the
         command = ""
         if self.bug_contact is not None:
             command = "XGETTEXT_ARGS=--msgid-bugs-address=%s " % self.bug_contact
-        command = "cd po; %s intltool-update -p -g %s" % (command, self.domain)
+        command = "cd %s; %s intltool-update -p -g %s" % (self.po_dir, 
+                                                          command, 
+                                                          self.domain)
         os.system(command)
 
         # Merge new strings into the po files
         command = ""
         if self.bug_contact is not None:
             command = "XGETTEXT_ARGS=--msgid-bugs-address=%s " % self.bug_contact
-        command = "cd po; %s intltool-update -r -g %s" % (command, self.domain)
+        command = "cd %s; %s intltool-update -r -g %s" % (self.po_dir,
+                                                          command, 
+                                                          self.domain)
         os.system(command)
 
-        for po_file in glob.glob("po/*.po"):
+        for po_file in glob.glob("%s/*.po" % self.po_dir):
             lang = os.path.basename(po_file[:-3])
             mo_dir =  os.path.join("build", "mo", lang, "LC_MESSAGES")
             mo_file = os.path.join(mo_dir, "%s.mo" % self.domain)
