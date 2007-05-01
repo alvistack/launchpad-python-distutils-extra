@@ -31,12 +31,12 @@ class build_i18n(distutils.cmd.Command):
                     ('bug-contact=', None, 'contact address for msgid bugs')]
 
     def initialize_options(self):
-        self.merge_desktop_files = []
-        self.merge_xml_files = []
-        self.merge_key_files = []
-        self.merge_schemas_files = []
-        self.merge_ba_files = []
-        self.merge_rfc822deb_files = []
+        self.desktop_files = []
+        self.xml_files = []
+        self.key_files = []
+        self.schemas_files = []
+        self.ba_files = []
+        self.rfc822deb_files = []
         self.domain = None
         self.bug_contact = None
         self.po_dir = None
@@ -54,6 +54,10 @@ class build_i18n(distutils.cmd.Command):
         """
         data_files = self.distribution.data_files
 
+        if self.bug_contact is not None:
+            os.environ["XGETTEXT_ARGS"] = "--msgid-bugs-address=%s " % \
+                                          self.bug_contact
+
         # Print a warning if there is a Makefile that would overwrite our
         # values
         if os.path.exists("%s/Makefile" % self.po_dir):
@@ -63,23 +67,13 @@ WARNING: Intltool will use the values specified from the
          from setup.cfg.
          Remove the Makefile to avoid problems.""")
 
-        # Update the pot file
-        command = ""
-        if self.bug_contact is not None:
-            command = "XGETTEXT_ARGS=--msgid-bugs-address=%s " % self.bug_contact
-        command = "cd %s; %s intltool-update -p -g %s" % (self.po_dir, 
-                                                          command, 
-                                                          self.domain)
-        os.system(command)
-
-        # Merge new strings into the po files
-        command = ""
-        if self.bug_contact is not None:
-            command = "XGETTEXT_ARGS=--msgid-bugs-address=%s " % self.bug_contact
-        command = "cd %s; %s intltool-update -r -g %s" % (self.po_dir,
-                                                          command, 
-                                                          self.domain)
-        os.system(command)
+        # Update po(t) files and print a report
+        # We have to change the working dir to the po dir for intltool
+        cmd = ["intltool-update", "-r", "-g", self.domain]
+        wd = os.getcwd()
+        os.chdir(self.po_dir)
+        self.spawn(cmd)
+        os.chdir(wd)
 
         for po_file in glob.glob("%s/*.po" % self.po_dir):
             lang = os.path.basename(po_file[:-3])
@@ -87,23 +81,24 @@ WARNING: Intltool will use the values specified from the
             mo_file = os.path.join(mo_dir, "%s.mo" % self.domain)
             if not os.path.exists(mo_dir):
                 os.makedirs(mo_dir)
-            os.system("msgfmt %s -o %s" % (po_file, mo_file))
+            cmd = ["msgfmt", po_file, "-o", mo_file]
+            self.spawn(cmd)
 
             targetpath = os.path.join("share/locale", lang, "LC_MESSAGES")
             data_files.append((targetpath, (mo_file,)))
 
         # merge .in with translation
-        for (intltool_type, option) in ((self.merge_xml_files, "-x"),
-                                        (self.merge_desktop_files, "-d"),
-                                        (self.merge_schemas_files, "-s"),
-                                        (self.merge_rfc822deb_files, "-r"),
-                                        (self.merge_ba_files, "-b"),
-                                        (self.merge_key_files, "-k"),):
+        for (option, switch) in ((self.xml_files, "-x"),
+                                 (self.desktop_files, "-d"),
+                                 (self.schemas_files, "-s"),
+                                 (self.rfc822deb_files, "-r"),
+                                 (self.ba_files, "-b"),
+                                 (self.key_files, "-k"),):
             try:
-                intltool_type = eval(intltool_type)
+                file_set = eval(option)
             except:
                 continue
-            for (target, files) in intltool_type:
+            for (target, files) in file_set:
                 build_target = os.path.join("build", target)
                 files_merged = []
                 for file in files:
@@ -114,8 +109,8 @@ WARNING: Intltool will use the values specified from the
                 if not os.path.exists(build_target): 
                     os.makedirs(build_target)
                 file_merged = os.path.join(build_target, file_merged)
-                os.system("intltool-merge %s po %s %s" % (option, file, 
-                                                          file_merged))
+                cmd = ["intltool-merge", switch, self.po_dir, file, file_merged]
+                self.spawn(cmd)
                 files_merged.append(file_merged)
                 data_files.append((target, files_merged))
 
