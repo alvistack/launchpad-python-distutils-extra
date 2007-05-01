@@ -1,16 +1,16 @@
 To make use of the distutils extenstions, you have to import the corresponding methods at the beginning of your setup.py:
 
-from DistUtilsExtra.distutils import build_extra, build_l10n
+from DistUtilsExtra.command import *
 
 Furthermore you have to map the methods to the extended ones:
 
-cmdclass = { "build" : build_extra,
-             "build_l10n" :  build_l10n }
+cmdclass = { "build" : build_extra.build_extra,
+             "build_i18n" :  build_i18n.build_i18n }
 
-Finally you have to enable the use of the extension in your setup.cfg:
+If you have replaced the default build command by build_extra and defined the other commands e.g. build_i18n, the sub commands e.g. will be called automatically. There is no need to enable them in the setup.cfg anymore (This was require in a previous version). Disabling imported commands in the setup.cfg is still possible:
 
 [build]
-l10n=True
+i18n=False
 
 See the setup.cfg.example for a more complex layout.
 
