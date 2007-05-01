@@ -19,7 +19,7 @@ class build_icons(distutils.cmd.Command):
 
     description = "select all icons for installation"
 
-    user_options= [('icon_dir', None, 'icon directory of the source tree')]
+    user_options= [('icon-dir=', 'i', 'icon directory of the source tree')]
 
     def initialize_options(self):
         self.icon_dir = None

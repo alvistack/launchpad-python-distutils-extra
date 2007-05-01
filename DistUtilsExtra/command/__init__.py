@@ -1,4 +1,4 @@
 __all__ = ["build_extra",
-           "build_l10n",
+           "build_i18n",
            "build_icons",
            "build_help"]
