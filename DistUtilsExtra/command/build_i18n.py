@@ -100,18 +100,19 @@ WARNING: Intltool will use the values specified from the
                 continue
             for (target, files) in file_set:
                 build_target = os.path.join("build", target)
+                if not os.path.exists(build_target): 
+                    os.makedirs(build_target)
                 files_merged = []
                 for file in files:
                     if file.endswith(".in"):
                         file_merged = os.path.basename(file[:-3])
                     else:
                         file_merged = os.path.basename(file)
-                if not os.path.exists(build_target): 
-                    os.makedirs(build_target)
-                file_merged = os.path.join(build_target, file_merged)
-                cmd = ["intltool-merge", switch, self.po_dir, file, file_merged]
-                self.spawn(cmd)
-                files_merged.append(file_merged)
+                    file_merged = os.path.join(build_target, file_merged)
+                    cmd = ["intltool-merge", switch, self.po_dir, file, 
+                           file_merged]
+                    self.spawn(cmd)
+                    files_merged.append(file_merged)
                 data_files.append((target, files_merged))
 
 # class build
