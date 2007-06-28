@@ -17,7 +17,7 @@ See the setup.cfg.example for a more complex layout.
 Currently there are the following extensions available:
 
 build_extra: initiates the extensions
-build_l10n: provides gettext integration
+build_i18n: provides gettext integration
 build_icons: installs icons
 build_help: installs a docbook based documentation
 

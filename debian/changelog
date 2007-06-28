@@ -1,8 +1,16 @@
-python-distutils-extra (0.90ubuntu1) feisty; urgency=low
+python-distutils-extra (1.90) unstable; urgency=low
+
+  * New major release
+  * API break
+
+ -- Sebastian Heinlein <glatzor@ubuntu.com>  Wed, 27 Jun 2007 15:36:26 +0200
+
+python-distutils-extra (0.90) feisty; urgency=low
 
   * Add a FAQ
   * fix an error if a bug contact was specified
   * fix the wrong installation path of translation
+  * fix multiple merge files
 
  -- Sebastian Heinlein <sebi@sebi-laptop>  Thu, 22 Mar 2007 20:28:47 +0100
 
