@@ -1,3 +1,11 @@
+python-distutils-extra (1.91) feisty; urgency=low
+
+  * Switch to setuptools build system
+  * Integrate commands into setuptools
+  * Update documentation and package description
+
+ -- Sebastian Heinlein <glatzor@ubuntu.com>  Mon, 13 Aug 2007 13:55:02 +0200
+
 python-distutils-extra (1.90) unstable; urgency=low
 
   * New major release

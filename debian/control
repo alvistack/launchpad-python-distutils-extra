@@ -3,14 +3,14 @@ Section: python
 Priority: optional
 XS-Python-Version: all
 Maintainer: Sebastian Heinlein <glatzor@ubuntu.com>
-Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5), python-all-dev 
+Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5), python-all-dev, python-setuptools
 Standards-Version: 3.7.2
 
 Package: python-distutils-extra
 Architecture: all
 XB-Python-Version: ${python:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, intltool
-Description: enhancements to python's distutils
- This package provides additional functions in distutils. It allows you to
- easily integrate gettext, icons and GNOME documentation into your
- build and installation process.
+Description: enhancements to the Python build system
+ This package provides additional functions to Python's distutils and 
+ setuptools. It allows you to easily integrate gettext, icons and GNOME 
+ documentation into your build and installation process.
