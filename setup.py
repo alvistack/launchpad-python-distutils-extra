@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup
 import glob, os, commands, sys
-
 
 setup(
     name = 'python-distutils-extra',
@@ -13,4 +12,9 @@ setup(
     packages = ['DistUtilsExtra', 'DistUtilsExtra.command'],
     license = 'GNU GPL',
     platforms = 'posix',
+    entry_points = {"distutils.commands": [
+           "build = DistUtilsExtra.command.build_extra:build",
+           "build_i18n = DistUtilsExtra.command.build_i18n:build_i18n",
+           "build_icons = DistUtilsExtra.command.build_icons:build_icons",
+           "build_help = DistUtilsExtra.command.build_help:build_help",],},
 )

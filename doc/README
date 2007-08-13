@@ -1,3 +1,8 @@
+python-distutils-extra can be used with python's distutils or the enhanced
+setuptools.
+
+1. DISTUTILS
+
 To make use of the distutils extenstions, you have to import the corresponding methods at the beginning of your setup.py:
 
 from DistUtilsExtra.command import *
@@ -20,6 +25,17 @@ build_extra: initiates the extensions
 build_i18n: provides gettext integration
 build_icons: installs icons
 build_help: installs a docbook based documentation
+
+2. SETUPTOOLS
+
+Just enable the corresponding build target in the setup.cfg:
+
+[build]
+i18n=True
+help=True
+icons=True
+
+No further imports or modifications are required.
 
 I hope that this code could help you to make your live easier,
 
