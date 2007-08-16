@@ -1,6 +1,6 @@
 python-distutils-extra (1.91) feisty; urgency=low
 
-  * Switch to setuptools build system
+  * Switch to setuptools build system (thanks to Johannes Hölzl)
   * Integrate commands into setuptools
   * Update documentation and package description
 
