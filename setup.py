@@ -17,4 +17,5 @@ setup(
            "build_i18n = DistUtilsExtra.command.build_i18n:build_i18n",
            "build_icons = DistUtilsExtra.command.build_icons:build_icons",
            "build_help = DistUtilsExtra.command.build_help:build_help",],},
+    test_suite="nose.collector",
 )
