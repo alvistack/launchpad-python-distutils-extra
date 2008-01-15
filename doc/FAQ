@@ -1,7 +1,7 @@
 * How can I update the po files, formerly I used "make update-po"?
 
 - You can call the build_i18n command separately from the build process:
- ./setup.py build_li18
+ ./setup.py build_i18n
 
 
 * The domain and further intltool settings from the setup.cfg are not
