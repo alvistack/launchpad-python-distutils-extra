@@ -1,4 +1,4 @@
-python-distutils-extra (1.91.1) UNRELEASED; urgency=low
+python-distutils-extra (1.91.1) unstable; urgency=low
 
   * doc/FAQ: Fix typo: build_l10n -> build_i18n. (LP #177175)
   * Add debian/python-distutils-extra.docs: Ship documentation.
