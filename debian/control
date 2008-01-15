@@ -3,8 +3,10 @@ Section: python
 Priority: optional
 XS-Python-Version: all
 Maintainer: Sebastian Heinlein <glatzor@ubuntu.com>
+Uploaders: Martin Pitt <mpitt@debian.org>
 Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5), python-all-dev, python-setuptools
-Standards-Version: 3.7.2
+Standards-Version: 3.7.3
+Vcs-Bzr: https://code.launchpad.net/~pitti/python-distutils-extra/debian
 
 Package: python-distutils-extra
 Architecture: all
