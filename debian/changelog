@@ -6,8 +6,9 @@ python-distutils-extra (1.91.2) UNRELEASED; urgency=low
     -m/--merge-po instead. Adapt doc/FAQ accordingly.
   * debian/control: Update Vcs-*: fields.
   * debian/copyright: Fix copyright statement and upstream URL.
+  * debian/changelog: Fix invalid email address to make lintian happy.
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 18 Mar 2008 21:58:40 +0100
+ -- Martin Pitt <mpitt@debian.org>  Tue, 18 Mar 2008 21:59:43 +0100
 
 python-distutils-extra (1.91.1) unstable; urgency=low
 
@@ -47,7 +48,7 @@ python-distutils-extra (0.90) feisty; urgency=low
   * fix the wrong installation path of translation
   * fix multiple merge files
 
- -- Sebastian Heinlein <sebi@sebi-laptop>  Thu, 22 Mar 2007 20:28:47 +0100
+ -- Sebastian Heinlein <glatzor@ubuntu.com>  Thu, 22 Mar 2007 20:28:47 +0100
 
 python-distutils-extra (0.90) feisty; urgency=low
 
