@@ -5,8 +5,9 @@ python-distutils-extra (1.91.2) UNRELEASED; urgency=low
     rather, and creates noise in revision control. Introduce a new option
     -m/--merge-po instead. Adapt doc/FAQ accordingly.
   * debian/control: Update Vcs-*: fields.
+  * debian/copyright: Fix copyright statement and upstream URL.
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 18 Mar 2008 21:55:35 +0100
+ -- Martin Pitt <mpitt@debian.org>  Tue, 18 Mar 2008 21:58:40 +0100
 
 python-distutils-extra (1.91.1) unstable; urgency=low
 
