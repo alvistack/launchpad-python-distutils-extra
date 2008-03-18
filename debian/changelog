@@ -1,3 +1,12 @@
+python-distutils-extra (1.91.2) UNRELEASED; urgency=low
+
+  * DistUtilsExtra/command/build_i18n.py: Do not merge PO files by default,
+    since it is not related to building the package, should be done manually
+    rather, and creates noise in revision control. Introduce a new option
+    -m/--merge-po instead. Adapt doc/FAQ accordingly.
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 18 Mar 2008 21:51:31 +0100
+
 python-distutils-extra (1.91.1) unstable; urgency=low
 
   * doc/FAQ: Fix typo: build_l10n -> build_i18n. (LP #177175)

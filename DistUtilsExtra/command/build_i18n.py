@@ -27,8 +27,11 @@ class build_i18n(distutils.cmd.Command):
                     ('key-files=', None, '.key.in files that should be '
                                          'merged'),
                     ('domain=', 'd', 'gettext domain'),
+                    ('merge-po', 'm', 'merge po files against template'),
                     ('po-dir=', 'p', 'directory that holds the i18n files'),
                     ('bug-contact=', None, 'contact address for msgid bugs')]
+
+    boolean_options = ['merge-po']
 
     def initialize_options(self):
         self.desktop_files = []
@@ -38,6 +41,7 @@ class build_i18n(distutils.cmd.Command):
         self.ba_files = []
         self.rfc822deb_files = []
         self.domain = None
+        self.merge_po = False
         self.bug_contact = None
         self.po_dir = None
 
@@ -69,7 +73,7 @@ WARNING: Intltool will use the values specified from the
 
         # Update po(t) files and print a report
         # We have to change the working dir to the po dir for intltool
-        cmd = ["intltool-update", "-r", "-g", self.domain]
+        cmd = ["intltool-update", (self.merge_po and "-r" or "-p"), "-g", self.domain]
         wd = os.getcwd()
         os.chdir(self.po_dir)
         self.spawn(cmd)
