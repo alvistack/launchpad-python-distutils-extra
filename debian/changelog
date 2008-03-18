@@ -1,4 +1,4 @@
-python-distutils-extra (1.91.2) UNRELEASED; urgency=low
+python-distutils-extra (1.91.2) unstable; urgency=low
 
   * DistUtilsExtra/command/build_i18n.py: Do not merge PO files by default,
     since it is not related to building the package, should be done manually
