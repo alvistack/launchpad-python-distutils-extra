@@ -6,7 +6,8 @@ Maintainer: Sebastian Heinlein <glatzor@ubuntu.com>
 Uploaders: Martin Pitt <mpitt@debian.org>
 Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5), python-all-dev, python-setuptools
 Standards-Version: 3.7.3
-Vcs-Bzr: https://code.launchpad.net/~pitti/python-distutils-extra/debian
+Vcs-Bzr: http://bazaar.launchpad.net/~python-distutils-extra-hackers/python-distutils-extra/debian
+Vcs-Browser: https://code.launchpad.net/~python-distutils-extra-hackers/python-distutils-extra/debian
 
 Package: python-distutils-extra
 Architecture: all
