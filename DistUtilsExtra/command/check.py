@@ -50,7 +50,7 @@ class check (Command):
         if self.config_file is None:
             self.config_file = ""
         if self.exclude_files is None:
-            self.exclude_files = ""
+            self.exclude_files = "[]"
         if self.lint_files is None:
             self.lint_files = "[" + self.__find_files() + "]"
 
