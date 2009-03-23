@@ -76,7 +76,8 @@ class check (Command):
             current = line.split(":", 3)
             if line.startswith("    "):
                 outputs.append("    " + current[0] + "")
-            elif line.startswith("build/") or current[0] in excludes:
+            elif line.startswith("build/") or current[0] in excludes or \
+                    len(current) < 3:
                 pass
             elif filename == current[0]:
                 outputs.append("    " + current[1] + ": " + current[2])
