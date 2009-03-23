@@ -1,3 +1,11 @@
+python-distutils-extra (1.92) UNRELEASED; urgency=low
+
+  * Add DistUtilsExtra/command/check.py: New "check" command, running pylint
+    for now, but will do more things in the future. Thanks to Rodney Dawes for
+    this!
+
+ -- Martin Pitt <mpitt@debian.org>  Mon, 23 Mar 2009 18:17:33 +0100
+
 python-distutils-extra (1.91.2) unstable; urgency=low
 
   * DistUtilsExtra/command/build_i18n.py: Do not merge PO files by default,
