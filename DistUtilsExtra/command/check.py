@@ -22,7 +22,6 @@ Implements the DistUtilsExtra 'check' command.
 """
 
 import os
-import re
 import subprocess
 
 from distutils.core import Command
