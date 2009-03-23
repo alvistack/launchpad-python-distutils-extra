@@ -33,12 +33,12 @@ class check (Command):
 
     description = "integrate pylint checks"
 
-    user_options = [('config-file=', None,
+    user_options = [("config-file=", None,
                      "pylint config file to use"),
-                    ('exlcude-files=', None,
-                     'list of files to exclude from lint checks'),
-                    ('lint-files=', None,
-                     'list of mdoules or packages to run lint checks on')
+                    ("exclude-files=", None,
+                     "list of files to exclude from lint checks"),
+                    ("lint-files=", None,
+                     "list of modules or packages to run lint checks on")
                    ]
 
     def initialize_options (self):
@@ -63,23 +63,7 @@ class check (Command):
                              bufsize=4096, stdout=subprocess.PIPE)
         notices = p.stdout
 
-        r = re.compile("""(^$|Unused import (action|_python)|
-Unable to import .*sql(object|base)|
-_action.* Undefined variable|
-_getByName.* Instance|
-Redefining built-in .id|
-Redefining built-in 'filter'|
-<lambda>] Using variable .* before assignment|
-Comma not followed by a space/{N;N};/,[])}]|
-Undefined variable.*valida|
-ENABLED|
-BYUSER)
-""")
-        lines = []
-        for line in notices.readlines():
-            lines.append(r.sub("", line))
-
-        output = "".join(lines)
+        output = "".join(notices.readlines())
         if output != "":
             print "== Pylint notices =="
             print self.__group_lines_by_file(output)
@@ -88,12 +72,12 @@ BYUSER)
         """Format file:line:message output as lines grouped by file."""
         outputs = []
         filename = ""
-        ignores = eval(self.exclude_files)
+        excludes = eval(self.exclude_files)
         for line in input.splitlines():
-            current = line.split(':', 3)
+            current = line.split(":", 3)
             if line.startswith("    "):
                 outputs.append("    " + current[0] + "")
-            elif line.startswith("build/") or current[0] in ignores:
+            elif line.startswith("build/") or current[0] in excludes:
                 pass
             elif filename == current[0]:
                 outputs.append("    " + current[1] + ": " + current[2])
@@ -110,7 +94,7 @@ BYUSER)
         pyfiles = []
         for root, dirs, files in os.walk(os.getcwd(), topdown=False):
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     pyfiles.append("'" + os.path.join(root, file) + "'")
         pyfiles.sort()
         return ",".join(pyfiles)
