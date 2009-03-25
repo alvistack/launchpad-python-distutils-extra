@@ -1,4 +1,4 @@
-python-distutils-extra (1.92) UNRELEASED; urgency=low
+python-distutils-extra (1.92) unstable; urgency=low
 
   * Add DistUtilsExtra/command/check.py: New "check" command, running pylint
     for now, but will do more things in the future. Thanks to Rodney Dawes for
@@ -6,7 +6,7 @@ python-distutils-extra (1.92) UNRELEASED; urgency=low
   * debinan/rules: Drop arch-build stuff. We have bzr-builddeb nowadays, and
     for a package like this it isn't required at all.
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 23 Mar 2009 18:17:33 +0100
+ -- Martin Pitt <mpitt@debian.org>  Wed, 25 Mar 2009 19:14:52 +0100
 
 python-distutils-extra (1.91.2) unstable; urgency=low
 
