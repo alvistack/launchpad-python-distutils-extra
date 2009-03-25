@@ -54,11 +54,16 @@ class check (Command):
             self.lint_files = "[" + self.__find_files() + "]"
 
     def run (self):
-        config_file = ""
-        if self.config_file:
-            config_file = "--rcfile=" + self.config_file
+        pylint_args = ["--output-format=parseable",
+                       "--include-ids=yes"]
 
-        p = subprocess.Popen(["pylint", config_file] + eval(self.lint_files),
+        if self.config_file:
+            pylint_args.append("--rcfile=" + self.config_file)
+
+        for file in eval(self.lint_files):
+            pylint_args.append(file)
+
+        p = subprocess.Popen(["pylint"] + pylint_args,
                              bufsize=4096, stdout=subprocess.PIPE)
         notices = p.stdout
 
