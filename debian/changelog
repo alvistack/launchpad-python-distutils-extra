@@ -1,3 +1,10 @@
+python-distutils-extra (1.92.1) unstable; urgency=low
+
+  * DistUtilsExtra/command/build_i18n.py: Only rebuild files if the input
+    has been modified after the output has been produced.
+
+ -- Julian Andres Klode <jak@debian.org>  Thu, 09 Apr 2009 18:21:22 +0200
+
 python-distutils-extra (1.92) unstable; urgency=low
 
   * Add DistUtilsExtra/command/check.py: New "check" command, running pylint
