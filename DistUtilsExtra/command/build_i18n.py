@@ -86,7 +86,10 @@ WARNING: Intltool will use the values specified from the
             if not os.path.exists(mo_dir):
                 os.makedirs(mo_dir)
             cmd = ["msgfmt", po_file, "-o", mo_file]
-            self.spawn(cmd)
+            po_mtime = os.path.getmtime(po_file)
+            mo_mtime = os.path.exists(mo_file) and os.path.getmtime(mo_file) or 0
+            if po_mtime > mo_mtime:
+                self.spawn(cmd)
 
             targetpath = os.path.join("share/locale", lang, "LC_MESSAGES")
             data_files.append((targetpath, (mo_file,)))
