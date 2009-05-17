@@ -45,8 +45,10 @@ def __cmdclass(attrs):
     '''Default cmdclass for DistUtilsExtra'''
 
     v = attrs.setdefault('cmdclass', {})
+    v.setdefault('build', build_extra.build_extra)
     v.setdefault('build_i18n', build_i18n.build_i18n)
     v.setdefault('build_icons', build_icons.build_icons)
+    v.setdefault('clean', clean_i18n.clean_i18n)
 
 def __packages(attrs, src):
     '''Default packages'''
