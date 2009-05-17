@@ -27,6 +27,7 @@ def setup(**attrs):
 
     __cmdclass(attrs)
     __packages(attrs, src)
+    __dbus(attrs, src)
 
     print '---- attrs after: ----'
     print attrs
@@ -55,7 +56,7 @@ def __packages(attrs, src):
 
     if 'packages' in attrs:
         for pkg in attrs['packages']:
-            src_mark(src, os.path.join(pkg, '*.py'))
+            src_markglob(src, os.path.join(pkg, '*.py'))
         return
 
     packages = attrs.setdefault('packages', [])
@@ -63,8 +64,41 @@ def __packages(attrs, src):
     for f in src_fileglob(src, '__init__.py'):
         pkg = os.path.dirname(f)
         packages.append(pkg)
-        src_mark(src, os.path.join(pkg, '*.py'))
+        src_markglob(src, os.path.join(pkg, '*.py'))
 
+def __dbus(attrs, src):
+    '''D-Bus configuration and services'''
+
+    v = attrs.setdefault('data_files', [])
+
+    # /etc/dbus-1/system.d/*.conf
+    dbus_conf = []
+    for f in src_fileglob(src, '*.conf'):
+        if '-//freedesktop//DTD D-BUS Bus Configuration' in open(f).read():
+            src_mark(src, f)
+            dbus_conf.append(f)
+    if dbus_conf:
+        v.append(('/etc/dbus-1/system.d/', dbus_conf))
+
+    session_service = []
+    system_service = []
+    # dbus services
+    for f in src_fileglob(src, '*.service'):
+        lines = [l.strip() for l in open(f).readlines()]
+        if '[D-BUS Service]' not in lines:
+            continue
+        for l in lines:
+            if l.startswith('User='):
+                src_mark(src, f)
+                system_service.append(f)
+                break
+        else:
+            src_mark(src, f)
+            session_service.append(f)
+    if system_service:
+        v.append(('share/dbus-1/system-services', system_service))
+    if session_service:
+        v.append(('share/dbus-1/services', session_service))
 
 #
 # helper functions
@@ -114,7 +148,12 @@ def src_fileglob(src, fnameglob):
             result.add(f)
     return result
 
-def src_mark(src, pathglob):
+def src_mark(src, path):
+    '''Remove path from src.'''
+
+    src.remove(path)
+
+def src_markglob(src, pathglob):
     '''Remove all paths from src which match pathglob.'''
 
     for f in src.copy():
