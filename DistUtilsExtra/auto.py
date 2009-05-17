@@ -77,7 +77,7 @@ def src_find():
     for (root, dirs, files) in os.walk('.'):
         if root.startswith('./'):
             root = root[2:]
-        if root.startswith('build') or root.startswith('.'):
+        if root.startswith('.') or root in ('build', 'test', 'tests'):
             continue
         # data/icons is handled by build_icons
         if root.startswith(os.path.join('data', 'icons')):
