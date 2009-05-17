@@ -18,7 +18,7 @@ def setup(**attrs):
 
     TODO: doc
     '''
-    src = src_find()
+    src = src_find(attrs)
 
     print '---- attrs before: ----'
     print attrs
@@ -70,14 +70,23 @@ def __packages(attrs, src):
 # helper functions
 #
 
-def src_find():
-    '''Find source files.'''
-
+def src_find(attrs):
+    '''Find source files.
+    
+    This ignores all source files which are explicitly specified as setup()
+    arguments.
+    '''
     src = set()
+
+    # files explicitly covered in setup() call
+    explicit = set(attrs.get('scripts', []))
+    for (destdir, files) in attrs.get('data_files', []):
+        explicit.update(files)
+
     for (root, dirs, files) in os.walk('.'):
         if root.startswith('./'):
             root = root[2:]
-        if root.startswith('.') or root in ('build', 'test', 'tests'):
+        if root.startswith('.') or root.split(os.path.sep, 1)[0] in ('build', 'test', 'tests'):
             continue
         # data/icons is handled by build_icons
         if root.startswith(os.path.join('data', 'icons')):
@@ -90,7 +99,9 @@ def src_find():
             if root == 'po' and (ext == '.po' or f == 'POTFILES.in'):
                 continue
             
-            src.add(os.path.join(root, f))
+            path = os.path.join(root, f)
+            if path not in explicit:
+                src.add(path)
 
     return src
 
