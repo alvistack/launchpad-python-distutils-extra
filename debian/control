@@ -2,7 +2,7 @@ Source: python-distutils-extra
 Section: python
 Priority: optional
 XS-Python-Version: all
-Maintainer: Sebastian Heinlein <glatzor@ubuntu.com>
+Maintainer: Sebastian Heinlein <devel@glatzor.de>
 Uploaders: Martin Pitt <mpitt@debian.org>
 Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5), python-all-dev, python-setuptools
 Standards-Version: 3.7.3
