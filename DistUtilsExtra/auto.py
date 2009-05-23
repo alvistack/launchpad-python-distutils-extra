@@ -13,11 +13,15 @@ import distutils.core
 
 from DistUtilsExtra.command import *
 
+# FIXME: global variable, to share with build_i18n_auto
+src = {}
+
 def setup(**attrs):
     '''Auto-inferring extension of standard distutils.core.setup()
 
     TODO: doc
     '''
+    global src
     src = src_find(attrs)
 
     print '---- attrs before: ----'
@@ -32,11 +36,12 @@ def setup(**attrs):
     print '---- attrs after: ----'
     print attrs
 
-    print 'WARNING: the following files are not recognized by DistUtilsExtra.auto:'
-    for f in sorted(src):
-        print ' ', f
-
     distutils.core.setup(**attrs)
+
+    if src:
+        print 'WARNING: the following files are not recognized by DistUtilsExtra.auto:'
+        for f in sorted(src):
+            print ' ', f
 
 #
 # parts of setup()
@@ -47,7 +52,7 @@ def __cmdclass(attrs):
 
     v = attrs.setdefault('cmdclass', {})
     v.setdefault('build', build_extra.build_extra)
-    v.setdefault('build_i18n', build_i18n.build_i18n)
+    v.setdefault('build_i18n', build_i18n_auto)
     v.setdefault('build_icons', build_icons.build_icons)
     v.setdefault('clean', clean_i18n.clean_i18n)
 
@@ -159,3 +164,26 @@ def src_markglob(src, pathglob):
     for f in src.copy():
         if fnmatch.fnmatch(f, pathglob):
             src.remove(f)
+
+#
+# Automatic setup.cfg
+#
+
+class build_i18n_auto(build_i18n.build_i18n):
+    def finalize_options(self):
+        build_i18n.build_i18n.finalize_options(self)
+        global src
+
+        # add PolicyKit files
+
+        policy_files = []
+        for f in src_fileglob(src, '*.policy.in'):
+            src_mark(src, f)
+            policy_files.append(f)
+        if policy_files:
+            try:
+                xf = eval(self.xml_files)
+            except TypeError:
+                xf = []
+            xf.append(('share/PolicyKit/policy', policy_files))
+            self.xml_files = repr(xf)
