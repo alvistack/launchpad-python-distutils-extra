@@ -175,7 +175,6 @@ class build_i18n_auto(build_i18n.build_i18n):
         global src
 
         # add PolicyKit files
-
         policy_files = []
         for f in src_fileglob(src, '*.policy.in'):
             src_mark(src, f)
@@ -187,3 +186,29 @@ class build_i18n_auto(build_i18n.build_i18n):
                 xf = []
             xf.append(('share/PolicyKit/policy', policy_files))
             self.xml_files = repr(xf)
+
+        # add desktop files
+        desktop_files = []
+        autostart_files = []
+        notify_files = []
+        for f in src_fileglob(src, '*.desktop.in'):
+            src_mark(src, f)
+            if 'autostart' in f:
+                autostart_files.append(f)
+            else:
+                desktop_files.append(f)
+        for f in src_fileglob(src, '*.notifyrc.in'):
+            src_mark(src, f)
+            notify_files.append(f)
+        try:
+            df = eval(self.desktop_files)
+        except TypeError:
+            df = []
+        if desktop_files:
+            df.append(('share/applications', desktop_files))
+        if autostart_files:
+            df.append(('share/autostart', autostart_files))
+        if notify_files:
+            df.append(('share/kde4/apps/' + self.distribution.get_name(), notify_files))
+        self.desktop_files = repr(df)
+
