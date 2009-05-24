@@ -54,6 +54,7 @@ def __cmdclass(attrs):
     v.setdefault('build', build_extra.build_extra)
     v.setdefault('build_i18n', build_i18n_auto)
     v.setdefault('build_icons', build_icons.build_icons)
+    v.setdefault('build_kdeui', build_kdeui.build_kdeui)
     v.setdefault('clean', clean_i18n.clean_i18n)
 
 def __packages(attrs, src):
