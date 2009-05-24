@@ -54,7 +54,7 @@ def __cmdclass(attrs):
     v.setdefault('build', build_extra.build_extra)
     v.setdefault('build_i18n', build_i18n_auto)
     v.setdefault('build_icons', build_icons.build_icons)
-    v.setdefault('build_kdeui', build_kdeui.build_kdeui)
+    v.setdefault('build_kdeui', build_kdeui_auto)
     v.setdefault('clean', clean_i18n.clean_i18n)
 
 def __packages(attrs, src):
@@ -213,3 +213,22 @@ class build_i18n_auto(build_i18n.build_i18n):
             df.append(('share/kde4/apps/' + self.distribution.get_name(), notify_files))
         self.desktop_files = repr(df)
 
+class build_kdeui_auto(build_kdeui.build_kdeui):
+    def finalize_options(self):
+        global src
+
+        # add *.ui files which belong to KDE4
+        kdeui_files = []
+        for f in src_fileglob(src, '*.ui'):
+            if open(f).readline().startswith('<ui version="'):
+                src_mark(src, f)
+                kdeui_files.append(f)
+        if kdeui_files:
+            try:
+                uf = eval(self.ui_files)
+            except TypeError:
+                uf = []
+            uf += kdeui_files
+            self.ui_files = repr(uf)
+
+        build_kdeui.build_kdeui.finalize_options(self)
