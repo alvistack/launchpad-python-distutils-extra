@@ -14,7 +14,7 @@ class build_extra(distutils.command.build.build):
     def __init__(self, dist):
         distutils.command.build.build.__init__(self, dist)
 
-        self.user_options.extend([("i18n", None, "use the localsation"),
+        self.user_options.extend([("i18n", None, "use the localisation"),
                                   ("icons", None, "use icons"),
                                   ("help", None, "use help system")])
     def initialize_options(self):

@@ -1,3 +1,9 @@
+python-distutils-extra (1.93) UNRELEASED; urgency=low
+
+  * build_extra.py: Fix typo in help.
+
+ -- Martin Pitt <mpitt@debian.org>  Sun, 24 May 2009 20:44:41 +0200
+
 python-distutils-extra (1.92) unstable; urgency=low
 
   * Add DistUtilsExtra/command/check.py: New "check" command, running pylint
