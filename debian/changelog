@@ -2,7 +2,7 @@ python-distutils-extra (1.93) UNRELEASED; urgency=low
 
   [ Julian Andres Klode ]
   * DistUtilsExtra/command/build_i18n.py: Only rebuild files if the input
-    has been modified after the output has been produced.
+    has been modified after the output has been produced. (Closes: #523369)
 
   [ Martin Pitt ]
   * build_extra.py: Fix typo in help.
