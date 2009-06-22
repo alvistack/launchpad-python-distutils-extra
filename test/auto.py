@@ -49,8 +49,31 @@ setup(
     def test_empty(self):
         '''empty source tree (just setup.py)'''
 
-        self.do_install()
-        self.assertEqual(os.listdir(self.install_tree), [])
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = self.installed_files()
+        # just installs the .egg_info
+        self.assertEqual(len(f), 1)
+        self.assert_(f[0].endswith('.egg-info'))
+
+    def test_packages(self):
+        '''Python packages'''
+
+        self._mksrc('foopkg/__init__.py', '')
+        self._mksrc('foopkg/bar.py')
+        self._mksrc('foopkg/baz.py')
+        self._mksrc('noinit/notme.py')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = '\n'.join(self.installed_files())
+        self.assert_('foopkg/__init__.py' in f)
+        self.assert_('foopkg/bar.py' in f)
+        self.failIf('noinit' in f)
 
     #
     # helper methods
@@ -83,7 +106,18 @@ setup(
         '''
         self.install_tree = tempfile.mkdtemp()
 
-        return self.setup_py(['install', '--root=' + self.install_tree])
+        return self.setup_py(['install', '--no-compile', '--root=' + self.install_tree])
+
+    def installed_files(self):
+        '''Return list of file paths in install tree.'''
+
+        result = []
+        for root, _, files in os.walk(self.install_tree):
+            assert root.startswith(self.install_tree)
+            r = root[len(self.install_tree):]
+            for f in files:
+                result.append(os.path.join(r, f))
+        return result
 
     def _mksrc(self, path, content=None, executable=False):
         '''Create a file in the test source tree.'''
