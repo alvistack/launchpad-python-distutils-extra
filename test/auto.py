@@ -75,6 +75,45 @@ setup(
         self.assert_('foopkg/bar.py' in f)
         self.failIf('noinit' in f)
 
+    def test_dbus(self):
+        '''D-BUS configuration and service files'''
+
+        # D-BUS ACL configuration file
+        self._mksrc('daemon/com.example.foo.conf', '''<!DOCTYPE busconfig PUBLIC
+ "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+</busconfig>''')
+
+        # non-D-BUS configuration file
+        self._mksrc('daemon/defaults.conf', 'start = True\nlog = syslog')
+
+        # D-BUS system service
+        self._mksrc('daemon/com.example.foo.service', '''[D-BUS Service]
+Name=com.example.Foo
+Exec=/usr/lib/foo/foo_daemon
+User=root''')
+
+        # D-BUS session service
+        self._mksrc('gui/com.example.foo.gui.service', '''[D-BUS Service]
+Name=com.example.Foo.GUI
+Exec=/usr/bin/foo-gtk
+''')
+
+        # non-D-BUS .service file
+        self._mksrc('stuff/super.service', 'I am a file')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = self.installed_files()
+        self.assertEqual(len(f), 4) # 3 D-BUS files plus .egg-info
+        self.assert_('/etc/dbus-1/system.d/com.example.foo.conf' in f)
+        self.assert_('/usr/local/share/dbus-1/system-services/com.example.foo.service' in f)
+        self.assert_('/usr/local/share/dbus-1/services/com.example.foo.gui.service' in f)
+        self.failIf('super.service' in '\n'.join(f))
+
     #
     # helper methods
     #
