@@ -48,7 +48,7 @@ class build_i18n(distutils.cmd.Command):
     def finalize_options(self):
         if self.domain is None:
             self.domain = self.distribution.metadata.name
-        if self.po_dir is None:
+        if self.po_dir is None and os.path.isdir("po"):
             self.po_dir = "po"
 
     def run(self):
@@ -56,6 +56,9 @@ class build_i18n(distutils.cmd.Command):
         Update the language files, generate mo files and add them
         to the to be installed files
         """
+        if not self.po_dir:
+            return
+
         data_files = self.distribution.data_files
 
         if self.bug_contact is not None:
@@ -78,7 +81,7 @@ WARNING: Intltool will use the values specified from the
         os.chdir(self.po_dir)
         self.spawn(cmd)
         os.chdir(wd)
-
+        max_po_mtime = 0
         for po_file in glob.glob("%s/*.po" % self.po_dir):
             lang = os.path.basename(po_file[:-3])
             mo_dir =  os.path.join("build", "mo", lang, "LC_MESSAGES")
@@ -86,7 +89,12 @@ WARNING: Intltool will use the values specified from the
             if not os.path.exists(mo_dir):
                 os.makedirs(mo_dir)
             cmd = ["msgfmt", po_file, "-o", mo_file]
-            self.spawn(cmd)
+            po_mtime = os.path.getmtime(po_file)
+            mo_mtime = os.path.exists(mo_file) and os.path.getmtime(mo_file) or 0
+            if po_mtime > max_po_mtime:
+                max_po_mtime = po_mtime
+            if po_mtime > mo_mtime:
+                self.spawn(cmd)
 
             targetpath = os.path.join("share/locale", lang, "LC_MESSAGES")
             data_files.append((targetpath, (mo_file,)))
@@ -115,7 +123,12 @@ WARNING: Intltool will use the values specified from the
                     file_merged = os.path.join(build_target, file_merged)
                     cmd = ["intltool-merge", switch, self.po_dir, file, 
                            file_merged]
-                    self.spawn(cmd)
+                    mtime_merged = os.path.exists(file_merged) and \
+                                   os.path.getmtime(file_merged) or 0
+                    mtime_file = os.path.getmtime(file)
+                    if mtime_merged < max_po_mtime or mtime_merged < mtime_file:
+                        # Only build if output is older than input (.po,.in) 
+                        self.spawn(cmd)
                     files_merged.append(file_merged)
                 data_files.append((target, files_merged))
 

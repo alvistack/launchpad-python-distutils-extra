@@ -1,8 +1,14 @@
 python-distutils-extra (1.93) UNRELEASED; urgency=low
 
+  [ Julian Andres Klode ]
+  * DistUtilsExtra/command/build_i18n.py: Only rebuild files if the input
+    has been modified after the output has been produced. (Closes: #523369)
+
+  [ Martin Pitt ]
   * build_extra.py: Fix typo in help.
   * Add new command "build_kdeui" to call pykdeuic4 for compiling KDE 4 .ui
     files to .py modules. Add it to build_extra.
+  * build_i18n.py: Fix error if default "po/" directory does not exist.
 
  -- Martin Pitt <mpitt@debian.org>  Sun, 24 May 2009 20:44:41 +0200
 
