@@ -12,6 +12,8 @@ import os, os.path, fnmatch
 import distutils.core
 
 from DistUtilsExtra.command import *
+from distutils.dir_util import remove_tree
+import distutils.command.clean
 
 # FIXME: global variable, to share with build_i18n_auto
 src = {}
@@ -47,6 +49,16 @@ def setup(**attrs):
 # parts of setup()
 #
 
+class clean_build_tree(distutils.command.clean.clean):
+
+    description = 'clean up build/ directory'
+
+    def run(self):
+        # clean build/mo
+        if os.path.isdir('build'):
+            remove_tree('build')
+        distutils.command.clean.clean.run(self)
+
 def __cmdclass(attrs):
     '''Default cmdclass for DistUtilsExtra'''
 
@@ -55,7 +67,7 @@ def __cmdclass(attrs):
     v.setdefault('build_i18n', build_i18n_auto)
     v.setdefault('build_icons', build_icons.build_icons)
     v.setdefault('build_kdeui', build_kdeui_auto)
-    v.setdefault('clean', clean_i18n.clean_i18n)
+    v.setdefault('clean', clean_build_tree)
 
 def __packages(attrs, src):
     '''Default packages'''
