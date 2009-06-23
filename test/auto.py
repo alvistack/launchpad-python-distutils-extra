@@ -195,6 +195,20 @@ Exec=/usr/bin/fooapplet''')
         self.assert_('\nName[de]=Hallo\n' in p)
         self.assert_('\nComment[fr]=Bonjour\n' in p)
 
+    def test_icons(self):
+        '''data/icons/'''
+
+        self._mksrc('data/icons/scalable/actions/press.png')
+        self._mksrc('data/icons/48x48/apps/foo.png')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = self.installed_files()
+        self.assert_('/usr/local/share/icons/hicolor/scalable/actions/press.png' in f)
+        self.assert_('/usr/local/share/icons/hicolor/48x48/apps/foo.png' in f)
+
     #
     # helper methods
     #
