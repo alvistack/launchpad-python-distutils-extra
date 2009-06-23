@@ -168,6 +168,33 @@ Exec=/usr/bin/foo-gtk
         self.assert_('<message>Hello</message>' in p)
         self.assert_('<message xml:lang="de">Hallo</message>' in p)
 
+    def test_desktop(self):
+        '''*.desktop.in files'''
+
+        self._mksrc('gui/foogtk.desktop.in', '''[Desktop Entry]
+_Name=Hello
+_Comment=Good morning
+Exec=/bin/foo''')
+        self._mksrc('gui/autostart/fooapplet.desktop.in', '''[Desktop Entry]
+_Name=Hello
+_Comment=Good morning
+Exec=/usr/bin/fooapplet''')
+        self._mkpo()
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = self.installed_files()
+        self.assert_('/usr/local/share/autostart/fooapplet.desktop' in f)
+        self.assert_('/usr/local/share/applications/foogtk.desktop' in f)
+
+        p = open(os.path.join(self.install_tree,
+            'usr/local/share/autostart/fooapplet.desktop')).read()
+        self.assert_('\nName=Hello\n' in p)
+        self.assert_('\nName[de]=Hallo\n' in p)
+        self.assert_('\nComment[fr]=Bonjour\n' in p)
+
     #
     # helper methods
     #
