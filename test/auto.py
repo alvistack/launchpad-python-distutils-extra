@@ -114,6 +114,29 @@ Exec=/usr/bin/foo-gtk
         self.assert_('/usr/local/share/dbus-1/services/com.example.foo.gui.service' in f)
         self.failIf('super.service' in '\n'.join(f))
 
+    def test_po(self):
+        '''gettext *.po files'''
+
+        self._mksrc('po/POTFILES.in', '')
+        self._mksrc('po/de.po', 'msgid "Good morning"\nmsgstr "Guten Morgen"')
+        self._mksrc('po/fr.po', 'msgid "Good morning"\nmsgstr "Bonjour"')
+        self._mksrc('po/junk')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        f = self.installed_files()
+        self.assert_('/usr/local/share/locale/de/LC_MESSAGES/foo.mo' in f)
+        self.assert_('/usr/local/share/locale/fr/LC_MESSAGES/foo.mo' in f)
+        self.failIf('junk' in '\n'.join(f))
+
+        msgunfmt = subprocess.Popen(['msgunfmt',
+            os.path.join(self.install_tree,
+            'usr/local/share/locale/de/LC_MESSAGES/foo.mo')],
+            stdout=subprocess.PIPE)
+        out = msgunfmt.communicate()[0]
+        self.assertEqual(out, open(os.path.join(self.src, 'po/de.po')).read())
+
     #
     # helper methods
     #
