@@ -117,10 +117,7 @@ Exec=/usr/bin/foo-gtk
     def test_po(self):
         '''gettext *.po files'''
 
-        self._mksrc('po/POTFILES.in', '')
-        self._mksrc('po/de.po', 'msgid "Good morning"\nmsgstr "Guten Morgen"')
-        self._mksrc('po/fr.po', 'msgid "Good morning"\nmsgstr "Bonjour"')
-        self._mksrc('po/junk')
+        self._mkpo()
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
@@ -136,6 +133,40 @@ Exec=/usr/bin/foo-gtk
             stdout=subprocess.PIPE)
         out = msgunfmt.communicate()[0]
         self.assertEqual(out, open(os.path.join(self.src, 'po/de.po')).read())
+
+    def test_policykit(self):
+        '''*.policy.in PolicyKit files'''
+
+        self._mksrc('daemon/com.example.foo.policy.in', '''<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+<policyconfig>
+  <vendor>Foo project</vendor>
+  <vendor_url>https://foo.example.com</vendor_url>
+
+  <action id="com.example.foo.greet">
+    <_description>Good morning</_description>
+    <_message>Hello</_message>
+    <defaults>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+</policyconfig>''')
+
+        self._mkpo()
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = self.installed_files()
+        self.assert_('/usr/local/share/PolicyKit/policy/com.example.foo.policy' in f)
+        p = open(os.path.join(self.install_tree,
+            'usr/local/share/PolicyKit/policy/com.example.foo.policy')).read()
+        self.assert_('<description>Good morning</description>' in p)
+        self.assert_('<description xml:lang="de">Guten Morgen</description>' in p)
+        self.assert_('<message>Hello</message>' in p)
+        self.assert_('<message xml:lang="de">Hallo</message>' in p)
 
     #
     # helper methods
@@ -220,5 +251,23 @@ Exec=/usr/bin/foo-gtk
         (out, err) = diff.communicate()
         self.assertEqual(err, '', 'diff error messages')
         return out
+
+    def _mkpo(self):
+        '''Create some example po files.'''
+
+        self._mksrc('po/POTFILES.in', '')
+        self._mksrc('po/de.po', '''msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\\n"
+
+msgid "Good morning"
+msgstr "Guten Morgen"
+
+msgid "Hello"
+msgstr "Hallo"''')
+        self._mksrc('po/fr.po', '''msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\\n"
+        
+msgid "Good morning"
+msgstr "Bonjour"''')
 
 unittest.main()
