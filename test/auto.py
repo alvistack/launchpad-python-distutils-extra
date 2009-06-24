@@ -287,6 +287,33 @@ setup(
         self.assert_(os.access(os.path.join(binpath, 'shout'), os.X_OK))
         self.assert_(os.access(os.path.join(binpath, 'foo'), os.X_OK))
 
+    def test_pot_manual(self):
+        '''PO template creation with manual POTFILES.in'''
+
+        self._mk_i18n_source()
+        # only do a subset here
+        self._mksrc('po/POTFILES.in', '''
+gtk/main.py
+gui/foo.desktop.in
+[type: gettext/glade]gtk/test.ui''')
+
+        (o, e, s) = self.setup_py(['build'])
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        pot_path = os.path.join(self.src, 'po', 'foo.pot')
+        self.assert_(os.path.exists(pot_path))
+        pot = open(pot_path).read()
+        os.unlink(pot_path) # so that tearDown() doesn't consider it cruft
+
+        self.failIf('msgid "no"' in pot)
+        self.assert_('msgid "yes1"' in pot)
+        self.assert_('msgid "yes2 %s"' in pot)
+        self.failIf('msgid "yes5"' in pot) # we didn't add helpers.py
+        self.assert_('msgid "yes7"' in pot) # we did include the desktop file
+        self.failIf('msgid "yes5"' in pot) # we didn't add helpers.py
+        self.assert_('msgid "yes11"' in pot) # we added the GTKBuilder file
+
     #
     # helper methods
     #
@@ -388,5 +415,60 @@ msgstr "Content-Type: text/plain; charset=UTF-8\\n"
         
 msgid "Good morning"
 msgstr "Bonjour"''')
+
+    def _mk_i18n_source(self):
+        '''Create some example source files with gettext calls'''
+
+        self._mksrc('gtk/main.py', '''print _("yes1")
+print "no1"
+print __("no2")
+x = _('yes2 %s') % y
+
+def f():
+    print _(u"yes3")
+    print f(_(u"yes4"))
+    return _(u'yes6')''')
+
+        self._mksrc('helpers.py', '''
+print _(\'\'\'yes5
+more lines\'\'\')
+print _("""yes6
+even
+more""")
+print \'\'\'no3
+\'\'\'
+print """no4
+more"""''')
+
+        self._mksrc('gui/foo.desktop.in', '''[Desktop Entry]
+_Name=yes7
+_Comment=yes8
+Icon=no5
+Exec=/usr/bin/foo''')
+
+        self._mksrc('daemon/com.example.foo.policy.in', '''<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+<policyconfig>
+  <action id="com.example.foo.greet">
+    <_description>yes9</_description>
+    <_message>yes10</_message>
+    <defaults>
+      <allow_active>no6</allow_active>
+    </defaults>
+  </action>
+</policyconfig>''')
+
+        self._mksrc('gtk/test.ui', '''<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <object class="GtkWindow" id="window1">
+    <property name="title" translatable="yes">yes11</property>
+    <child><placeholder/></child>
+  </object>
+</interface>''')
+
+        self._mksrc('Makefile', 'echo _("no7")')
 
 unittest.main()
