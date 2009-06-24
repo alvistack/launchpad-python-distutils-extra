@@ -448,7 +448,7 @@ def f():
     print _(u"yes3")
     return _(u'yes6')''')
 
-        self._mksrc('data/helpers.py', '''
+        self._mksrc('helpers.py', '''
 print f(_(u"yes4"))
 print _(\'\'\'yes5
 even more
