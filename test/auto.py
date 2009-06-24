@@ -209,6 +209,52 @@ Exec=/usr/bin/fooapplet''')
         self.assert_('/usr/local/share/icons/hicolor/scalable/actions/press.png' in f)
         self.assert_('/usr/local/share/icons/hicolor/48x48/apps/foo.png' in f)
 
+    def test_data(self):
+        '''Auxiliary files in data/'''
+
+        # have some explicitly covered files, to check that they don't get
+        # installed into prefix/share/foo/ again
+        self._mksrc('setup.py', '''
+from DistUtilsExtra.auto import setup
+from glob import glob
+
+setup(
+    name='foo',
+    version='0.1',
+    description='Test suite package',
+    url='https://foo.example.com',
+    license='GPL v2 or later',
+    author='Martin Pitt',
+    author_email='martin.pitt@example.com',
+
+    data_files = [
+      ('/lib/udev/rules.d', ['data/40-foo.rules']),
+      ('/etc/foo', glob('data/*.conf')),
+    ]
+)
+''')
+
+        self._mksrc('data/stuff')
+        self._mksrc('data/handlers/red.py', 'import sys\nprint "RED"')
+        self._mksrc('data/handlers/blue.py', 'import sys\nprint "BLUE"')
+        self._mksrc('data/40-foo.rules')
+        self._mksrc('data/blob1.conf')
+        self._mksrc('data/blob2.conf')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = self.installed_files()
+        self.assert_('/usr/local/share/foo/stuff' in f)
+        self.assert_('/usr/local/share/foo/handlers/red.py' in f)
+        self.assert_('/usr/local/share/foo/handlers/blue.py' in f)
+        self.assert_('/lib/udev/rules.d/40-foo.rules' in f)
+        self.assert_('/etc/foo/blob1.conf' in f)
+        self.assert_('/etc/foo/blob2.conf' in f)
+        self.failIf('/usr/local/share/foo/blob1.conf' in f)
+        self.failIf('/usr/local/share/foo/40-foo.rules' in f)
+
     #
     # helper methods
     #

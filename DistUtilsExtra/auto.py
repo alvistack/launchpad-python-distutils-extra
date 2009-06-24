@@ -34,6 +34,7 @@ def setup(**attrs):
     __cmdclass(attrs)
     __packages(attrs, src)
     __dbus(attrs, src)
+    __data(attrs, src)
 
     print '---- attrs after: ----'
     print attrs
@@ -117,6 +118,22 @@ def __dbus(attrs, src):
         v.append(('share/dbus-1/system-services', system_service))
     if session_service:
         v.append(('share/dbus-1/services', session_service))
+
+def __data(attrs, src):
+    '''Install auxiliary data files.
+
+    This installs everythign from data/ except data/icons/ into
+    prefix/share/<projectname>/.
+    '''
+    v = attrs.setdefault('data_files', [])
+
+    assert 'name' in attrs, 'You need to set the "name" property in setup.py'
+
+    data_files = []
+    for f in src.copy():
+        if f.startswith('data/') and not f.startswith('data/icons/'):
+            v.append((os.path.join('share', attrs['name'], os.path.dirname(f[5:])), [f]))
+            src_mark(src, f)
 
 #
 # helper functions
