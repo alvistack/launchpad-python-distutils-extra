@@ -255,6 +255,38 @@ setup(
         self.failIf('/usr/local/share/foo/blob1.conf' in f)
         self.failIf('/usr/local/share/foo/40-foo.rules' in f)
 
+    def test_scripts(self):
+        '''scripts'''
+
+        # these should get autoinstalled
+        self._mksrc('bin/yell', '#!/bin/sh', True)
+        self._mksrc('bin/shout', '#!/bin/sh', True)
+        self._mksrc('bin/foo', '#!/bin/sh', True)
+
+        # these shouldn't
+        self._mksrc('daemon/food', '#!/bin/sh', True) # not in bin/
+        self._mksrc('foob', '#!/bin/sh', True) # not named like project
+        self._mksrc('bin/whisper', '#!/bin/sh') # not executable
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = self.installed_files()
+        self.assert_('/usr/local/bin/yell' in f)
+        self.assert_('/usr/local/bin/shout' in f)
+        self.assert_('/usr/local/bin/foo' in f)
+        ftext = '\n'.join(f)
+        self.failIf('food' in ftext)
+        self.failIf('foob' in ftext)
+        self.failIf('whisper' in ftext)
+
+        # verify that they are executable
+        binpath = os.path.join(self.install_tree, 'usr', 'local', 'bin')
+        self.assert_(os.access(os.path.join(binpath, 'yell'), os.X_OK))
+        self.assert_(os.access(os.path.join(binpath, 'shout'), os.X_OK))
+        self.assert_(os.access(os.path.join(binpath, 'foo'), os.X_OK))
+
     #
     # helper methods
     #

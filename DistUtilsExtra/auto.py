@@ -8,7 +8,7 @@ for GtkBilder, D-Bus, PolicyKit files, scripts, etc.
 # (c) 2009 Canonical Ltd.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
-import os, os.path, fnmatch
+import os, os.path, fnmatch, stat
 import distutils.core
 
 from DistUtilsExtra.command import *
@@ -35,6 +35,7 @@ def setup(**attrs):
     __packages(attrs, src)
     __dbus(attrs, src)
     __data(attrs, src)
+    __scripts(attrs, src)
 
     print '---- attrs after: ----'
     print attrs
@@ -122,7 +123,7 @@ def __dbus(attrs, src):
 def __data(attrs, src):
     '''Install auxiliary data files.
 
-    This installs everythign from data/ except data/icons/ into
+    This installs everything from data/ except data/icons/ into
     prefix/share/<projectname>/.
     '''
     v = attrs.setdefault('data_files', [])
@@ -134,6 +135,27 @@ def __data(attrs, src):
         if f.startswith('data/') and not f.startswith('data/icons/'):
             v.append((os.path.join('share', attrs['name'], os.path.dirname(f[5:])), [f]))
             src_mark(src, f)
+
+def __scripts(attrs, src):
+    '''Install scripts.
+
+    This picks executable scripts in bin/*, and an executable ./<projectname>.
+    Other scripts have to be added manually; this is to avoid automatically
+    installing test suites, build scripts, etc.
+    '''
+    assert 'name' in attrs, 'You need to set the "name" property in setup.py'
+
+    scripts = []
+    for f in src.copy():
+        if f.startswith('bin/') or f == attrs['name']:
+            st = os.stat(f)
+            if stat.S_ISREG(st.st_mode) and st.st_mode & stat.S_IEXEC:
+                scripts.append(f)
+                src_mark(src, f)
+
+    if scripts:
+        v = attrs.setdefault('scripts', [])
+        v += scripts
 
 #
 # helper functions
