@@ -304,7 +304,6 @@ gui/foo.desktop.in
         pot_path = os.path.join(self.src, 'po', 'foo.pot')
         self.assert_(os.path.exists(pot_path))
         pot = open(pot_path).read()
-        os.unlink(pot_path) # so that tearDown() doesn't consider it cruft
 
         self.failIf('msgid "no"' in pot)
         self.assert_('msgid "yes1"' in pot)
@@ -313,6 +312,27 @@ gui/foo.desktop.in
         self.assert_('msgid "yes7"' in pot) # we did include the desktop file
         self.failIf('msgid "yes5"' in pot) # we didn't add helpers.py
         self.assert_('msgid "yes11"' in pot) # we added the GTKBuilder file
+
+    def test_pot_auto(self):
+        '''PO template creation with automatic POTFILES.in'''
+
+        self._mk_i18n_source()
+
+        (o, e, s) = self.setup_py(['build'])
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        pot_path = os.path.join(self.src, 'po', 'foo.pot')
+        self.assert_(os.path.exists(pot_path))
+        pot = open(pot_path).read()
+
+        self.failIf('msgid "no"' in pot)
+        for i in range(2, 12):
+            self.assert_('msgid "yes%i' % i in pot or 
+                   'msgid ""\n"yes%i' % i in pot,
+                   'yes%i' % i)
+        # above loop would match yes11 to yes1 as well, so test it explicitly
+        self.assert_('msgid "yes1"' in pot)
 
     #
     # helper methods
@@ -392,7 +412,7 @@ gui/foo.desktop.in
         Return diff -Nur output.
         '''
         assert self.snapshot, 'no snapshot taken'
-        diff = subprocess.Popen(['diff', '-Nur', os.path.join(self.snapshot, 's'), 
+        diff = subprocess.Popen(['diff', '-x', 'foo.pot', '-Nur', os.path.join(self.snapshot, 's'), 
             self.src], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (out, err) = diff.communicate()
         self.assertEqual(err, '', 'diff error messages')
@@ -426,17 +446,17 @@ x = _('yes2 %s') % y
 
 def f():
     print _(u"yes3")
-    print f(_(u"yes4"))
     return _(u'yes6')''')
 
-        self._mksrc('helpers.py', '''
+        self._mksrc('data/helpers.py', '''
+print f(_(u"yes4"))
 print _(\'\'\'yes5
-more lines\'\'\')
+even more
+lines\'\'\')
 print _("""yes6
-even
-more""")
+more lines""")
 print \'\'\'no3
-\'\'\'
+boo\'\'\'
 print """no4
 more"""''')
 

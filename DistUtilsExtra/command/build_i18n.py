@@ -48,7 +48,7 @@ class build_i18n(distutils.cmd.Command):
     def finalize_options(self):
         if self.domain is None:
             self.domain = self.distribution.metadata.name
-        if self.po_dir is None and os.path.isdir("po"):
+        if self.po_dir is None:
             self.po_dir = "po"
 
     def run(self):
@@ -56,7 +56,7 @@ class build_i18n(distutils.cmd.Command):
         Update the language files, generate mo files and add them
         to the to be installed files
         """
-        if not self.po_dir:
+        if not os.path.isdir(self.po_dir):
             return
 
         data_files = self.distribution.data_files

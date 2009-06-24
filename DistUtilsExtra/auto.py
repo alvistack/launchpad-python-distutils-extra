@@ -1,8 +1,22 @@
 '''DistUtilsExtra.auto
 
 This provides a setup() method for distutils and DistUtilsExtra which infers as
-many setup() arguments as possible. This includes packages, data files
-for GtkBilder, D-Bus, PolicyKit files, scripts, etc.
+many setup() arguments as possible. The idea is that your setup.py only needs
+to have the metadata and some tweaks for unusual files/paths, in a "convention
+over configuration" paradigm.
+
+This currently supports:
+
+ * Python packages
+ * GtkBuilder (*.ui)
+ * Qt4 user interfaces (*.ui)
+ * D-Bus (*.conf and *.service)
+ * PolicyKit (*.policy.in)
+ * Desktop files (*.desktop.in)
+ * KDE4 notifications (*.notifyrc.in)
+ * scripts
+ * Auxiliary data files (in data/*)
+ * automatic po/POTFILES.in
 '''
 
 # (c) 2009 Canonical Ltd.
@@ -17,14 +31,14 @@ import distutils.command.clean
 
 # FIXME: global variable, to share with build_i18n_auto
 src = {}
+src_all = {}
 
 def setup(**attrs):
-    '''Auto-inferring extension of standard distutils.core.setup()
-
-    TODO: doc
-    '''
+    '''Auto-inferring extension of standard distutils.core.setup()'''
     global src
-    src = src_find(attrs)
+    global src_all
+    src_all = src_find(attrs)
+    src = src_all.copy()
 
     print '---- attrs before: ----'
     print attrs
@@ -263,6 +277,42 @@ class build_i18n_auto(build_i18n.build_i18n):
         if notify_files:
             df.append(('share/kde4/apps/' + self.distribution.get_name(), notify_files))
         self.desktop_files = repr(df)
+
+    def run(self):
+        '''Build a default POTFILES.in'''
+
+        auto_potfiles_in = False
+        global src_all
+        if not os.path.exists(os.path.join('po', 'POTFILES.in')):
+            files = src_fileglob(src_all, '*.py')
+            files.update(src_fileglob(src_all, '*.desktop.in'))
+            files.update(src_fileglob(src_all, '*.notifyrc.in'))
+            files.update(src_fileglob(src_all, '*.policy.in'))
+
+            for f in src_fileglob(src_all, '*.ui'):
+                contents = open(f).read()
+                if '<interface>\n' in contents and '<requires lib="gtk+"' in contents:
+                    files.add('[type: gettext/glade]' + f)
+
+            if files:
+                if not os.path.isdir('po'):
+                    os.mkdir('po')
+                potfiles_in = open('po/POTFILES.in', 'w')
+                print >> potfiles_in, '[encoding: UTF-8]'
+                for f in files:
+                    print >> potfiles_in, f
+                potfiles_in.close()
+
+                auto_potfiles_in = True
+
+        build_i18n.build_i18n.run(self)
+
+        if auto_potfiles_in:
+            os.unlink('po/POTFILES.in')
+            try:
+                os.rmdir('po')
+            except:
+                pass
 
 class build_kdeui_auto(build_kdeui.build_kdeui):
     def finalize_options(self):
