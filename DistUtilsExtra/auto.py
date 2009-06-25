@@ -52,6 +52,7 @@ def setup(**attrs):
     __dbus(attrs, src)
     __data(attrs, src)
     __scripts(attrs, src)
+    __stdfiles(attrs, src)
 
     print '---- attrs after: ----'
     print attrs
@@ -172,6 +173,27 @@ def __scripts(attrs, src):
     if scripts:
         v = attrs.setdefault('scripts', [])
         v += scripts
+
+def __stdfiles(attrs, src):
+    '''Install/mark standard files.
+
+    This covers COPYING, AUTHORS, README, etc.
+    '''
+    src_markglob(src, 'COPYING*')
+    src_markglob(src, 'AUTHORS')
+    src_markglob(src, 'MANIFEST.in')
+
+    # install all README* from the root directory
+    readme = []
+    for f in src_fileglob(src, 'README*'):
+        if os.path.sep not in f:
+            readme.append(f)
+            src_mark(src, f)
+    if readme:
+        assert 'name' in attrs, 'You need to set the "name" property in setup.py'
+
+        attrs.setdefault('data_files', []).append((os.path.join('share', 'doc',
+            attrs['name']), readme))
 
 #
 # helper functions
