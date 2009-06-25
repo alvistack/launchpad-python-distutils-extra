@@ -43,11 +43,6 @@ def setup(**attrs):
     src_all = src_find(attrs)
     src = src_all.copy()
 
-    print '---- attrs before: ----'
-    print attrs
-    print '---- srcfiles before: ----'
-    print src
-
     src_mark(src, 'setup.py')
 
     __cmdclass(attrs)
@@ -56,9 +51,6 @@ def setup(**attrs):
     __data(attrs, src)
     __scripts(attrs, src)
     __stdfiles(attrs, src)
-
-    print '---- attrs after: ----'
-    print attrs
 
     distutils.core.setup(**attrs)
 
