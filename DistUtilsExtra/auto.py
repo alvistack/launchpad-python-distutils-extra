@@ -17,6 +17,7 @@ This currently supports:
  * scripts
  * Auxiliary data files (in data/*)
  * automatic po/POTFILES.in
+ * automatic MANIFEST
 '''
 
 # (c) 2009 Canonical Ltd.
@@ -28,6 +29,8 @@ import distutils.core
 from DistUtilsExtra.command import *
 from distutils.dir_util import remove_tree
 import distutils.command.clean
+import distutils.command.sdist
+import distutils.filelist
 
 # FIXME: global variable, to share with build_i18n_auto
 src = {}
@@ -87,6 +90,7 @@ def __cmdclass(attrs):
     v.setdefault('build_icons', build_icons.build_icons)
     v.setdefault('build_kdeui', build_kdeui_auto)
     v.setdefault('clean', clean_build_tree)
+    v.setdefault('sdist', sdist_auto)
 
 def __packages(attrs, src):
     '''Default packages'''
@@ -368,3 +372,26 @@ class build_kdeui_auto(build_kdeui.build_kdeui):
             self.ui_files = repr(uf)
 
         build_kdeui.build_kdeui.finalize_options(self)
+
+#
+# Automatic sdist
+#
+
+class sdist_auto(distutils.command.sdist.sdist):
+    def add_defaults(self):
+        filter_prefix = ['build', '.git', '.svn', '.CVS', '.bzr', 
+                os.path.join('dist', self.distribution.get_name())]
+        filter_suffix = ['.pyc', '.mo', '~', '.swp']
+
+        distutils.command.sdist.sdist.add_defaults(self)
+
+        manifest_in = os.path.join('MANIFEST.in')
+        if os.path.exists(manifest_in):
+            return
+
+        for f in distutils.filelist.findall():
+            if f in self.filelist.files or any(map(f.startswith, filter_prefix)) or \
+                    any(map(f.endswith, filter_suffix)):
+                continue
+            self.filelist.append(f)
+

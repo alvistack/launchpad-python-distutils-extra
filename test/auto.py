@@ -386,6 +386,35 @@ gui/foo.desktop.in
         self.assert_('following files are not recognized' in o)
         self.assert_('\n  extra/README\n' in o)
 
+    def test_sdist(self):
+        '''default MANIFEST'''
+
+        good = ['AUTHORS', 'README.txt', 'COPYING', 'helpers.py',
+                'foo/__init__.py', 'foo/bar.py', 'tests/all.py',
+                'gui/x.desktop.in', 'backend/foo.policy.in',
+                'daemon/backend.conf', 'x/y', 'po/de.po', 'po/foo.pot',
+                '.quickly', 'data/icons/16x16/apps/foo.png', 'bin/foo',
+                'backend/food', 'backend/com.example.foo.service',
+                'gtk/main.glade', 'dist/extra.tar.gz']
+        bad = ['po/de.mo', '.helpers.py.swp', '.bzr/index', '.svn/index',
+               '.git/index', 'bin/foo~', 'backend/foo.pyc', 
+               'dist/foo-0.1.tar.gz']
+
+        for f in good + bad:
+            self._mksrc(f)
+
+        (o, e, s) = self.setup_py(['sdist', '-o'])
+        self.assert_("'MANIFEST.in' does not exist" in e)
+        self.assertEqual(s, 0)
+
+        manifest = open(os.path.join(self.src, 'MANIFEST')).read().splitlines()
+
+        for f in good:
+            self.assert_(f in manifest, '%s in manifest' % f)
+        for f in bad:
+            self.failIf(f in manifest, '%s not in manifest' % f)
+        os.unlink(os.path.join(self.src, 'MANIFEST'))
+
     #
     # helper methods
     #
