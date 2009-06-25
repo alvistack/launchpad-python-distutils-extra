@@ -353,6 +353,37 @@ gui/foo.desktop.in
         # above loop would match yes11 to yes1 as well, so test it explicitly
         self.assert_('msgid "yes1"' in pot)
 
+    def test_standard_files(self):
+        '''Standard files (MANIFEST.in, COPYING, etc.)'''
+
+        self._mksrc('AUTHORS')
+        self._mksrc('COPYING')
+        self._mksrc('COPYING.LIB')
+        self._mksrc('README.txt')
+        self._mksrc('MANIFEST.in')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o, o)
+
+        f = self.installed_files()
+        self.assert_('/usr/local/share/doc/foo/README.txt' in f)
+        ftext = '\n'.join(f)
+        self.failIf('MANIFEST' in ftext)
+        self.failIf('COPYING' in ftext)
+        self.failIf('COPYING' in ftext)
+        self.failIf('AUTHORS' in ftext)
+
+        # sub-dir READMEs shouldn't be installed by default
+        self.snapshot = None
+        self._mksrc('extra/README')
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.assert_('following files are not recognized' in o)
+        self.assert_('\n  extra/README\n' in o)
+
     #
     # helper methods
     #
