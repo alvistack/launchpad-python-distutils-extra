@@ -115,8 +115,8 @@ Exec=/usr/bin/foo-gtk
         f = self.installed_files()
         self.assertEqual(len(f), 4) # 3 D-BUS files plus .egg-info
         self.assert_('/etc/dbus-1/system.d/com.example.foo.conf' in f)
-        self.assert_('/usr/local/share/dbus-1/system-services/com.example.foo.service' in f)
-        self.assert_('/usr/local/share/dbus-1/services/com.example.foo.gui.service' in f)
+        self.assert_('/usr/share/dbus-1/system-services/com.example.foo.service' in f)
+        self.assert_('/usr/share/dbus-1/services/com.example.foo.gui.service' in f)
         self.failIf('super.service' in '\n'.join(f))
 
     def test_po(self):
@@ -129,13 +129,13 @@ Exec=/usr/bin/foo-gtk
         self.assertEqual(s, 0)
         self.failIf('following files are not recognized' in o)
         f = self.installed_files()
-        self.assert_('/usr/local/share/locale/de/LC_MESSAGES/foo.mo' in f)
-        self.assert_('/usr/local/share/locale/fr/LC_MESSAGES/foo.mo' in f)
+        self.assert_('/usr/share/locale/de/LC_MESSAGES/foo.mo' in f)
+        self.assert_('/usr/share/locale/fr/LC_MESSAGES/foo.mo' in f)
         self.failIf('junk' in '\n'.join(f))
 
         msgunfmt = subprocess.Popen(['msgunfmt',
             os.path.join(self.install_tree,
-            'usr/local/share/locale/de/LC_MESSAGES/foo.mo')],
+            'usr/share/locale/de/LC_MESSAGES/foo.mo')],
             stdout=subprocess.PIPE)
         out = msgunfmt.communicate()[0]
         self.assertEqual(out, open(os.path.join(self.src, 'po/de.po')).read())
@@ -167,9 +167,9 @@ Exec=/usr/bin/foo-gtk
         self.failIf('following files are not recognized' in o)
 
         f = self.installed_files()
-        self.assert_('/usr/local/share/PolicyKit/policy/com.example.foo.policy' in f)
+        self.assert_('/usr/share/PolicyKit/policy/com.example.foo.policy' in f)
         p = open(os.path.join(self.install_tree,
-            'usr/local/share/PolicyKit/policy/com.example.foo.policy')).read()
+            'usr/share/PolicyKit/policy/com.example.foo.policy')).read()
         self.assert_('<description>Good morning</description>' in p)
         self.assert_('<description xml:lang="de">Guten Morgen</description>' in p)
         self.assert_('<message>Hello</message>' in p)
@@ -194,11 +194,11 @@ Exec=/usr/bin/fooapplet''')
         self.failIf('following files are not recognized' in o)
 
         f = self.installed_files()
-        self.assert_('/usr/local/share/autostart/fooapplet.desktop' in f)
-        self.assert_('/usr/local/share/applications/foogtk.desktop' in f)
+        self.assert_('/usr/share/autostart/fooapplet.desktop' in f)
+        self.assert_('/usr/share/applications/foogtk.desktop' in f)
 
         p = open(os.path.join(self.install_tree,
-            'usr/local/share/autostart/fooapplet.desktop')).read()
+            'usr/share/autostart/fooapplet.desktop')).read()
         self.assert_('\nName=Hello\n' in p)
         self.assert_('\nName[de]=Hallo\n' in p)
         self.assert_('\nComment[fr]=Bonjour\n' in p)
@@ -215,8 +215,8 @@ Exec=/usr/bin/fooapplet''')
         self.failIf('following files are not recognized' in o)
 
         f = self.installed_files()
-        self.assert_('/usr/local/share/icons/hicolor/scalable/actions/press.png' in f)
-        self.assert_('/usr/local/share/icons/hicolor/48x48/apps/foo.png' in f)
+        self.assert_('/usr/share/icons/hicolor/scalable/actions/press.png' in f)
+        self.assert_('/usr/share/icons/hicolor/48x48/apps/foo.png' in f)
 
     def test_data(self):
         '''Auxiliary files in data/'''
@@ -256,14 +256,14 @@ setup(
         self.failIf('following files are not recognized' in o)
 
         f = self.installed_files()
-        self.assert_('/usr/local/share/foo/stuff' in f)
-        self.assert_('/usr/local/share/foo/handlers/red.py' in f)
-        self.assert_('/usr/local/share/foo/handlers/blue.py' in f)
+        self.assert_('/usr/share/foo/stuff' in f)
+        self.assert_('/usr/share/foo/handlers/red.py' in f)
+        self.assert_('/usr/share/foo/handlers/blue.py' in f)
         self.assert_('/lib/udev/rules.d/40-foo.rules' in f)
         self.assert_('/etc/foo/blob1.conf' in f)
         self.assert_('/etc/foo/blob2.conf' in f)
-        self.failIf('/usr/local/share/foo/blob1.conf' in f)
-        self.failIf('/usr/local/share/foo/40-foo.rules' in f)
+        self.failIf('/usr/share/foo/blob1.conf' in f)
+        self.failIf('/usr/share/foo/40-foo.rules' in f)
 
     def test_scripts(self):
         '''scripts'''
@@ -287,16 +287,16 @@ setup(
         self.assert_('\n  daemon/food' in o)
 
         f = self.installed_files()
-        self.assert_('/usr/local/bin/yell' in f)
-        self.assert_('/usr/local/bin/shout' in f)
-        self.assert_('/usr/local/bin/foo' in f)
+        self.assert_('/usr/bin/yell' in f)
+        self.assert_('/usr/bin/shout' in f)
+        self.assert_('/usr/bin/foo' in f)
         ftext = '\n'.join(f)
         self.failIf('food' in ftext)
         self.failIf('foob' in ftext)
         self.failIf('whisper' in ftext)
 
         # verify that they are executable
-        binpath = os.path.join(self.install_tree, 'usr', 'local', 'bin')
+        binpath = os.path.join(self.install_tree, 'usr', 'bin')
         self.assert_(os.access(os.path.join(binpath, 'yell'), os.X_OK))
         self.assert_(os.access(os.path.join(binpath, 'shout'), os.X_OK))
         self.assert_(os.access(os.path.join(binpath, 'foo'), os.X_OK))
@@ -370,7 +370,7 @@ gui/foo.desktop.in
         self.failIf('following files are not recognized' in o, o)
 
         f = self.installed_files()
-        self.assert_('/usr/local/share/doc/foo/README.txt' in f)
+        self.assert_('/usr/share/doc/foo/README.txt' in f)
         ftext = '\n'.join(f)
         self.failIf('MANIFEST' in ftext)
         self.failIf('COPYING' in ftext)
@@ -446,7 +446,8 @@ gui/foo.desktop.in
         '''
         self.install_tree = tempfile.mkdtemp()
 
-        return self.setup_py(['install', '--no-compile', '--root=' + self.install_tree])
+        return self.setup_py(['install', '--no-compile', '--prefix=/usr', 
+            '--root=' + self.install_tree])
 
     def installed_files(self):
         '''Return list of file paths in install tree.'''
