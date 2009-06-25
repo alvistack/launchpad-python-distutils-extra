@@ -180,8 +180,10 @@ def __stdfiles(attrs, src):
     This covers COPYING, AUTHORS, README, etc.
     '''
     src_markglob(src, 'COPYING*')
+    src_markglob(src, 'LICENSE*')
     src_markglob(src, 'AUTHORS')
     src_markglob(src, 'MANIFEST.in')
+    src_markglob(src, 'MANIFEST')
 
     # install all README* from the root directory
     readme = []

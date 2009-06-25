@@ -358,9 +358,11 @@ gui/foo.desktop.in
 
         self._mksrc('AUTHORS')
         self._mksrc('COPYING')
+        self._mksrc('LICENSE')
         self._mksrc('COPYING.LIB')
         self._mksrc('README.txt')
         self._mksrc('MANIFEST.in')
+        self._mksrc('MANIFEST')
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
