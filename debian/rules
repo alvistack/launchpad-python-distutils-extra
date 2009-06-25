@@ -13,4 +13,5 @@ common-post-build-indep::
 	test/auto.py -v
 
 clean::
+	rm -rf build
 	rm -rf python_distutils_extra.egg-info
