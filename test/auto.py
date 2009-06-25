@@ -52,6 +52,7 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o)
 
         f = self.installed_files()
         # just installs the .egg_info
@@ -69,6 +70,8 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        self.assert_('following files are not recognized' in o)
+        self.assert_('\n  noinit/notme.py\n' in o)
 
         f = '\n'.join(self.installed_files())
         self.assert_('foopkg/__init__.py' in f)
@@ -106,6 +109,8 @@ Exec=/usr/bin/foo-gtk
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        self.assert_('following files are not recognized' in o)
+        self.assert_('\n  stuff/super.service\n' in o)
 
         f = self.installed_files()
         self.assertEqual(len(f), 4) # 3 D-BUS files plus .egg-info
@@ -122,6 +127,7 @@ Exec=/usr/bin/foo-gtk
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o)
         f = self.installed_files()
         self.assert_('/usr/local/share/locale/de/LC_MESSAGES/foo.mo' in f)
         self.assert_('/usr/local/share/locale/fr/LC_MESSAGES/foo.mo' in f)
@@ -158,6 +164,7 @@ Exec=/usr/bin/foo-gtk
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o)
 
         f = self.installed_files()
         self.assert_('/usr/local/share/PolicyKit/policy/com.example.foo.policy' in f)
@@ -184,6 +191,7 @@ Exec=/usr/bin/fooapplet''')
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o)
 
         f = self.installed_files()
         self.assert_('/usr/local/share/autostart/fooapplet.desktop' in f)
@@ -204,6 +212,7 @@ Exec=/usr/bin/fooapplet''')
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o)
 
         f = self.installed_files()
         self.assert_('/usr/local/share/icons/hicolor/scalable/actions/press.png' in f)
@@ -244,6 +253,7 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o)
 
         f = self.installed_files()
         self.assert_('/usr/local/share/foo/stuff' in f)
@@ -271,6 +281,10 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        self.assert_('following files are not recognized' in o)
+        self.assert_('\n  foob' in o)
+        self.assert_('\n  bin/whisper' in o)
+        self.assert_('\n  daemon/food' in o)
 
         f = self.installed_files()
         self.assert_('/usr/local/bin/yell' in f)
