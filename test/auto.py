@@ -305,6 +305,7 @@ setup(
         '''PO template creation with manual POTFILES.in'''
 
         self._mk_i18n_source()
+        self._mksrc('po/foo.pot', '')
         # only do a subset here
         self._mksrc('po/POTFILES.in', '''
 gtk/main.py
@@ -314,6 +315,8 @@ gui/foo.desktop.in
         (o, e, s) = self.setup_py(['build'])
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        # POT file should not be shown as not recognized
+        self.failIf('\n  po/foo.pot\n' in o)
 
         pot_path = os.path.join(self.src, 'po', 'foo.pot')
         self.assert_(os.path.exists(pot_path))
@@ -335,6 +338,8 @@ gui/foo.desktop.in
         (o, e, s) = self.setup_py(['build'])
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
+        # POT file should not be shown as not recognized
+        self.failIf('\n  po/foo.pot\n' in o)
 
         pot_path = os.path.join(self.src, 'po', 'foo.pot')
         self.assert_(os.path.exists(pot_path))

@@ -283,6 +283,12 @@ class build_i18n_auto(build_i18n.build_i18n):
             df.append(('share/kde4/apps/' + self.distribution.get_name(), notify_files))
         self.desktop_files = repr(df)
 
+        # mark PO template as known to handle
+        try:
+            src_mark(src, os.path.join('po', self.distribution.get_name() + '.pot'))
+        except KeyError:
+            pass
+
     def run(self):
         '''Build a default POTFILES.in'''
 
