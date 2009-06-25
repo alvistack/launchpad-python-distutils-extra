@@ -45,6 +45,8 @@ def setup(**attrs):
     print '---- srcfiles before: ----'
     print src
 
+    src_mark(src, 'setup.py')
+
     __cmdclass(attrs)
     __packages(attrs, src)
     __dbus(attrs, src)
@@ -191,7 +193,9 @@ def src_find(attrs):
     for (root, dirs, files) in os.walk('.'):
         if root.startswith('./'):
             root = root[2:]
-        if (root.startswith('.') and root != '.') or \
+        if root == '.':
+            root = ''
+        if root.startswith('.') or \
                 root.split(os.path.sep, 1)[0] in ('build', 'test', 'tests'):
             continue
         # data/icons is handled by build_icons
