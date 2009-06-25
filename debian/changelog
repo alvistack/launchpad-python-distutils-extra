@@ -1,3 +1,9 @@
+python-distutils-extra (2.1) UNRELEASED; urgency=low
+
+  * debian/rules: Remove build/ on clean.
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 25 Jun 2009 12:49:41 +0200
+
 python-distutils-extra (2.0) unstable; urgency=low
 
   [ Julian Andres Klode ]
