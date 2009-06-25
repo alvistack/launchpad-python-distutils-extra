@@ -1,4 +1,4 @@
-python-distutils-extra (1.93) UNRELEASED; urgency=low
+python-distutils-extra (2.0) UNRELEASED; urgency=low
 
   [ Julian Andres Klode ]
   * DistUtilsExtra/command/build_i18n.py: Only rebuild files if the input
@@ -9,6 +9,14 @@ python-distutils-extra (1.93) UNRELEASED; urgency=low
   * Add new command "build_kdeui" to call pykdeuic4 for compiling KDE 4 .ui
     files to .py modules. Add it to build_extra.
   * build_i18n.py: Fix error if default "po/" directory does not exist.
+  * Add new module "DistUtilsExtra.auto". This provides a "convention over
+    configuration" setup which infers almost all file related information for
+    setup.py, setup.cfg, POTFILES.in, and MANIFEST.in, and recognizes Python
+    modules, D-BUS configuration/service files, desktop files, and others
+    automatically. See the Ubuntu specification for details:
+    https://wiki.ubuntu.com/DesktopTeam/Specs/Karmic/AutomagicPythonBuildSystem
+  * Add test/auto.py: Test suite foor DistUtilsExtra.auto. Run it on package
+    build in debian/rules.
 
  -- Martin Pitt <mpitt@debian.org>  Sun, 24 May 2009 20:44:41 +0200
 
