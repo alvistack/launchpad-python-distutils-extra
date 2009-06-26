@@ -1,4 +1,4 @@
-python-distutils-extra (2.1) UNRELEASED; urgency=low
+python-distutils-extra (2.1) unstable; urgency=low
 
   * debian/rules: Remove build/ on clean.
   * debian/control: Bump Standards-Version (no changes necessary).
