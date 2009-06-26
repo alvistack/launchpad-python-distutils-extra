@@ -419,6 +419,30 @@ gui/foo.desktop.in
             self.failIf(f in manifest, '%s not in manifest' % f)
         os.unlink(os.path.join(self.src, 'MANIFEST'))
 
+    def test_gtkbuilder(self):
+        '''GtkBuilder *.ui'''
+
+        self._mksrc('gtk/test.ui', '''<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <object class="GtkWindow" id="window1">
+    <property name="title" translatable="yes">yes11</property>
+    <child><placeholder/></child>
+  </object>
+</interface>''')
+        self._mksrc('someweird.ui')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.assert_('following files are not recognized' in o)
+        self.assert_('\n  someweird.ui\n' in o)
+
+        f = self.installed_files()
+        self.assert_('/usr/share/foo/test.ui' in f)
+        ftext = '\n'.join(f)
+        self.failIf('someweirMANIFESTd' in ftext)
+
     #
     # helper methods
     #

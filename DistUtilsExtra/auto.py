@@ -56,6 +56,7 @@ def setup(**attrs):
     __data(attrs, src)
     __scripts(attrs, src)
     __stdfiles(attrs, src)
+    __gtkbuilder(attrs, src)
 
     distutils.core.setup(**attrs)
 
@@ -198,6 +199,21 @@ def __stdfiles(attrs, src):
 
         attrs.setdefault('data_files', []).append((os.path.join('share', 'doc',
             attrs['name']), readme))
+
+def __gtkbuilder(attrs, src):
+    '''Install GtkBuilder *.ui files'''
+
+    ui = []
+    for f in src_fileglob(src_all, '*.ui'):
+        contents = open(f).read()
+        if '<interface>\n' in contents and '<requires lib="gtk+"' in contents:
+            src_mark(src, f)
+            ui.append(f)
+    if ui:
+        assert 'name' in attrs, 'You need to set the "name" property in setup.py'
+
+        attrs.setdefault('data_files', []).append((os.path.join('share', 
+            attrs['name']), ui))
 
 #
 # helper functions
