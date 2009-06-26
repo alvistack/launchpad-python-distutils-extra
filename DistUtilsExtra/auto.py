@@ -7,17 +7,22 @@ over configuration" paradigm.
 
 This currently supports:
 
- * Python packages
+ * Python packages (all directories with __init__.py)
  * GtkBuilder (*.ui)
  * Qt4 user interfaces (*.ui)
  * D-Bus (*.conf and *.service)
  * PolicyKit (*.policy.in)
  * Desktop files (*.desktop.in)
  * KDE4 notifications (*.notifyrc.in)
- * scripts
+ * scripts (all in bin/, and ./<projectname>
  * Auxiliary data files (in data/*)
- * automatic po/POTFILES.in
- * automatic MANIFEST
+ * automatic po/POTFILES.in (with all source files which contain _())
+ * automatic MANIFEST (everything except swap and backup files, *.pyc, and
+   revision control)
+
+If you follow above conventions, then you don't need any po/POTFILES.in,
+./setup.cfg, or ./MANIFEST.in, and just need the project metadata (name,
+author, license, etc.) in ./setup.py.
 '''
 
 # (c) 2009 Canonical Ltd.
