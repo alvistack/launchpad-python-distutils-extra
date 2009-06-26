@@ -363,6 +363,8 @@ gui/foo.desktop.in
         self._mksrc('README.txt')
         self._mksrc('MANIFEST.in')
         self._mksrc('MANIFEST')
+        self._mksrc('NEWS')
+        self._mksrc('TODO')
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
@@ -371,11 +373,13 @@ gui/foo.desktop.in
 
         f = self.installed_files()
         self.assert_('/usr/share/doc/foo/README.txt' in f)
+        self.assert_('/usr/share/doc/foo/NEWS' in f)
         ftext = '\n'.join(f)
         self.failIf('MANIFEST' in ftext)
         self.failIf('COPYING' in ftext)
         self.failIf('COPYING' in ftext)
         self.failIf('AUTHORS' in ftext)
+        self.failIf('TODO' in ftext)
 
         # sub-dir READMEs shouldn't be installed by default
         self.snapshot = None

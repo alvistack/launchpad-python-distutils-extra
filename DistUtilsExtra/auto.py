@@ -185,10 +185,11 @@ def __stdfiles(attrs, src):
     src_markglob(src, 'AUTHORS')
     src_markglob(src, 'MANIFEST.in')
     src_markglob(src, 'MANIFEST')
+    src_markglob(src, 'TODO')
 
     # install all README* from the root directory
     readme = []
-    for f in src_fileglob(src, 'README*'):
+    for f in src_fileglob(src, 'README*').union(src_fileglob(src, 'NEWS')):
         if os.path.sep not in f:
             readme.append(f)
             src_mark(src, f)
