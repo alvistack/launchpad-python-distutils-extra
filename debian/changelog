@@ -4,6 +4,7 @@ python-distutils-extra (2.1) UNRELEASED; urgency=low
   * debian/control: Bump Standards-Version (no changes necessary).
   * debian/control: Mention auto module in package description.
   * Add MANIFEST.in, to provide a working "setup.py sdist".
+  * doc/README, DistUtilsExtra.auto.py: Improve documentation.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 25 Jun 2009 12:49:41 +0200
 
