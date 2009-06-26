@@ -26,6 +26,8 @@ If you follow above conventions, then you don't need any po/POTFILES.in,
 author, license, etc.) in ./setup.py.
 '''
 
+__version__ = '2.2'
+
 # (c) 2009 Canonical Ltd.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
