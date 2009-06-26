@@ -449,7 +449,29 @@ gui/foo.desktop.in
         f = self.installed_files()
         self.assert_('/usr/share/foo/test.ui' in f)
         ftext = '\n'.join(f)
-        self.failIf('someweirMANIFESTd' in ftext)
+        self.failIf('someweird' in ftext)
+
+    def test_manpages(self):
+        '''manpages'''
+
+        self._mksrc('man/foo.1', '.TH foo 1 "Jan 01, 1900" "Joe Developer"')
+        self._mksrc('daemon/food.8', '.TH food 8 "Jan 01, 1900" "Joe Developer"')
+        self._mksrc('cruft/food.1', '')
+        self._mksrc('daemon/notme.s', '.TH food 8 "Jan 01, 1900" "Joe Developer"')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.assert_('following files are not recognized' in o)
+        self.assert_('\n  cruft/food.1\n' in o)
+        self.assert_('\n  daemon/notme.s\n' in o)
+
+        f = self.installed_files()
+        self.assert_('/usr/share/man/man1/foo.1' in f)
+        self.assert_('/usr/share/man/man8/food.8' in f)
+        ftext = '\n'.join(f)
+        self.failIf('food.1' in ftext)
+        self.failIf('notme' in ftext)
 
     #
     # helper methods
