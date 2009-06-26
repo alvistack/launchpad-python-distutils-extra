@@ -48,6 +48,7 @@ only needs to have the metadata and some tweaks for unusual files/paths, in a
 
 This currently supports:
 
+ * Python modules (./*.py, only in root directory)
  * Python packages (all directories with __init__.py)
  * GtkBuilder (*.ui)
  * Qt4 user interfaces (*.ui)

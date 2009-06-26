@@ -7,6 +7,7 @@ over configuration" paradigm.
 
 This currently supports:
 
+ * Python modules (./*.py, only in root directory)
  * Python packages (all directories with __init__.py)
  * GtkBuilder (*.ui)
  * Qt4 user interfaces (*.ui)
@@ -54,6 +55,7 @@ def setup(**attrs):
     src_mark(src, 'setup.py')
 
     __cmdclass(attrs)
+    __modules(attrs, src)
     __packages(attrs, src)
     __dbus(attrs, src)
     __data(attrs, src)
@@ -93,6 +95,21 @@ def __cmdclass(attrs):
     v.setdefault('build_kdeui', build_kdeui_auto)
     v.setdefault('clean', clean_build_tree)
     v.setdefault('sdist', sdist_auto)
+
+def __modules(attrs, src):
+    '''Default modules'''
+
+    if 'py_modules' in attrs:
+        for mod in attrs['py_modules']:
+            src_markglob(src, os.path.join(mod, '*.py'))
+        return
+
+    mods = attrs.setdefault('py_modules', [])
+
+    for f in src_fileglob(src, '*.py'):
+        if os.path.sep not in f:
+            mods.append(os.path.splitext(f)[0])
+            src_markglob(src, f)
 
 def __packages(attrs, src):
     '''Default packages'''
