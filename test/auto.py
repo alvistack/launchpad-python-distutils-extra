@@ -2,7 +2,7 @@
 
 # test DistUtilsExtra.auto
 
-import sys, unittest, shutil, tempfile, os, os.path, subprocess
+import sys, unittest, shutil, tempfile, os, os.path, subprocess, stat
 
 class T(unittest.TestCase):
     def setUp(self):
@@ -208,6 +208,10 @@ Exec=/usr/bin/fooapplet''')
 
         self._mksrc('data/icons/scalable/actions/press.png')
         self._mksrc('data/icons/48x48/apps/foo.png')
+        action_icon_path = os.path.join(self.src, 'data', 'icons', 'scalable',
+                'actions')
+        os.symlink(os.path.join(action_icon_path, 'press.png'),
+                os.path.join(action_icon_path, 'crunch.png'))
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
@@ -216,7 +220,11 @@ Exec=/usr/bin/fooapplet''')
 
         f = self.installed_files()
         self.assert_('/usr/share/icons/hicolor/scalable/actions/press.png' in f)
+        self.assert_('/usr/share/icons/hicolor/scalable/actions/crunch.png' in f)
         self.assert_('/usr/share/icons/hicolor/48x48/apps/foo.png' in f)
+        # TODO: known to fail right now
+        #st = os.stat(os.path.join(action_icon_path, 'crunch.png'))
+        #self.assert_(stat.S_ISLNK(st.st_mode))
 
     def test_data(self):
         '''Auxiliary files in data/'''
