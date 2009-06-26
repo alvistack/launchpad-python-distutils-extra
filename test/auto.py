@@ -59,6 +59,22 @@ setup(
         self.assertEqual(len(f), 1)
         self.assert_(f[0].endswith('.egg-info'))
 
+    def test_modules(self):
+        '''Python modules'''
+
+        self._mksrc('yesme.py')
+        self._mksrc('stuff/notme.py')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.assert_('following files are not recognized' in o)
+        self.assert_('\n  stuff/notme.py\n' in o)
+
+        f = '\n'.join(self.installed_files())
+        self.assert_('-packages/yesme.py' in f)
+        self.failIf('notme' in f)
+
     def test_packages(self):
         '''Python packages'''
 
