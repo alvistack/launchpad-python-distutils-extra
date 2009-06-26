@@ -60,6 +60,7 @@ This currently supports:
  * automatic po/POTFILES.in (with all source files which contain _())
  * automatic MANIFEST (everything except swap and backup files, *.pyc, and
    revision control)
+ * manpages (*.[0-9])
 
 If you follow above conventions, then you don't need any po/POTFILES.in,
 ./setup.cfg, or ./MANIFEST.in, and just need the project metadata (name,

@@ -19,6 +19,7 @@ This currently supports:
  * automatic po/POTFILES.in (with all source files which contain _())
  * automatic MANIFEST (everything except swap and backup files, *.pyc, and
    revision control)
+ * manpages (*.[0-9])
 
 If you follow above conventions, then you don't need any po/POTFILES.in,
 ./setup.cfg, or ./MANIFEST.in, and just need the project metadata (name,
@@ -57,6 +58,7 @@ def setup(**attrs):
     __scripts(attrs, src)
     __stdfiles(attrs, src)
     __gtkbuilder(attrs, src)
+    __manpages(attrs, src)
 
     distutils.core.setup(**attrs)
 
@@ -214,6 +216,19 @@ def __gtkbuilder(attrs, src):
 
         attrs.setdefault('data_files', []).append((os.path.join('share', 
             attrs['name']), ui))
+
+def __manpages(attrs, src):
+    '''Install manpages'''
+
+    mans = {}
+    for f in src_fileglob(src_all, '*.[0123456789]'):
+        line = open(f).readline()
+        if line.startswith('.TH '):
+            src_mark(src, f)
+            mans.setdefault(f[-1], []).append(f)
+    v = attrs.setdefault('data_files', [])
+    for section, files in mans.iteritems():
+        v.append((os.path.join('share', 'man', 'man' + section), files))
 
 #
 # helper functions
