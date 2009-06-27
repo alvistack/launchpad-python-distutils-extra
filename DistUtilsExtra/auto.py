@@ -21,6 +21,7 @@ This currently supports:
  * automatic MANIFEST (everything except swap and backup files, *.pyc, and
    revision control)
  * manpages (*.[0-9])
+ * files which should go into /etc (./etc/*, copied verbatim)
 
 If you follow above conventions, then you don't need any po/POTFILES.in,
 ./setup.cfg, or ./MANIFEST.in, and just need the project metadata (name,
@@ -32,13 +33,14 @@ __version__ = '2.2'
 # (c) 2009 Canonical Ltd.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
-import os, os.path, fnmatch, stat
+import os, os.path, fnmatch, stat, shutil
 import distutils.core
 
 from DistUtilsExtra.command import *
 from distutils.dir_util import remove_tree
 import distutils.command.clean
 import distutils.command.sdist
+import distutils.command.install
 import distutils.filelist
 
 # FIXME: global variable, to share with build_i18n_auto
@@ -53,6 +55,11 @@ def setup(**attrs):
     src = src_all.copy()
 
     src_mark(src, 'setup.py')
+
+    # mark files in etc/*, handled by install_auto
+    for f in src.copy():
+        if f.startswith('etc' + os.path.sep):
+            src.remove(f)
 
     __cmdclass(attrs)
     __modules(attrs, src)
@@ -93,6 +100,7 @@ def __cmdclass(attrs):
     v.setdefault('build_i18n', build_i18n_auto)
     v.setdefault('build_icons', build_icons.build_icons)
     v.setdefault('build_kdeui', build_kdeui_auto)
+    v.setdefault('install', install_auto)
     v.setdefault('clean', clean_build_tree)
     v.setdefault('sdist', sdist_auto)
 
@@ -443,3 +451,13 @@ class sdist_auto(distutils.command.sdist.sdist):
                 continue
             self.filelist.append(f)
 
+# Automatic installation of ./etc/
+
+class install_auto(distutils.command.install.install):
+    def run(self):
+        distutils.command.install.install.run(self)
+
+        # install files from etc/
+        if os.path.isdir('etc'):
+            shutil.copytree('etc', os.path.join(self.root, 'etc'),
+                    symlinks=True)
