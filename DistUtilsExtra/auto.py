@@ -54,6 +54,10 @@ def setup(**attrs):
     src_all = src_find(attrs)
     src = src_all.copy()
 
+    # src_find() removes explicit scripts, but we need them for automatic
+    # POTFILE.in building
+    src_all.update(set(attrs.get('scripts', [])))
+
     src_mark(src, 'setup.py')
 
     # mark files in etc/*, handled by install_auto
