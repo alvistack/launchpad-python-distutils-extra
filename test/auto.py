@@ -239,7 +239,8 @@ Exec=/usr/bin/fooapplet''')
         self.assert_('/usr/share/icons/hicolor/scalable/actions/crunch.png' in f)
         self.assert_('/usr/share/icons/hicolor/48x48/apps/foo.png' in f)
         # TODO: known to fail right now
-        #st = os.stat(os.path.join(action_icon_path, 'crunch.png'))
+        #st = os.lstat(os.path.join(self.install_tree, 
+        #   '/usr/share/icons/hicolor/scalable/actions/crunch.png'))
         #self.assert_(stat.S_ISLNK(st.st_mode))
 
     def test_data(self):
@@ -488,6 +489,35 @@ gui/foo.desktop.in
         ftext = '\n'.join(f)
         self.failIf('food.1' in ftext)
         self.failIf('notme' in ftext)
+
+    def test_etc(self):
+        '''etc/*'''
+
+        self._mksrc('etc/cron.daily/foo')
+        self._mksrc('etc/foo.conf')
+        self._mksrc('etc/init.d/foo', executable=True)
+        d = os.path.join(self.src, 'etc', 'cron.weekly')
+        os.mkdir(d)
+        os.symlink(os.path.join('..', 'cron.daily', 'foo'),
+                os.path.join(d, 'foo'))
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o, o)
+
+        f = self.installed_files()
+        self.assert_('/etc/cron.daily/foo' in f)
+        self.assert_('/etc/cron.weekly/foo' in f)
+        self.assert_('/etc/init.d/foo' in f)
+        self.assert_('/etc/foo.conf' in f)
+
+        # verify that init script is executable
+        self.assert_(os.access(os.path.join(self.install_tree, 'etc', 'init.d',
+            'foo'), os.X_OK))
+        # verify that symlinks get preserved
+        st = os.lstat(os.path.join(self.install_tree, 'etc', 'cron.weekly', 'foo'))
+        self.assert_(stat.S_ISLNK(st.st_mode))
 
     #
     # helper methods
