@@ -377,6 +377,7 @@ class build_i18n_auto(build_i18n.build_i18n):
         '''Build a default POTFILES.in'''
 
         auto_potfiles_in = False
+        exe_symlinks = []
         global src_all
         if not os.path.exists(os.path.join('po', 'POTFILES.in')):
             files = src_fileglob(src_all, '*.py')
@@ -388,6 +389,19 @@ class build_i18n_auto(build_i18n.build_i18n):
                 contents = open(f).read()
                 if '<interface>\n' in contents and '<requires lib="gtk+"' in contents:
                     files.add('[type: gettext/glade]' + f)
+
+            # find extensionless executable scripts which are Python files, and
+            # generate a temporary *.py alias, so that they get caught by
+            # intltool
+            for f in src_all:
+                f_py = f + '.py'
+                if os.access(f, os.X_OK) and os.path.splitext(f)[1] == '' and \
+                        not os.path.exists(f_py):
+                    line = open(f).readline()
+                    if line.startswith('#!') and 'python' in line:
+                        os.symlink(os.path.basename(f), f_py)
+                        files.add(f_py)
+                        exe_symlinks.append(f_py)
 
             if files:
                 if not os.path.isdir('po'):
@@ -401,6 +415,9 @@ class build_i18n_auto(build_i18n.build_i18n):
                 auto_potfiles_in = True
 
         build_i18n.build_i18n.run(self)
+
+        for f in exe_symlinks:
+            os.unlink(f)
 
         if auto_potfiles_in:
             os.unlink('po/POTFILES.in')

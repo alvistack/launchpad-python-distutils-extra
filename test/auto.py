@@ -370,7 +370,7 @@ gui/foo.desktop.in
         pot = open(pot_path).read()
 
         self.failIf('msgid "no"' in pot)
-        for i in range(2, 12):
+        for i in range(2, 14):
             self.assert_('msgid "yes%i' % i in pot or 
                    'msgid ""\n"yes%i' % i in pot,
                    'yes%i' % i)
@@ -682,5 +682,13 @@ Exec=/usr/bin/foo''')
 </interface>''')
 
         self._mksrc('Makefile', 'echo _("no7")')
+
+        # Executables without *.py extension
+        self._mksrc('gtk/foo-gtk', '#!/usr/bin/python\nprint _("yes12")',
+                executable=True)
+        self._mksrc('cli/foo-cli', '#!/usr/bin/env python\nprint _("yes13")',
+                executable=True)
+        self._mksrc('daemon/foobarize', '#!/usr/bin/flex\np _("no8")',
+                executable=True)
 
 unittest.main()
