@@ -33,11 +33,11 @@ __version__ = '2.2'
 # (c) 2009 Canonical Ltd.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
-import os, os.path, fnmatch, stat, shutil
+import os, os.path, fnmatch, stat
 import distutils.core
 
 from DistUtilsExtra.command import *
-from distutils.dir_util import remove_tree
+import distutils.dir_util
 import distutils.command.clean
 import distutils.command.sdist
 import distutils.command.install
@@ -89,7 +89,7 @@ class clean_build_tree(distutils.command.clean.clean):
     def run(self):
         # clean build/mo
         if os.path.isdir('build'):
-            remove_tree('build')
+            distutils.dir_util.remove_tree('build')
         distutils.command.clean.clean.run(self)
 
 def __cmdclass(attrs):
@@ -455,9 +455,19 @@ class sdist_auto(distutils.command.sdist.sdist):
 
 class install_auto(distutils.command.install.install):
     def run(self):
-        distutils.command.install.install.run(self)
-
         # install files from etc/
         if os.path.isdir('etc'):
-            shutil.copytree('etc', os.path.join(self.root, 'etc'),
-                    symlinks=True)
+            # work around a bug in copy_tree() which fails with "File exists" on
+            # previously existing symlinks
+            for f in distutils.filelist.findall():
+                if not f.startswith('etc' + os.path.sep) or not os.path.islink(f):
+                    continue
+                try:
+                    os.unlink(os.path.join(self.root, f))
+                except OSError:
+                    pass
+
+            distutils.dir_util.copy_tree('etc', os.path.join(self.root, 'etc'),
+                    preserve_times=0, preserve_symlinks=1, verbose=1)
+
+        distutils.command.install.install.run(self)

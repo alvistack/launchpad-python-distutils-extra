@@ -2,7 +2,7 @@
 
 # test DistUtilsExtra.auto
 
-import sys, unittest, shutil, tempfile, os, os.path, subprocess, stat
+import sys, unittest, shutil, tempfile, os, os.path, subprocess
 
 class T(unittest.TestCase):
     def setUp(self):
@@ -239,9 +239,8 @@ Exec=/usr/bin/fooapplet''')
         self.assert_('/usr/share/icons/hicolor/scalable/actions/crunch.png' in f)
         self.assert_('/usr/share/icons/hicolor/48x48/apps/foo.png' in f)
         # TODO: known to fail right now
-        #st = os.lstat(os.path.join(self.install_tree, 
+        #self.assert_(os.path.islink(os.path.join(self.install_tree, 
         #   '/usr/share/icons/hicolor/scalable/actions/crunch.png'))
-        #self.assert_(stat.S_ISLNK(st.st_mode))
 
     def test_data(self):
         '''Auxiliary files in data/'''
@@ -516,8 +515,15 @@ gui/foo.desktop.in
         self.assert_(os.access(os.path.join(self.install_tree, 'etc', 'init.d',
             'foo'), os.X_OK))
         # verify that symlinks get preserved
-        st = os.lstat(os.path.join(self.install_tree, 'etc', 'cron.weekly', 'foo'))
-        self.assert_(stat.S_ISLNK(st.st_mode))
+        self.assert_(os.path.islink(os.path.join(self.install_tree, 'etc',
+            'cron.weekly', 'foo')))
+
+        # check that we can install again into the same source tree
+        (o, e, s) = self.setup_py(['install', '--no-compile', '--prefix=/usr', 
+            '--root=' + self.install_tree])
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o, o)
 
     #
     # helper methods
