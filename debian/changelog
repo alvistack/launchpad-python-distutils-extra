@@ -1,3 +1,9 @@
+python-distutils-extra (2.3) UNRELEASED; urgency=low
+
+  * auto.py: Fix recognition of GtkBuilder *.ui files as glade-3 writes them.
+
+ -- Martin Pitt <mpitt@debian.org>  Mon, 29 Jun 2009 14:44:38 +0200
+
 python-distutils-extra (2.2) unstable; urgency=low
 
   * auto.py: Handle "NEWS" and "TODO" standard files.
