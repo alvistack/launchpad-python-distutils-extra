@@ -239,7 +239,7 @@ def __gtkbuilder(attrs, src):
     ui = []
     for f in src_fileglob(src_all, '*.ui'):
         contents = open(f).read()
-        if '<interface>\n' in contents and '<requires lib="gtk+"' in contents:
+        if '<interface>\n' in contents and 'class="Gtk' in contents:
             src_mark(src, f)
             ui.append(f)
     if ui:
