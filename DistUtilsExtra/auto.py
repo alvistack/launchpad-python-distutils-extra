@@ -271,8 +271,13 @@ def __manpages(attrs, src):
 def __external_mod(module, attrs):
     '''Check if given Python module is not included in Python or locally'''
 
+    # filter out locally provided modules
     if module in attrs['provides']:
         return False
+    for m in _module_parents(module):
+        if m in attrs['provides']:
+            return False
+
     try:
         path = __import__(module).__file__
     except ImportError:
@@ -303,6 +308,32 @@ def __add_imports(imports, file, attrs):
     except SyntaxError, e:
         print >> sys.stderr, 'WARNING: syntax errors in', f, ':', e
 
+def _module_parents(mod):
+    '''Iterate over all parents of a module'''
+
+    hierarchy = mod.split('.')
+    hierarchy.pop()
+    while hierarchy:
+        yield '.'.join(hierarchy)
+        hierarchy.pop()
+
+def __filter_namespace(modules):
+    '''Filter out modules which are already covered by a parent module
+    
+    E. g. this transforms ['os.path', 'os', 'foo.bar.baz', 'foo.bar'] to
+    ['os', 'foo.bar'].
+    '''
+    result = set()
+
+    for m in modules:
+        for p in _module_parents(m):
+            if p in modules:
+                break
+        else:
+            result.add(m)
+
+    return sorted(result)
+
 def __requires(attrs, src_all):
     '''Determine requires (if not set explicitly)'''
 
@@ -323,7 +354,7 @@ def __requires(attrs, src_all):
             continue
         __add_imports(imports, s, attrs)
 
-    attrs['requires'] = list(imports)
+    attrs['requires'] = __filter_namespace(imports)
 
 def __provides(attrs, src_all):
     '''Determine provides (if not set explicitly)'''
@@ -331,9 +362,10 @@ def __provides(attrs, src_all):
     if 'provides' in attrs:
         return
 
-    attrs['provides'] = attrs.get('py_modules', [])
+    provides = attrs.get('py_modules', [])
     for p in attrs.get('packages', []):
-        attrs['provides'].append(p.replace(os.path.sep, '.'))
+        provides.append(p.replace(os.path.sep, '.'))
+    attrs['provides'] = __filter_namespace(provides)
  
 #
 # helper functions

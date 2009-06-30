@@ -544,7 +544,7 @@ import Crypto.PublicKey.DSA, unknown
         self._mksrc('foo/bar/__init__.py', '')
         self._mksrc('foo/bar/poke.py', 'def x(): pass')
 
-        self._mksrc('mymod.py', 'import foo') # TODO: from foo.bar.poke import x
+        self._mksrc('mymod.py', 'import foo\nfrom foo.bar.poke import x')
 
         self._mksrc('bin/foo-cli', '''#!/usr/bin/python
 import sys
@@ -568,12 +568,11 @@ print 'import iamnota.module'
 
         # check provides
         prov = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Provides: ')]
-        self.assertEqual(set(prov), set(['foo', 'foo.bar', 'mymod']))
+        self.assertEqual(set(prov), set(['foo', 'mymod']))
 
         # check requires
         req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
-        self.assertEqual(set(req), set(['DistUtilsExtra.auto',
-            'Crypto.PublicKey.DSA', 'Crypto', 'dateutil']))
+        self.assertEqual(set(req), set(['DistUtilsExtra.auto', 'Crypto', 'dateutil']))
 
     #
     # helper methods
