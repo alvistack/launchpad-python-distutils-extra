@@ -525,6 +525,42 @@ gui/foo.desktop.in
         self.assertEqual(s, 0)
         self.failIf('following files are not recognized' in o, o)
 
+    def test_requires(self):
+        '''automatic requires'''
+
+        try:
+            __import__('Crypto')
+            __import__('dateutil')
+        except ImportError:
+            self.fail('You need to have Crypto and dateutil installed for this test suite to work')
+
+        self._mksrc('foo/__init__.py', '')
+        self._mksrc('foo/stuff.py', '''import xml.parsers.expat
+import os, os.path, email.mime, distutils.command.register
+from email import header as h
+import Crypto.PublicKey.DSA, unknown
+''')
+        self._mksrc('bin/foo-cli', '''#!/usr/bin/python
+import sys
+from dateutil import tz
+from Crypto import Cipher
+
+print 'import iamnota.module'
+''', executable=True)
+
+        self.install_tree = tempfile.mkdtemp()
+        (o, e, s) = self.setup_py(['install_egg_info', '-d', self.install_tree])
+        self.assertEqual(e, 'ERROR: Python module unknown not found\n')
+        self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o, o)
+
+        egg = open(os.path.join(self.install_tree,
+            'foo-0.1.egg-info')).read().splitlines()
+        self.assert_('Name: foo' in egg)
+        req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
+        self.assertEqual(set(req), set(['DistUtilsExtra.auto',
+            'Crypto.PublicKey.DSA', 'Crypto', 'dateutil']))
+
     #
     # helper methods
     #

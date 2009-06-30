@@ -1,6 +1,7 @@
 python-distutils-extra (2.3) UNRELEASED; urgency=low
 
   * auto.py: Fix recognition of GtkBuilder *.ui files as glade-3 writes them.
+  * auto.py: Add automatic calculation of "requires" unless explicitly given.
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 29 Jun 2009 14:44:38 +0200
 
