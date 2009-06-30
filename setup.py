@@ -20,5 +20,4 @@ setup(
            "clean_i18n = DistUtilsExtra.command.clean_i18n:clean_i18n",
            "check = DistUtilsExtra.command.check:check",
         ],},
-    test_suite = "nose.collector",
 )
