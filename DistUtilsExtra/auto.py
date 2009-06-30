@@ -268,9 +268,11 @@ def __manpages(attrs, src):
     for section, files in mans.iteritems():
         v.append((os.path.join('share', 'man', 'man' + section), files))
 
-def __external_mod(module):
-    '''Check if given Python module is not included in Python'''
+def __external_mod(module, attrs):
+    '''Check if given Python module is not included in Python or locally'''
 
+    if module in attrs['provides']:
+        return False
     try:
         path = __import__(module).__file__
     except ImportError:
@@ -282,7 +284,7 @@ def __external_mod(module):
     return 'dist-packages' in path or 'site-packages' in path or \
             not path.startswith(os.path.dirname(os.__file__))
 
-def __add_imports(imports, file):
+def __add_imports(imports, file, attrs):
     '''Add all imported modules from file to imports set.
 
     This filters out modules which are shipped with Python itself.
@@ -293,10 +295,10 @@ def __add_imports(imports, file):
         for node in ast.node.nodes:
             if isinstance(node, compiler.ast.Import):
                 for name, _ in node.names:
-                    if __external_mod(name):
+                    if __external_mod(name, attrs):
                         imports.add(name)
             if isinstance(node, compiler.ast.From):
-                if __external_mod(node.modname):
+                if __external_mod(node.modname, attrs):
                     imports.add(node.modname)
     except SyntaxError, e:
         print >> sys.stderr, 'WARNING: syntax errors in', f, ':', e
@@ -319,7 +321,7 @@ def __requires(attrs, src_all):
                 continue
         elif ext != '.py':
             continue
-        __add_imports(imports, s)
+        __add_imports(imports, s, attrs)
 
     attrs['requires'] = list(imports)
 

@@ -544,11 +544,12 @@ import Crypto.PublicKey.DSA, unknown
         self._mksrc('foo/bar/__init__.py', '')
         self._mksrc('foo/bar/poke.py', 'def x(): pass')
 
-        self._mksrc('mymod.py', 'import foo.bar')
+        self._mksrc('mymod.py', 'import foo') # TODO: from foo.bar.poke import x
 
         self._mksrc('bin/foo-cli', '''#!/usr/bin/python
 import sys
 from dateutil import tz
+import foo.bar
 from Crypto import Cipher
 
 print 'import iamnota.module'
