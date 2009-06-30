@@ -540,6 +540,12 @@ import os, os.path, email.mime, distutils.command.register
 from email import header as h
 import Crypto.PublicKey.DSA, unknown
 ''')
+
+        self._mksrc('foo/bar/__init__.py', '')
+        self._mksrc('foo/bar/poke.py', 'def x(): pass')
+
+        self._mksrc('mymod.py', 'import foo.bar')
+
         self._mksrc('bin/foo-cli', '''#!/usr/bin/python
 import sys
 from dateutil import tz
@@ -554,14 +560,19 @@ print 'import iamnota.module'
         self.assertEqual(s, 0)
         self.failIf('following files are not recognized' in o, o)
 
+        # parse .egg-info
         egg = open(os.path.join(self.install_tree,
             'foo-0.1.egg-info')).read().splitlines()
         self.assert_('Name: foo' in egg)
-        req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
+
+        # check provides
         prov = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Provides: ')]
+        self.assertEqual(set(prov), set(['foo', 'foo.bar', 'mymod']))
+
+        # check requires
+        req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
         self.assertEqual(set(req), set(['DistUtilsExtra.auto',
             'Crypto.PublicKey.DSA', 'Crypto', 'dateutil']))
-        self.assertEqual(prov, ['foo'])
 
     #
     # helper methods
