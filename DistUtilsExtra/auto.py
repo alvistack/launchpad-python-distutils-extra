@@ -22,6 +22,7 @@ This currently supports:
    revision control)
  * manpages (*.[0-9])
  * files which should go into /etc (./etc/*, copied verbatim)
+ * determining "requires" from import statements in source code
 
 If you follow above conventions, then you don't need any po/POTFILES.in,
 ./setup.cfg, or ./MANIFEST.in, and just need the project metadata (name,
@@ -33,7 +34,8 @@ __version__ = '2.2'
 # (c) 2009 Canonical Ltd.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
-import os, os.path, fnmatch, stat
+import os, os.path, fnmatch, stat, sys
+import compiler # TODO: deprecated
 import distutils.core
 
 from DistUtilsExtra.command import *
@@ -55,7 +57,7 @@ def setup(**attrs):
     src = src_all.copy()
 
     # src_find() removes explicit scripts, but we need them for automatic
-    # POTFILE.in building
+    # POTFILE.in building and requires
     src_all.update(set(attrs.get('scripts', [])))
 
     src_mark(src, 'setup.py')
@@ -74,6 +76,9 @@ def setup(**attrs):
     __stdfiles(attrs, src)
     __gtkbuilder(attrs, src)
     __manpages(attrs, src)
+
+    if 'clean' not in sys.argv:
+        __requires(attrs, src_all)
 
     distutils.core.setup(**attrs)
 
@@ -260,6 +265,61 @@ def __manpages(attrs, src):
     v = attrs.setdefault('data_files', [])
     for section, files in mans.iteritems():
         v.append((os.path.join('share', 'man', 'man' + section), files))
+
+def __external_mod(module):
+    '''Check if given Python module is not included in Python'''
+
+    try:
+        path = __import__(module).__file__
+    except ImportError:
+        print >> sys.stderr, 'ERROR: Python module %s not found' % module
+        return False
+    except AttributeError: # builtin modules
+        return False
+
+    return 'dist-packages' in path or 'site-packages' in path or \
+            not path.startswith(os.path.dirname(os.__file__))
+
+def __add_imports(imports, file):
+    '''Add all imported modules from file to imports set.
+
+    This filters out modules which are shipped with Python itself.
+    '''
+    try:
+        ast = compiler.parseFile(file)
+
+        for node in ast.node.nodes:
+            if isinstance(node, compiler.ast.Import):
+                for name, _ in node.names:
+                    if __external_mod(name):
+                        imports.add(name)
+            if isinstance(node, compiler.ast.From):
+                if __external_mod(node.modname):
+                    imports.add(node.modname)
+    except SyntaxError, e:
+        print >> sys.stderr, 'WARNING: syntax errors in', f, ':', e
+
+def __requires(attrs, src_all):
+    '''Determine requires (if not set explicitly)'''
+
+    if 'requires' in attrs:
+        return
+
+    imports = set()
+
+    # iterate over all *.py and scripts which are Python
+    for s in src_all:
+        ext = os.path.splitext(s)[1]
+        if ext == '':
+            f = open(s)
+            line = f.readline()
+            if not line.startswith('#!') or 'python' not in line:
+                continue
+        elif ext != '.py':
+            continue
+        __add_imports(imports, s)
+
+    attrs['requires'] = list(imports)
 
 #
 # helper functions
@@ -492,3 +552,4 @@ class install_auto(distutils.command.install.install):
                     preserve_times=0, preserve_symlinks=1, verbose=1)
 
         distutils.command.install.install.run(self)
+
