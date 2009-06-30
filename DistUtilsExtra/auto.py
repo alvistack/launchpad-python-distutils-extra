@@ -329,7 +329,9 @@ def __provides(attrs, src_all):
     if 'provides' in attrs:
         return
 
-    attrs['provides'] = attrs.get('packages', []) + attrs.get('modules', [])
+    attrs['provides'] = attrs.get('py_modules', [])
+    for p in attrs.get('packages', []):
+        attrs['provides'].append(p.replace(os.path.sep, '.'))
  
 #
 # helper functions
