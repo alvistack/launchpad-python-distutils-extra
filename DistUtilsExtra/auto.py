@@ -23,6 +23,7 @@ This currently supports:
  * manpages (*.[0-9])
  * files which should go into /etc (./etc/*, copied verbatim)
  * determining "requires" from import statements in source code
+ * determining "provides" from shipped packages and modules
 
 If you follow above conventions, then you don't need any po/POTFILES.in,
 ./setup.cfg, or ./MANIFEST.in, and just need the project metadata (name,
@@ -70,6 +71,7 @@ def setup(**attrs):
     __cmdclass(attrs)
     __modules(attrs, src)
     __packages(attrs, src)
+    __provides(attrs, src)
     __dbus(attrs, src)
     __data(attrs, src)
     __scripts(attrs, src)
@@ -321,6 +323,14 @@ def __requires(attrs, src_all):
 
     attrs['requires'] = list(imports)
 
+def __provides(attrs, src_all):
+    '''Determine provides (if not set explicitly)'''
+
+    if 'provides' in attrs:
+        return
+
+    attrs['provides'] = attrs.get('packages', []) + attrs.get('modules', [])
+ 
 #
 # helper functions
 #

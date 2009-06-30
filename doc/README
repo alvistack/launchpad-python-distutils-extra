@@ -64,6 +64,7 @@ This currently supports:
  * manpages (*.[0-9])
  * files which should go into /etc (./etc/*, copied verbatim)
  * determining "requires" from import statements in source code
+ * determining "provides" from shipped packages and modules
 
 If you follow above conventions, then you don't need any po/POTFILES.in,
 ./setup.cfg, or ./MANIFEST.in, and just need the project metadata (name,

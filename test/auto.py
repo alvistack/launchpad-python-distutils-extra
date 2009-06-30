@@ -525,8 +525,8 @@ gui/foo.desktop.in
         self.assertEqual(s, 0)
         self.failIf('following files are not recognized' in o, o)
 
-    def test_requires(self):
-        '''automatic requires'''
+    def test_requires_provides(self):
+        '''automatic requires/provides'''
 
         try:
             __import__('Crypto')
@@ -558,8 +558,10 @@ print 'import iamnota.module'
             'foo-0.1.egg-info')).read().splitlines()
         self.assert_('Name: foo' in egg)
         req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
+        prov = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Provides: ')]
         self.assertEqual(set(req), set(['DistUtilsExtra.auto',
             'Crypto.PublicKey.DSA', 'Crypto', 'dateutil']))
+        self.assertEqual(prov, ['foo'])
 
     #
     # helper methods
