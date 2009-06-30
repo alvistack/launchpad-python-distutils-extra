@@ -1,0 +1,158 @@
+#!/usr/bin/python
+# Create/update debian packaging from a Python .egg-info
+# Copyright (C) 2009 Canonical Ltd.
+# Author: Martin Pitt
+# License: GPL v2 or later
+
+import subprocess, tempfile, shutil, sys, os
+
+def get_egg_info():
+    '''Get egg information from ./setup.py into a dictionary.'''
+
+    if not os.path.isfile('setup.py'):
+        print >> sys.stderr, 'No setup.py in current directory'
+        sys.exit(1)
+
+    egg = {}
+    instdir = tempfile.mkdtemp()
+    try:
+        result = subprocess.call(['python', 'setup.py', 'install_egg_info', '-d', instdir])
+        if result != 0:
+            print >> sys.stderr, 'setup.py install_egg_info failed'
+            sys.exit(1)
+
+        ls = os.listdir(instdir)
+        if len(ls) != 1 or not os.path.isfile(os.path.join(instdir, ls[0])) or \
+                not ls[0].endswith('.egg-info'):
+            print >> sys.stderr, './setup.py install_egg_info did not generate an .egg-info file'
+            sys.exit(1)
+
+        for l in open(os.path.join(instdir, ls[0])):
+            k, v = l.strip().split(': ', 1)
+            if k in ['Requires', 'Provides']:
+                # multi-value fields
+                egg.setdefault(k, []).append(v)
+            else:
+                if k in egg:
+                    print >> sys.stderr, 'WARNING: duplicate field %s in .egg-info' % k
+                egg[k] = v
+
+        return egg
+    finally:
+        shutil.rmtree(instdir)
+
+def make_debian(egg):
+    '''Create/update debian/* from information in egg dictionary'''
+
+    if not os.path.isdir('debian'):
+        os.mkdir('debian')
+
+    if not os.path.exists('debian/compat'):
+        f = open('debian/compat', 'w')
+        f.write('6\n')
+        f.close()
+
+    if not os.path.exists('debian/rules'):
+        f = open('debian/rules', 'w')
+        f.write('''#!/usr/bin/make -f
+
+DEB_PYTHON_SYSTEM := pycentral
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/python-distutils.mk
+include /usr/share/cdbs/1/rules/langpack.mk
+''')
+        f.close()
+        os.chmod('debian/rules', 0755)
+
+    if not os.path.exists('debian/copyright'):
+        make_copyright(egg)
+
+    make_control(egg)
+    make_changelog(egg)
+
+def make_copyright(egg):
+    author = egg.get('Author', '')
+    if 'Author-email' in egg:
+        author += ' <' + egg['Author-email'] + '>'
+
+    f = open('debian/copyright', 'w')
+    f.write('''Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat
+Upstream-Name: %s
+Upstream-Maintainer: %s
+''' % (egg['Name'], author))
+    if 'Home-page' in egg:
+        print >> f, 'Upstream-Source:', egg['Home-page']
+
+    print >> f, '\nFiles: *'
+
+    cgrep = subprocess.Popen("find -type f ! -name 'COPYING*' ! -name LICENSE !  -name '*.pyc' ! -path '*/.*' ! -path './debian/*' ! -name '*.pot' | xargs grep -hi '(c)' | sed 's/^.*([cC])/Copyright: (C)/' | sort -u",
+            shell=True, stdout=subprocess.PIPE)
+    out = cgrep.communicate()[0]
+    assert cgrep.returncode == 0
+    f.write(out)
+
+    if 'License' in egg:
+        print >> f, 'License:', egg['License']
+        if 'gpl' in egg['License'].lower():
+            if '2' in egg['License']:
+                l = 'GPL-2'
+            elif '3' in egg['License']:
+                l = 'GPL-3'
+            else:
+                l = 'GPL'
+            print >> f, ''' The full text of the GPL is distributed in
+ /usr/share/common-licenses/%s on Debian systems.''' % l
+
+def make_control(egg):
+    author = egg.get('Author', '')
+    if 'Author-email' in egg:
+        author += ' <' + egg['Author-email'] + '>'
+
+    deps = '' # TODO
+
+    if not os.path.exists('debian/control'):
+        f = open('debian/control', 'w')
+        f.write('''Source: %(name)s
+Section: python
+Priority: extra
+Build-Depends: cdbs (>= 0.4.43),
+  debhelper (>= 6), 
+  python-central (>= 0.6.11),
+  python-distutils-extra (>= 2.3)
+Maintainer: %(maint)s
+Standards-Version: 3.8.2
+XS-Python-Version: current
+
+Package: %(name)s
+Architecture: all
+XB-Python-Version: ${python:Versions}
+Depends: ${python:Depends}, %(depends)s
+Description: %(desc)s
+''' % {'name': egg['Name'], 'maint': author, 'depends': deps,
+       'desc': egg.get('Summary', '')})
+        f.close()
+
+    # TODO: update debian/control
+
+def make_changelog(egg):
+    lsb_release = subprocess.Popen(['lsb_release', '-sc'],
+            stdout=subprocess.PIPE)
+    release = lsb_release.communicate()[0].strip()
+    assert lsb_release.returncode == 0
+
+    if not os.path.exists('debian/changelog'):
+        assert subprocess.call(['debchange', '--create', '--package', egg['Name'],
+            '-D' + release, '-v' + egg['Version'], 'Initial release.']) == 0
+    else:
+        # this will just fail if we already have that version, which is okay.
+        subprocess.call(['debchange', '-D' + release, '-v' + egg['Version'],
+            'New release.'], stderr=subprocess.PIPE)
+        # TODO: add CLI option to specify changelog
+
+#
+# main
+#
+
+egg = get_egg_info()
+make_debian(egg)
