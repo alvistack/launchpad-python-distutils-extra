@@ -121,15 +121,22 @@ def make_control(egg):
         else:
             print '[not found]'
  
+    # calculate extra build dependencies
+    bdeps = ''
+    if subprocess.call('find -name "*.ui" | xargs grep -q \'<widget class="Q\'', 
+            shell=True) == 0:
+        print 'Package uses KDE *.ui files, adding python-kde4-dev build dependency'
+        bdeps += ',\n python-kde4-dev'
+
     if not os.path.exists('debian/control'):
         f = open('debian/control', 'w')
         f.write('''Source: %(name)s
 Section: python
 Priority: extra
 Build-Depends: cdbs (>= 0.4.43),
-  debhelper (>= 6), 
-  python-central (>= 0.6.11),
-  python-distutils-extra (>= 2.3)
+ debhelper (>= 6), 
+ python-central (>= 0.6.11),
+ python-distutils-extra (>= 2.3)%(bdep)s
 Maintainer: %(maint)s
 Standards-Version: 3.8.2
 XS-Python-Version: current
@@ -140,7 +147,7 @@ XB-Python-Version: ${python:Versions}
 Depends: ${python:Depends}, %(depends)s
 Description: %(desc)s
 ''' % {'name': egg['Name'], 'maint': author, 'depends': ', '.join(deps),
-       'desc': egg.get('Summary', '')})
+       'desc': egg.get('Summary', ''), 'bdep': bdeps})
         f.close()
 
     # TODO: update debian/control
