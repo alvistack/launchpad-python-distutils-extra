@@ -5,6 +5,9 @@ python-distutils-extra (2.3) UNRELEASED; urgency=low
   * auto.py: Add automatic calculation of "provides" unless explicitly given.
   * Drop test/testBzrBuild.py, it's specific to Sebastian's computer.
   * setup.py: Drop nose.collector, we don't use it.
+  * Add debian/local/python-mkdebian: Create/update debian packaging
+    (debian/*) from python egg-info data. Not terribly pretty, but working and
+    reasonably policy compliant.
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 29 Jun 2009 14:44:38 +0200
 

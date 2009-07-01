@@ -12,6 +12,9 @@ include /usr/share/cdbs/1/class/python-distutils.mk
 common-post-build-indep::
 	test/auto.py -v
 
+install/python-distutils-extra::
+	install -D -m 755 debian/local/python-mkdebian debian/$(cdbs_curpkg)/usr/bin/python-mkdebian
+
 clean::
 	rm -rf build
 	rm -rf python_distutils_extra.egg-info
