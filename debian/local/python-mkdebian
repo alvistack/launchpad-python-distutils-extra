@@ -109,8 +109,18 @@ def make_control(egg):
     if 'Author-email' in egg:
         author += ' <' + egg['Author-email'] + '>'
 
-    deps = '' # TODO
-
+    # calculate dependencies
+    print 'Searching packages which provide required Python modules:'
+    deps = set()
+    for m in egg.get('Requires', []):
+        print '  ', m, '...',
+        p = mod2package(m)
+        if p:
+            deps.add(p)
+            print p
+        else:
+            print '[not found]'
+ 
     if not os.path.exists('debian/control'):
         f = open('debian/control', 'w')
         f.write('''Source: %(name)s
@@ -129,7 +139,7 @@ Architecture: all
 XB-Python-Version: ${python:Versions}
 Depends: ${python:Depends}, %(depends)s
 Description: %(desc)s
-''' % {'name': egg['Name'], 'maint': author, 'depends': deps,
+''' % {'name': egg['Name'], 'maint': author, 'depends': ', '.join(deps),
        'desc': egg.get('Summary', '')})
         f.close()
 
@@ -149,6 +159,51 @@ def make_changelog(egg):
         subprocess.call(['debchange', '-D' + release, '-v' + egg['Version'],
             'New release.'], stderr=subprocess.PIPE)
         # TODO: add CLI option to specify changelog
+
+def mod2package(module):
+    '''Convert Python module into a package name.
+
+    This can return None if the package name cannot be determined.
+    '''
+
+    # first attempt: python-<modulename> (common case)
+    package = 'python-' + module.split('.')[0].lower()
+    dpkg = subprocess.Popen(['dpkg', '-L', package], stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+    out = dpkg.communicate()[0]
+    if dpkg.returncode == 0 and '/%s/__init__.py\n' % module.replace('.', '/') in out:
+        return package
+
+    # bigger hammer: dpkg -S for Python packages
+    dpkg = subprocess.Popen(['dpkg', '-S', '*/%s/__init__.py' % module.split('.')[0]], 
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = dpkg.communicate()[0]
+    pkgs = set()
+    for line in out.splitlines():
+        pkgs.add(line.split(':')[0])
+    if len(pkgs) == 1:
+        package = list(pkgs)[0]
+        return package
+    elif len(pkgs) > 1:
+        py_pkgs = [p for p in pkgs if p.startswith('python-')]
+        if len(py_pkgs) == 1:
+            return py_pkgs[0]
+        else:
+            print '[dpkg -S found more than one package: %s; ignoring]' % ', '.join(pkgs),
+
+    # bigger hammer: dpkg -S for compiled extensions
+    dpkg = subprocess.Popen(['dpkg', '-S', '*/%s.so' % module.replace('.', '/')], 
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = dpkg.communicate()[0]
+    pkgs = set()
+    for line in out.splitlines():
+        pkgs.add(line.split(':')[0])
+    if len(pkgs) == 1:
+        return list(pkgs)[0]
+    elif len(pkgs) > 1:
+        print '[dpkg -S found more than one extension: %s; ignoring]' % ', '.join(pkgs),
+
+    return None
 
 #
 # main
