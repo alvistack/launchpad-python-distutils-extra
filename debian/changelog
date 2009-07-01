@@ -1,3 +1,10 @@
+python-distutils-extra (2.4) UNRELEASED; urgency=low
+
+  * Add missing python-{crypto,dateutil} build dependencies, for the test
+    suite to succeed.
+
+ -- Martin Pitt <mpitt@debian.org>  Wed, 01 Jul 2009 16:48:57 +0200
+
 python-distutils-extra (2.3) unstable; urgency=low
 
   * auto.py: Fix recognition of GtkBuilder *.ui files as glade-3 writes them.
