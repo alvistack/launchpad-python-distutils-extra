@@ -144,7 +144,8 @@ XS-Python-Version: current
 Package: %(name)s
 Architecture: all
 XB-Python-Version: ${python:Versions}
-Depends: ${python:Depends}%(depends)s
+Depends: ${misc:Depends},
+ ${python:Depends}%(depends)s
 Description: %(desc)s
  %(longdesc)s
 ''' % {'name': egg['Name'], 'maint': author,
