@@ -4,7 +4,7 @@
 # Author: Martin Pitt
 # License: GPL v2 or later
 
-import subprocess, tempfile, shutil, sys, os
+import subprocess, tempfile, shutil, sys, os, textwrap
 
 def get_egg_info():
     '''Get egg information from ./setup.py into a dictionary.'''
@@ -146,9 +146,12 @@ Architecture: all
 XB-Python-Version: ${python:Versions}
 Depends: ${python:Depends}%(depends)s
 Description: %(desc)s
+ %(longdesc)s
 ''' % {'name': egg['Name'], 'maint': author,
        'depends': ',\n '.join(['',] + list(deps)),
-       'desc': egg.get('Summary', ''), 'bdep': bdeps})
+       'desc': egg.get('Summary', ''),
+       'longdesc': '\n '.join(textwrap.wrap(egg.get('Description', ''), 72)),
+       'bdep': bdeps})
         f.close()
 
     # TODO: update debian/control
