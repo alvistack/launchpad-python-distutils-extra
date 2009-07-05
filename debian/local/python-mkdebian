@@ -134,7 +134,7 @@ def make_control(egg):
 Section: python
 Priority: extra
 Build-Depends: cdbs (>= 0.4.43),
- debhelper (>= 6), 
+ debhelper (>= 6),
  python-central (>= 0.6.11),
  python-distutils-extra (>= 2.3)%(bdep)s
 Maintainer: %(maint)s
@@ -144,9 +144,10 @@ XS-Python-Version: current
 Package: %(name)s
 Architecture: all
 XB-Python-Version: ${python:Versions}
-Depends: ${python:Depends}, %(depends)s
+Depends: ${python:Depends}%(depends)s
 Description: %(desc)s
-''' % {'name': egg['Name'], 'maint': author, 'depends': ', '.join(deps),
+''' % {'name': egg['Name'], 'maint': author,
+       'depends': ',\n '.join(['',] + list(deps)),
        'desc': egg.get('Summary', ''), 'bdep': bdeps})
         f.close()
 
