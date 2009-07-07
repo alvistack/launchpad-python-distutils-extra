@@ -244,7 +244,7 @@ def __gtkbuilder(attrs, src):
     '''Install GtkBuilder *.ui files'''
 
     ui = []
-    for f in src_fileglob(src_all, '*.ui'):
+    for f in src_fileglob(src, '*.ui'):
         contents = open(f).read()
         if '<interface>\n' in contents and 'class="Gtk' in contents:
             src_mark(src, f)
