@@ -244,7 +244,7 @@ def __gtkbuilder(attrs, src):
     '''Install GtkBuilder *.ui files'''
 
     ui = []
-    for f in src_fileglob(src_all, '*.ui'):
+    for f in src_fileglob(src, '*.ui'):
         contents = open(f).read()
         if '<interface>\n' in contents and 'class="Gtk' in contents:
             src_mark(src, f)
@@ -259,7 +259,7 @@ def __manpages(attrs, src):
     '''Install manpages'''
 
     mans = {}
-    for f in src_fileglob(src_all, '*.[0123456789]'):
+    for f in src_fileglob(src, '*.[0123456789]'):
         line = open(f).readline()
         if line.startswith('.TH '):
             src_mark(src, f)
