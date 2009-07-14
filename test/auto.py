@@ -192,8 +192,7 @@ Exec=/usr/bin/foo-gtk
         self.assert_('<message xml:lang="de">Hallo</message>' in p)
 
         # polkit-1
-        self._mksrc('foo.py', '''import dbus
-polkit = dbus.Interface(dbus.SystemBus().get_object(
+        self._mksrc('foo.py', '''polkit = dbus.Interface(dbus.SystemBus().get_object(
     'org.freedesktop.PolicyKit1',
     '/org/freedesktop/PolicyKit1/Authority', False),
     'org.freedesktop.PolicyKit1.Authority')
