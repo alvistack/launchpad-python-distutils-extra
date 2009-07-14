@@ -35,7 +35,7 @@ __version__ = '2.3'
 # (c) 2009 Canonical Ltd.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
-import os, os.path, fnmatch, stat, sys
+import os, os.path, fnmatch, stat, sys, subprocess
 import compiler # TODO: deprecated
 import distutils.core
 
@@ -438,6 +438,7 @@ class build_i18n_auto(build_i18n.build_i18n):
     def finalize_options(self):
         build_i18n.build_i18n.finalize_options(self)
         global src
+        global src_all
 
         # add PolicyKit files
         policy_files = []
@@ -445,11 +446,18 @@ class build_i18n_auto(build_i18n.build_i18n):
             src_mark(src, f)
             policy_files.append(f)
         if policy_files:
+            # check if we have PolicyKit 1 API
+            if subprocess.call(['grep', '-q', 'org\.freedesktop\.PolicyKit1'] +
+                    list(src_fileglob(src_all, '*.py')),
+                    stderr=subprocess.PIPE) == 0:
+                destdir = os.path.join('share', 'polkit-1', 'actions')
+            else:
+                destdir = os.path.join('share', 'PolicyKit', 'policy')
             try:
                 xf = eval(self.xml_files)
             except TypeError:
                 xf = []
-            xf.append(('share/PolicyKit/policy', policy_files))
+            xf.append((destdir, policy_files))
             self.xml_files = repr(xf)
 
         # add desktop files

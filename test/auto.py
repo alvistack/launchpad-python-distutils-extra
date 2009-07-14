@@ -191,6 +191,24 @@ Exec=/usr/bin/foo-gtk
         self.assert_('<message>Hello</message>' in p)
         self.assert_('<message xml:lang="de">Hallo</message>' in p)
 
+        # polkit-1
+        self._mksrc('foo.py', '''import dbus
+polkit = dbus.Interface(dbus.SystemBus().get_object(
+    'org.freedesktop.PolicyKit1',
+    '/org/freedesktop/PolicyKit1/Authority', False),
+    'org.freedesktop.PolicyKit1.Authority')
+''')
+        self.setup_py(['clean', '-a'])
+        self.snapshot = None
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o)
+
+        f = self.installed_files()
+        self.failIf('/usr/share/PolicyKit/policy/com.example.foo.policy' in f)
+        self.assert_('/usr/share/polkit-1/actions/com.example.foo.policy' in f)
+
     def test_desktop(self):
         '''*.desktop.in files'''
 
