@@ -5,6 +5,8 @@ python-distutils-extra (2.4) UNRELEASED; urgency=low
   * python-mkdebian: Add long description, thanks Loïc Minier!
   * auto.py: Ignore manually installed *.ui files (Thanks Severin Heiniger!)
     and manpages.
+  * auto.py: Support polkit-1 (determined by checking source code for
+    org.freedesktop.PolicyKit1). 
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 01 Jul 2009 16:48:57 +0200
 
