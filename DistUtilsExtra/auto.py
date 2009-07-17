@@ -141,6 +141,8 @@ def __packages(attrs, src):
     packages = attrs.setdefault('packages', [])
 
     for f in src_fileglob(src, '__init__.py'):
+        if f.startswith('data' + os.path.sep):
+            continue
         pkg = os.path.dirname(f)
         packages.append(pkg)
         src_markglob(src, os.path.join(pkg, '*.py'))
