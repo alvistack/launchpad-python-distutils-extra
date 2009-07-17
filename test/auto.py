@@ -572,13 +572,23 @@ from Crypto import Cipher
 print 'import iamnota.module'
 ''', executable=True)
 
-        self.install_tree = tempfile.mkdtemp()
-        (o, e, s) = self.setup_py(['install_egg_info', '-d', self.install_tree])
-        self.assertEqual(e, 'ERROR: Python module unknown not found\n')
+        # this shouldn't be treated specially
+        self._mksrc('data/example-code/template.py', 'import example.module')
+
+        (o, e, s) = self.do_install()
         self.assertEqual(s, 0)
-        self.failIf('following files are not recognized' in o, o)
+        self.assertEqual(e, 'ERROR: Python module unknown not found\n')
+        self.failIf('following files are not recognized' in o)
+
+        inst = self.installed_files()
+        self.assert_('/usr/share/foo/example-code/template.py' in inst)
+        for f in inst:
+            if 'template.py' in f:
+                self.failIf('packages' in f)
 
         # parse .egg-info
+        (o, e, s) = self.setup_py(['install_egg_info', '-d', self.install_tree])
+        self.assertEqual(e, 'ERROR: Python module unknown not found\n')
         egg = open(os.path.join(self.install_tree,
             'foo-0.1.egg-info')).read().splitlines()
         self.assert_('Name: foo' in egg)

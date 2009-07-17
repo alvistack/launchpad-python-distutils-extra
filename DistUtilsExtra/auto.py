@@ -344,6 +344,8 @@ def __requires(attrs, src_all):
 
     # iterate over all *.py and scripts which are Python
     for s in src_all:
+        if s.startswith('data' + os.path.sep):
+            continue
         ext = os.path.splitext(s)[1]
         if ext == '':
             f = open(s)
