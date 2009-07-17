@@ -3,6 +3,8 @@ python-distutils-extra (2.6) UNRELEASED; urgency=low
   * auto.py: Add another test case for having python packages below data/, and
     ignore them in automatic package installation and automatic provides. (The
     previous fix just covered modules). (LP: #399324)
+  * auto.py: Point out what happens with file types, and where they are
+    installed.
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 17 Jul 2009 16:01:44 +0200
 

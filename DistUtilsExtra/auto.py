@@ -9,14 +9,15 @@ This currently supports:
 
  * Python modules (./*.py, only in root directory)
  * Python packages (all directories with __init__.py)
- * GtkBuilder (*.ui)
- * Qt4 user interfaces (*.ui)
+ * GtkBuilder (*.ui) [installed into prefix/share/<projectname>/]
+ * Qt4 user interfaces (*.ui) [compiled with pykdeuic into Python modules]
  * D-Bus (*.conf and *.service)
  * PolicyKit (*.policy.in)
- * Desktop files (*.desktop.in)
+ * Desktop files (*.desktop.in) [into prefix/share/applications, or
+   prefix/share/autostart if they have "autostart" anywhere in the path]
  * KDE4 notifications (*.notifyrc.in)
  * scripts (all in bin/, and ./<projectname>
- * Auxiliary data files (in data/*)
+ * Auxiliary data files (in data/*) [into prefix/share/<projectname>/]
  * automatic po/POTFILES.in (with all source files which contain _())
  * automatic MANIFEST (everything except swap and backup files, *.pyc, and
    revision control)
