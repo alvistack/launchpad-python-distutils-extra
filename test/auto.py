@@ -574,6 +574,8 @@ print 'import iamnota.module'
 
         # this shouldn't be treated specially
         self._mksrc('data/example-code/template.py', 'import example.module')
+        self._mksrc('data/example-code/mymod/__init__.py', '')
+        self._mksrc('data/example-code/mymod/shiny.py', 'import example.othermod')
 
         (o, e, s) = self.do_install()
         self.assertEqual(s, 0)
@@ -582,8 +584,9 @@ print 'import iamnota.module'
 
         inst = self.installed_files()
         self.assert_('/usr/share/foo/example-code/template.py' in inst)
+        self.assert_('/usr/share/foo/example-code/mymod/shiny.py' in inst)
         for f in inst:
-            if 'template.py' in f:
+            if 'template.py' in f or 'shiny' in f:
                 self.failIf('packages' in f)
 
         # parse .egg-info
