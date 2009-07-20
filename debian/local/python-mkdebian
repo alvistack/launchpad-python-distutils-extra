@@ -155,8 +155,30 @@ Description: %(desc)s
        'longdesc': '\n '.join(textwrap.wrap(egg.get('Description', ''), 72)),
        'bdep': bdeps})
         f.close()
+    else:
+        #  update debian/control
+        in_ = open('debian/control')
+        out = open('debian/control.new', 'w')
+        try:
+            for line in in_:
+                if line.startswith('Depends:'):
+                    break
+                out.write(line)
 
-    # TODO: update debian/control
+            # skip over original depends, and write our own
+            print >> out, 'Depends: ${misc:Depends},\n ${python:Depends}%s' % \
+                ',\n '.join(['',] + list(deps))
+
+            for line in in_:
+                if not line.startswith(' '):
+                    out.write(line)
+                    break
+            for line in in_:
+                out.write(line)
+        except:
+            os.unlink('debian/control.new')
+            raise
+        os.rename('debian/control.new', 'debian/control')
 
 def make_changelog(egg):
     lsb_release = subprocess.Popen(['lsb_release', '-sc'],
