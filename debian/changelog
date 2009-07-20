@@ -3,6 +3,7 @@ python-distutils-extra (2.7) UNRELEASED; urgency=low
   * debian/local/python-mkdebian: Add python build dependency.
   * debian/local/python-mkdebian: Bump python-distutils-extra build
     dependency.
+  * auto.py: Ignore .shelf/ (from bzr), add comprehensive test cases.
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 20 Jul 2009 15:40:09 +0200
 

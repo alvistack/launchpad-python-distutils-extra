@@ -59,6 +59,24 @@ setup(
         self.assertEqual(len(f), 1)
         self.assert_(f[0].endswith('.egg-info'))
 
+    def test_vcs(self):
+        '''Ignores revision control files'''
+
+        self._mksrc('.shelf/1')
+        self._mksrc('.bzr/revs')
+        self._mksrc('.git/config')
+        self._mksrc('.svn/revs')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o)
+
+        f = self.installed_files()
+        # just installs the .egg_info
+        self.assertEqual(len(f), 1)
+        self.assert_(f[0].endswith('.egg-info'))
+
     def test_modules(self):
         '''Python modules'''
 
@@ -443,7 +461,7 @@ gui/foo.desktop.in
                 'gtk/main.glade', 'dist/extra.tar.gz']
         bad = ['po/de.mo', '.helpers.py.swp', '.bzr/index', '.svn/index',
                '.git/index', 'bin/foo~', 'backend/foo.pyc', 
-               'dist/foo-0.1.tar.gz']
+               'dist/foo-0.1.tar.gz', '.shelf/1', '.bzr/revs', '.git/config']
 
         for f in good + bad:
             self._mksrc(f)
