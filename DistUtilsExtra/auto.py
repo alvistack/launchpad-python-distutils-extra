@@ -575,7 +575,7 @@ class build_kdeui_auto(build_kdeui.build_kdeui):
 
 class sdist_auto(distutils.command.sdist.sdist):
     def add_defaults(self):
-        filter_prefix = ['build', '.git', '.svn', '.CVS', '.bzr', 
+        filter_prefix = ['build', '.git', '.svn', '.CVS', '.bzr', '.shelf',
                 os.path.join('dist', self.distribution.get_name())]
         filter_suffix = ['.pyc', '.mo', '~', '.swp']
 
