@@ -135,6 +135,7 @@ Section: python
 Priority: extra
 Build-Depends: cdbs (>= 0.4.43),
  debhelper (>= 6),
+ python,
  python-central (>= 0.6.11),
  python-distutils-extra (>= 2.3)%(bdep)s
 Maintainer: %(maint)s
