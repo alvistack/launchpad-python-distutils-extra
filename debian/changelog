@@ -1,4 +1,4 @@
-python-distutils-extra (2.7) UNRELEASED; urgency=low
+python-distutils-extra (2.7) unstable; urgency=low
 
   * debian/local/python-mkdebian: Add python build dependency.
   * debian/local/python-mkdebian: Bump python-distutils-extra build
@@ -7,7 +7,7 @@ python-distutils-extra (2.7) UNRELEASED; urgency=low
   * debian/local/python-mkdebian: Update dependencies of debian/control, if it
     already exists.
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 20 Jul 2009 15:40:09 +0200
+ -- Martin Pitt <mpitt@debian.org>  Mon, 20 Jul 2009 16:42:41 +0200
 
 python-distutils-extra (2.6) unstable; urgency=low
 
