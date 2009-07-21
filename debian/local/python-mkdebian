@@ -135,7 +135,7 @@ def make_control(egg):
  debhelper (>= 6),
  python,
  python-central (>= 0.6.11),
- python-distutils-extra (>= 2.6)%s''' % bdeps,
+ python-distutils-extra (>= 2.7)%s''' % bdeps,
     'Maintainer': author,
     'Package': egg['Name'],
     'Depends': '''${misc:Depends},
