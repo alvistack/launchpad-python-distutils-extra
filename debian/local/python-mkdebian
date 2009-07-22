@@ -129,20 +129,22 @@ def make_control(egg):
         bdeps += ',\n python-kde4-dev'
 
     # prepare tags
-    control_content = {
-    'Source': egg['Name'],
-    'Build-Depends': '''cdbs (>= 0.4.43),
+    control_content = {'Depends': '''${misc:Depends},
+ ${python:Depends}%s''' % ',\n '.join(['',] + list(deps))
+    }
+    # add additional fields (even when updating if user chooses them)
+    if not os.path.exists('debian/control') or '--force-control' in sys.argv:
+        control_content.update({
+        'Source': egg['Name'],
+        'Build-Depends': '''cdbs (>= 0.4.43),
  debhelper (>= 6),
  python,
  python-central (>= 0.6.11),
  python-distutils-extra (>= 2.7)%s''' % bdeps,
-    'Maintainer': author,
-    'Package': egg['Name'],
-    'Depends': '''${misc:Depends},
- ${python:Depends}%s''' % ',\n '.join(['',] + list(deps)),
-    'Description' : egg.get('Summary', '') + '\n '.join(['',] + list(textwrap.wrap(egg.get('Description', ''), 72)))
-    }
- 
+        'Maintainer': author,
+        'Package': egg['Name'],
+        'Description' : egg.get('Summary', '') + '\n '.join(['',] + list(textwrap.wrap(egg.get('Description', ''), 72)))
+    })
 
     if not os.path.exists('debian/control'):
         f = open('debian/control', 'w')
