@@ -128,53 +128,66 @@ def make_control(egg):
         print 'Package uses KDE *.ui files, adding python-kde4-dev build dependency'
         bdeps += ',\n python-kde4-dev'
 
-    if not os.path.exists('debian/control'):
-        f = open('debian/control', 'w')
-        f.write('''Source: %(name)s
-Section: python
-Priority: extra
-Build-Depends: cdbs (>= 0.4.43),
+    # prepare tags
+    control_content = {'Depends': '''${misc:Depends},
+ ${python:Depends}%s''' % ',\n '.join(['',] + list(deps))
+    }
+    # add additional fields (even when updating if user chooses them)
+    if not os.path.exists('debian/control') or '--force-control' in sys.argv:
+        control_content.update({
+        'Source': egg['Name'],
+        'Build-Depends': '''cdbs (>= 0.4.43),
  debhelper (>= 6),
  python,
  python-central (>= 0.6.11),
- python-distutils-extra (>= 2.6)%(bdep)s
-Maintainer: %(maint)s
+ python-distutils-extra (>= 2.7)%s''' % bdeps,
+        'Maintainer': author,
+        'Package': egg['Name'],
+        'Description' : egg.get('Summary', '') + '\n '.join(['',] + list(textwrap.wrap(egg.get('Description', ''), 72)))
+    })
+
+    if not os.path.exists('debian/control'):
+        f = open('debian/control', 'w')
+        f.write('''Source: %(Source)s
+Section: python
+Priority: extra
+Build-Depends: %(Build-Depends)s
+Maintainer: %(Maintainer)s
 Standards-Version: 3.8.2
 XS-Python-Version: current
 
-Package: %(name)s
+Package: %(Package)s
 Architecture: all
 XB-Python-Version: ${python:Versions}
 Depends: ${misc:Depends},
- ${python:Depends}%(depends)s
-Description: %(desc)s
- %(longdesc)s
-''' % {'name': egg['Name'], 'maint': author,
-       'depends': ',\n '.join(['',] + list(deps)),
-       'desc': egg.get('Summary', ''),
-       'longdesc': '\n '.join(textwrap.wrap(egg.get('Description', ''), 72)),
-       'bdep': bdeps})
+ ${python:Depends}%(Depends)s
+Description: %(Description)s
+''' % control_content)
         f.close()
     else:
         #  update debian/control
         in_ = open('debian/control')
         out = open('debian/control.new', 'w')
+        skip_until_new_key = False
         try:
             for line in in_:
-                if line.startswith('Depends:'):
-                    break
-                out.write(line)
-
-            # skip over original depends, and write our own
-            print >> out, 'Depends: ${misc:Depends},\n ${python:Depends}%s' % \
-                ',\n '.join(['',] + list(deps))
-
-            for line in in_:
+                # toggle the switch to off if we encounter a new key not overwritten
                 if not line.startswith(' '):
+                    skip_until_new_key = False
+
+                for controlkey in control_content:
+                    if line.startswith(controlkey):
+                        # skip old values and write our own
+                        out.write('%s: %s\n' % (controlkey, control_content[controlkey]))
+                        skip_until_new_key = True
+                        break
+
+                # write current line if not in a overwritten section
+                if not skip_until_new_key:
                     out.write(line)
-                    break
-            for line in in_:
-                out.write(line)
+
+            out.close()
+            in_.close()
         except:
             os.unlink('debian/control.new')
             raise
