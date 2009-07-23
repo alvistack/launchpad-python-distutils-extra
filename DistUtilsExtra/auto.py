@@ -65,9 +65,13 @@ def setup(**attrs):
     src_mark(src, 'setup.py')
 
     # mark files in etc/*, handled by install_auto
+    # don't install DistUtilsExtra if bundled with a source tarball
+    ignore_dirs = ['etc', 'DistUtilsExtra']
+    
     for f in src.copy():
-        if f.startswith('etc' + os.path.sep):
-            src.remove(f)
+        for d in ignore_dirs:
+            if f.startswith(d + os.path.sep):
+                src.remove(f)
 
     __cmdclass(attrs)
     __modules(attrs, src)

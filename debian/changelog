@@ -4,6 +4,11 @@ python-distutils-extra (2.8) UNRELEASED; urgency=low
   * debian/local/python-mkdebian: Add a --force-control option to update all
     fields in debian/control, instead of just Depends:.
 
+  [ Martin Pitt ]
+  * auto.py: Do not ship DistUtilsExtra/. This makes it easier to bundle
+    DistUtilsExtra with source packages without installing it. Thanks to
+    Severin Heiniger!
+
  -- Martin Pitt <mpitt@debian.org>  Thu, 23 Jul 2009 11:44:39 +0200
 
 python-distutils-extra (2.7) unstable; urgency=low
