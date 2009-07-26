@@ -24,7 +24,7 @@ class build_help(Command):
 
         for path in glob(join(self.help_dir, "*")):
             lang = basename(path)
-            path_xml = join("share/gnome/help", lang)
+            path_xml = join("share/gnome/help", name, lang)
             path_figures = join("share/gnome/help", name, lang, "figures")
             
             data_files.append((path_xml, glob("%s/*.xml" % path)))
