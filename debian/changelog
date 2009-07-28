@@ -1,3 +1,9 @@
+python-distutils-extra (2.9) UNRELEASED; urgency=low
+
+  * Add missing intltool build dependency. (Closes: #536914)
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 28 Jul 2009 15:10:25 +0200
+
 python-distutils-extra (2.8) unstable; urgency=low
 
   [ Didier Roche ]
