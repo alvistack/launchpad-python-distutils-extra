@@ -1,6 +1,8 @@
 python-distutils-extra (2.9) UNRELEASED; urgency=low
 
   * Add missing intltool build dependency. (Closes: #536914)
+  * python-mkdebian: Improve error message when devscripts is not installed.
+    Add a Suggests: devscripts.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 28 Jul 2009 15:10:25 +0200
 

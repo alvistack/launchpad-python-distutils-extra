@@ -13,6 +13,7 @@ Package: python-distutils-extra
 Architecture: all
 XB-Python-Version: ${python:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, intltool
+Suggests: devscripts
 Description: enhancements to the Python build system
  This package provides additional functions to Python's distutils and 
  setuptools. It allows you to easily integrate gettext, icons and GNOME 

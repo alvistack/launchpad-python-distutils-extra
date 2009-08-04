@@ -200,8 +200,13 @@ def make_changelog(egg):
     assert lsb_release.returncode == 0
 
     if not os.path.exists('debian/changelog'):
-        assert subprocess.call(['debchange', '--create', '--package', egg['Name'],
-            '-D' + release, '-v' + egg['Version'], 'Initial release.']) == 0
+        try:
+            assert subprocess.call(['debchange', '--create', '--package', egg['Name'],
+                '-D' + release, '-v' + egg['Version'], 'Initial release.']) == 0
+        except OSError, e:
+            print >> sys.stderr, 'ERROR: Could not run "debchange": %s\n' \
+                'You need to install the "devscripts" package for this.' % str(e)
+            sys.exit(0)
     else:
         # this will just fail if we already have that version, which is okay.
         subprocess.call(['debchange', '-D' + release, '-v' + egg['Version'],
