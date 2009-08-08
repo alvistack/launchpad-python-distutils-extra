@@ -10,6 +10,7 @@ python-distutils-extra (2.9) UNRELEASED; urgency=low
   * auto.py: Mark 'setup.cfg' as known. Thanks to Severin Heiniger!
   * auto.py, sdist_auto: Turn filter_prefix and filter_suffix into properites
     so that subclasses can extend them. Thanks to Severin Heiniger!
+  * build_help: Make whitespace and quotes consistent.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 28 Jul 2009 15:10:25 +0200
 
