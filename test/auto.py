@@ -622,6 +622,38 @@ print 'import iamnota.module'
         req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
         self.assertEqual(set(req), set(['DistUtilsExtra.auto', 'Crypto', 'dateutil']))
 
+    def test_help(self):
+        '''Docbook XML help'''
+
+        self._mksrc('help/C/myprogram-C.omf')
+        self._mksrc('help/C/myprogram.xml')
+        self._mksrc('help/C/legal.xml')
+        self._mksrc('help/C/figures/mainscreen.png')
+        self._mksrc('help/de/myprogram-de.omf')
+        self._mksrc('help/de/myprogram.xml')
+        self._mksrc('help/de/legal.xml')
+        self._mksrc('help/de/figures/mainscreen.png')
+
+        self._mksrc('help/weird.xml')
+        self._mksrc('help/notme.png')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.assert_('following files are not recognized' in o)
+        self.assert_('\n  help/weird.xml\n' in o)
+        self.assert_('\n  help/notme.png\n' in o)
+
+        f = self.installed_files()
+        self.assert_('/usr/share/omf/foo/myprogram-C.omf' in f)
+        self.assert_('/usr/share/omf/foo/myprogram-de.omf' in f)
+        self.assert_('/usr/share/gnome/help/foo/C/myprogram.xml' in f)
+        self.assert_('/usr/share/gnome/help/foo/C/legal.xml' in f)
+        self.assert_('/usr/share/gnome/help/foo/C/figures/mainscreen.png' in f)
+        self.assert_('/usr/share/gnome/help/foo/de/myprogram.xml' in f)
+        self.assert_('/usr/share/gnome/help/foo/de/legal.xml' in f)
+        self.assert_('/usr/share/gnome/help/foo/de/figures/mainscreen.png' in f)
+
     #
     # helper methods
     #
