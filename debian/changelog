@@ -11,6 +11,7 @@ python-distutils-extra (2.9) UNRELEASED; urgency=low
   * auto.py, sdist_auto: Turn filter_prefix and filter_suffix into properites
     so that subclasses can extend them. Thanks to Severin Heiniger!
   * build_help: Make whitespace and quotes consistent.
+  * auto.py: Add test case for automatic help installation.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 28 Jul 2009 15:10:25 +0200
 
