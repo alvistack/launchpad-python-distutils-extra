@@ -603,7 +603,7 @@ class sdist_auto(distutils.command.sdist.sdist):
     It's possible for subclasses to extend the 'filter_prefix' and
     'filter_suffix' properties.
     '''
-    filter_prefix = ['build', '.git', '.svn', '.CVS', '.bzr', '.shelf', 'dist']
+    filter_prefix = ['build', '.git', '.svn', '.CVS', '.bzr', '.shelf']
     filter_suffix = ['.pyc', '.mo', '~', '.swp']
     
     def add_defaults(self):
@@ -611,6 +611,9 @@ class sdist_auto(distutils.command.sdist.sdist):
         
         if os.path.exists('MANIFEST.in'):
             return
+
+        self.filter_prefix.append(os.path.join('dist',
+            self.distribution.get_name()))
         
         for f in distutils.filelist.findall():
             if f in self.filelist.files or \
