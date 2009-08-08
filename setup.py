@@ -5,7 +5,7 @@ import glob, os, commands, sys
 
 setup(
     name = 'python-distutils-extra',
-    version = '2.8',
+    version = '2.9',
     author = 'Sebastian Heinlein, Martin Pitt',
     author_email = 'sebi@glatzor.de, martin.pitt@ubuntu.com',
     description = 'Add support for i18n, documentation and icons to distutils',
