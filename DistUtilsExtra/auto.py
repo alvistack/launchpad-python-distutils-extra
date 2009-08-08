@@ -445,6 +445,7 @@ def src_markglob(src, pathglob):
 #
 # Automatic setup.cfg
 #
+
 class build_help_auto(build_help.build_help):
     def finalize_options(self):
         build_help.build_help.finalize_options(self)
@@ -589,24 +590,39 @@ class build_kdeui_auto(build_kdeui.build_kdeui):
 #
 
 class sdist_auto(distutils.command.sdist.sdist):
+    '''Default values for the 'sdist' command.
+    
+    Replace the manually maintained MANIFEST.in file by providing information
+    about what the source tarball created using the 'sdist' command should
+    contain in normal cases.
+    
+    It prevents the 'build' directory, version control related files, as well as
+    compiled Python and gettext files and temporary files from being included in
+    the source tarball.
+    
+    It's possible for subclasses to extend the 'filter_prefix' and
+    'filter_suffix' properties.
+    '''
+    filter_prefix = ['build', '.git', '.svn', '.CVS', '.bzr', '.shelf', 'dist']
+    filter_suffix = ['.pyc', '.mo', '~', '.swp']
+    
     def add_defaults(self):
-        filter_prefix = ['build', '.git', '.svn', '.CVS', '.bzr', '.shelf',
-                os.path.join('dist', self.distribution.get_name())]
-        filter_suffix = ['.pyc', '.mo', '~', '.swp']
-
         distutils.command.sdist.sdist.add_defaults(self)
-
-        manifest_in = os.path.join('MANIFEST.in')
-        if os.path.exists(manifest_in):
+        
+        if os.path.exists('MANIFEST.in'):
             return
-
+        
         for f in distutils.filelist.findall():
-            if f in self.filelist.files or any(map(f.startswith, filter_prefix)) or \
-                    any(map(f.endswith, filter_suffix)):
+            if f in self.filelist.files or \
+                any(map(f.startswith, self.filter_prefix)) or \
+                any(map(f.endswith, self.filter_suffix)):
                 continue
+            
             self.filelist.append(f)
 
+#
 # Automatic installation of ./etc/
+#
 
 class install_auto(distutils.command.install.install):
     def run(self):
