@@ -3,6 +3,11 @@ python-distutils-extra (2.9) UNRELEASED; urgency=low
   * Add missing intltool build dependency. (Closes: #536914)
   * python-mkdebian: Improve error message when devscripts is not installed.
     Add a Suggests: devscripts.
+  * auto.py: Automatically install GNOME help files. Thanks to Severin
+    Heiniger!
+  * build_help: Fix installation path of docbook files. Thanks to Severin
+    Heiniger!
+  * auto.py: Mark 'setup.cfg' as known. Thanks to Severin Heiniger!
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 28 Jul 2009 15:10:25 +0200
 

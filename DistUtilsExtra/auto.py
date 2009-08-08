@@ -9,6 +9,7 @@ This currently supports:
 
  * Python modules (./*.py, only in root directory)
  * Python packages (all directories with __init__.py)
+ * Docbook-XML GNOME help files (help/<language>/{*.xml,*.omf,figures})
  * GtkBuilder (*.ui) [installed into prefix/share/<projectname>/]
  * Qt4 user interfaces (*.ui) [compiled with pykdeuic into Python modules]
  * D-Bus (*.conf and *.service)
@@ -63,6 +64,7 @@ def setup(**attrs):
     src_all.update(set(attrs.get('scripts', [])))
 
     src_mark(src, 'setup.py')
+    src_markglob(src, 'setup.cfg')
 
     # mark files in etc/*, handled by install_auto
     # don't install DistUtilsExtra if bundled with a source tarball
@@ -113,6 +115,7 @@ def __cmdclass(attrs):
 
     v = attrs.setdefault('cmdclass', {})
     v.setdefault('build', build_extra.build_extra)
+    v.setdefault('build_help', build_help_auto)
     v.setdefault('build_i18n', build_i18n_auto)
     v.setdefault('build_icons', build_icons.build_icons)
     v.setdefault('build_kdeui', build_kdeui_auto)
@@ -442,6 +445,14 @@ def src_markglob(src, pathglob):
 #
 # Automatic setup.cfg
 #
+class build_help_auto(build_help.build_help):
+    def finalize_options(self):
+        build_help.build_help.finalize_options(self)
+        global src
+        
+        for data_set in self.get_data_files():
+            for filepath in data_set[1]:
+                src.remove(filepath)
 
 class build_i18n_auto(build_i18n.build_i18n):
     def finalize_options(self):
@@ -493,10 +504,10 @@ class build_i18n_auto(build_i18n.build_i18n):
         if notify_files:
             df.append(('share/kde4/apps/' + self.distribution.get_name(), notify_files))
         self.desktop_files = repr(df)
-
+        
         # mark PO template as known to handle
         try:
-            src_mark(src, os.path.join('po', self.distribution.get_name() + '.pot'))
+            src_mark(src, os.path.join(self.po_dir, self.distribution.get_name() + '.pot'))
         except KeyError:
             pass
 
