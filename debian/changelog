@@ -1,3 +1,10 @@
+python-distutils-extra (2.10) UNRELEASED; urgency=low
+
+  * python-mkdebian: Handle complex cases where submodules of a Python module
+    can be in different packages.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 11 Sep 2009 10:46:56 +0200
+
 python-distutils-extra (2.9) unstable; urgency=low
 
   * Add missing intltool build dependency. (Closes: #536914)
