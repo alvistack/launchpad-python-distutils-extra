@@ -316,7 +316,7 @@ def __add_imports(imports, file, attrs):
                 if __external_mod(node.modname, attrs):
                     imports.add(node.modname)
     except SyntaxError, e:
-        print >> sys.stderr, 'WARNING: syntax errors in', f, ':', e
+        print >> sys.stderr, 'WARNING: syntax errors in', file, ':', e
 
 def _module_parents(mod):
     '''Iterate over all parents of a module'''

@@ -1,3 +1,9 @@
+python-distutils-extra (2.11) UNRELEASED; urgency=low
+
+  * auto.py: Fix variable name in "syntax error" warning. (Closes: #549583)
+
+ -- Martin Pitt <mpitt@debian.org>  Sun, 11 Oct 2009 20:08:06 +0200
+
 python-distutils-extra (2.10) unstable; urgency=low
 
   * python-mkdebian: Handle complex cases where submodules of a Python module
