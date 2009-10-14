@@ -192,8 +192,8 @@ def __dbus(attrs, src):
 def __data(attrs, src):
     '''Install auxiliary data files.
 
-    This installs everything from data/ except data/icons/ into
-    prefix/share/<projectname>/.
+    This installs everything from data/ except data/icons/ and *.in files (which
+    are handled differently) into prefix/share/<projectname>/.
     '''
     v = attrs.setdefault('data_files', [])
 
@@ -201,7 +201,8 @@ def __data(attrs, src):
 
     data_files = []
     for f in src.copy():
-        if f.startswith('data/') and not f.startswith('data/icons/'):
+        if f.startswith('data/') and not f.startswith('data/icons/') and \
+                not f.endswith('.desktop.in') and not f.endswith('*.notifyrc.in'):
             v.append((os.path.join('share', attrs['name'], os.path.dirname(f[5:])), [f]))
             src_mark(src, f)
 
