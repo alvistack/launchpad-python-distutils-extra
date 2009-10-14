@@ -489,6 +489,16 @@ gui/foo.desktop.in
     <child><placeholder/></child>
   </object>
 </interface>''')
+
+        self._mksrc('gtk/settings.ui', '''<?xml version="1.0"?>
+<interface domain="foobar">
+  <requires lib="gtk+" version="2.16"/>
+  <object class="GtkWindow" id="window2">
+    <property name="title" translatable="yes">yes12</property>
+    <child><placeholder/></child>
+  </object>
+</interface>''')
+
         self._mksrc('someweird.ui')
 
         (o, e, s) = self.do_install()
@@ -499,6 +509,7 @@ gui/foo.desktop.in
 
         f = self.installed_files()
         self.assert_('/usr/share/foo/test.ui' in f)
+        self.assert_('/usr/share/foo/settings.ui' in f)
         ftext = '\n'.join(f)
         self.failIf('someweird' in ftext)
 
