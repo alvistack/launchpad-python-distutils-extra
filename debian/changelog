@@ -2,6 +2,8 @@ python-distutils-extra (2.12) UNRELEASED; urgency=low
 
   * auto.py: Auto-install GtkBuilder files which have attributes in the
     <interface> tag.
+  * auto.py: Extract translatable strings from GtkBuilder files which have
+    attributes in the <interface> tag. (LP: #451170)
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 14 Oct 2009 13:35:24 +0200
 
