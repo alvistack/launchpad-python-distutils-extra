@@ -387,7 +387,8 @@ gui/foo.desktop.in
         self.failIf('msgid "yes5"' in pot) # we didn't add helpers.py
         self.assert_('msgid "yes7"' in pot) # we did include the desktop file
         self.failIf('msgid "yes5"' in pot) # we didn't add helpers.py
-        self.assert_('msgid "yes11"' in pot) # we added the GTKBuilder file
+        self.assert_('msgid "yes11"' in pot) # we added one GTKBuilder file
+        self.failIf('msgid "yes12"' in pot) # ... but not the other
 
     def test_pot_auto(self):
         '''PO template creation with automatic POTFILES.in'''
@@ -405,7 +406,7 @@ gui/foo.desktop.in
         pot = open(pot_path).read()
 
         self.failIf('msgid "no"' in pot)
-        for i in range(2, 14):
+        for i in range(2, 15):
             self.assert_('msgid "yes%i' % i in pot or 
                    'msgid ""\n"yes%i' % i in pot,
                    'yes%i' % i)
@@ -821,12 +822,21 @@ Exec=/usr/bin/foo''')
   </object>
 </interface>''')
 
+        self._mksrc('data/settings.ui', '''<?xml version="1.0"?>
+<interface domain="foobar">
+  <requires lib="gtk+" version="2.16"/>
+  <object class="GtkWindow" id="window1">
+    <property name="title" translatable="yes">yes12</property>
+    <child><placeholder/></child>
+  </object>
+</interface>''')
+
         self._mksrc('Makefile', 'echo _("no7")')
 
         # Executables without *.py extension
-        self._mksrc('gtk/foo-gtk', '#!/usr/bin/python\nprint _("yes12")',
+        self._mksrc('gtk/foo-gtk', '#!/usr/bin/python\nprint _("yes13")',
                 executable=True)
-        self._mksrc('cli/foo-cli', '#!/usr/bin/env python\nprint _("yes13")',
+        self._mksrc('cli/foo-cli', '#!/usr/bin/env python\nprint _("yes14")',
                 executable=True)
         self._mksrc('daemon/foobarize', '#!/usr/bin/flex\np _("no8")',
                 executable=True)

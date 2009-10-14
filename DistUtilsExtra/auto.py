@@ -526,7 +526,7 @@ class build_i18n_auto(build_i18n.build_i18n):
 
             for f in src_fileglob(src_all, '*.ui'):
                 contents = open(f).read()
-                if '<interface>\n' in contents and '<requires lib="gtk+"' in contents:
+                if ('<interface>\n' in contents or '<interface ' in contents) and 'class="Gtk' in contents:
                     files.add('[type: gettext/glade]' + f)
 
             # find extensionless executable scripts which are Python files, and
