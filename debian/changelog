@@ -4,6 +4,8 @@ python-distutils-extra (2.12) UNRELEASED; urgency=low
     <interface> tag.
   * auto.py: Extract translatable strings from GtkBuilder files which have
     attributes in the <interface> tag. (LP: #451170)
+  * auto.py: Properly handle *.{desktop,notifyrc}.in files in data/.
+    (LP: #451175)
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 14 Oct 2009 13:35:24 +0200
 

@@ -238,6 +238,10 @@ _Name=Hello
 _Comment=Good morning
 Exec=/usr/bin/fooapplet''')
         self._mkpo()
+        self._mksrc('data/foosettings.desktop.in', '''[Desktop Entry]
+_Name=Hello
+_Comment=Good morning
+Exec=/bin/foosettings''')
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
@@ -247,6 +251,9 @@ Exec=/usr/bin/fooapplet''')
         f = self.installed_files()
         self.assert_('/usr/share/autostart/fooapplet.desktop' in f)
         self.assert_('/usr/share/applications/foogtk.desktop' in f)
+        self.assert_('/usr/share/applications/foosettings.desktop' in f)
+        # data/*.desktop.in shouldn't go to data dir
+        self.failIf('/usr/share/foo/' in f)
 
         p = open(os.path.join(self.install_tree,
             'usr/share/autostart/fooapplet.desktop')).read()
