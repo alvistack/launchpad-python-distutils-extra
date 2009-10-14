@@ -1,4 +1,4 @@
-python-distutils-extra (2.12) UNRELEASED; urgency=low
+python-distutils-extra (2.12) unstable; urgency=low
 
   * auto.py: Auto-install GtkBuilder files which have attributes in the
     <interface> tag.
@@ -7,7 +7,7 @@ python-distutils-extra (2.12) UNRELEASED; urgency=low
   * auto.py: Properly handle *.{desktop,notifyrc}.in files in data/.
     (LP: #451175)
 
- -- Martin Pitt <mpitt@debian.org>  Wed, 14 Oct 2009 13:35:24 +0200
+ -- Martin Pitt <mpitt@debian.org>  Wed, 14 Oct 2009 13:53:43 +0200
 
 python-distutils-extra (2.11) unstable; urgency=high
 
