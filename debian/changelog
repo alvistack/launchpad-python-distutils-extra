@@ -1,3 +1,10 @@
+python-distutils-extra (2.13) UNRELEASED; urgency=low
+
+  * python-mkdebian: Fix dependency detection for packages which only ship a
+    Python module, not a package. Thanks Didier Roche! (LP: #482913)
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 17 Nov 2009 11:55:56 -0600
+
 python-distutils-extra (2.12) unstable; urgency=low
 
   * auto.py: Auto-install GtkBuilder files which have attributes in the
