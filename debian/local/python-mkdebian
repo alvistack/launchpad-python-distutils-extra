@@ -224,7 +224,9 @@ def mod2package(module):
     dpkg = subprocess.Popen(['dpkg', '-L', package], stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
     out = dpkg.communicate()[0]
-    if dpkg.returncode == 0 and '/%s/__init__.py\n' % module.replace('.', '/') in out:
+    if dpkg.returncode == 0 and \
+       ('/%s/__init__.py\n' % module.replace('.', '/') in out or \
+        '/%s.py\n' % module.replace('.', '/') in out):
         return package
 
     # bigger hammer: dpkg -S for Python packages
