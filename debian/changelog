@@ -1,3 +1,9 @@
+python-distutils-extra (2.14) UNRELEASED; urgency=low
+
+  * Bump Standards-Version to 3.8.3 (no changes necessary).
+
+ -- Martin Pitt <mpitt@debian.org>  Mon, 21 Dec 2009 19:15:46 +0100
+
 python-distutils-extra (2.13) unstable; urgency=low
 
   * python-mkdebian: Fix dependency detection for packages which only ship a
