@@ -1,9 +1,9 @@
-python-distutils-extra (2.13) UNRELEASED; urgency=low
+python-distutils-extra (2.13) unstable; urgency=low
 
   * python-mkdebian: Fix dependency detection for packages which only ship a
     Python module, not a package. Thanks Didier Roche! (LP: #482913)
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 17 Nov 2009 11:55:56 -0600
+ -- Martin Pitt <mpitt@debian.org>  Mon, 21 Dec 2009 19:12:25 +0100
 
 python-distutils-extra (2.12) unstable; urgency=low
 
