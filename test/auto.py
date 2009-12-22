@@ -280,9 +280,8 @@ Exec=/bin/foosettings''')
         self.assert_('/usr/share/icons/hicolor/scalable/actions/press.png' in f)
         self.assert_('/usr/share/icons/hicolor/scalable/actions/crunch.png' in f)
         self.assert_('/usr/share/icons/hicolor/48x48/apps/foo.png' in f)
-        # TODO: known to fail right now
-        #self.assert_(os.path.islink(os.path.join(self.install_tree, 
-        #   '/usr/share/icons/hicolor/scalable/actions/crunch.png'))
+        self.assert_(os.path.islink(os.path.join(self.install_tree, 
+           'usr/share/icons/hicolor/scalable/actions/crunch.png')))
 
     def test_data(self):
         '''Auxiliary files in data/'''
@@ -315,6 +314,7 @@ setup(
         self._mksrc('data/40-foo.rules')
         self._mksrc('data/blob1.conf')
         self._mksrc('data/blob2.conf')
+        os.symlink('stuff', os.path.join(self.src, 'data', 'stufflink'))
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
@@ -323,6 +323,9 @@ setup(
 
         f = self.installed_files()
         self.assert_('/usr/share/foo/stuff' in f)
+        self.assert_('/usr/share/foo/stufflink' in f)
+        self.assert_(os.path.islink(os.path.join(self.install_tree, 'usr',
+            'share', 'foo', 'stufflink')))
         self.assert_('/usr/share/foo/handlers/red.py' in f)
         self.assert_('/usr/share/foo/handlers/blue.py' in f)
         self.assert_('/lib/udev/rules.d/40-foo.rules' in f)
@@ -338,6 +341,7 @@ setup(
         self._mksrc('bin/yell', '#!/bin/sh', True)
         self._mksrc('bin/shout', '#!/bin/sh', True)
         self._mksrc('bin/foo', '#!/bin/sh', True)
+        os.symlink('shout', os.path.join(self.src, 'bin', 'shoutlink'))
 
         # these shouldn't
         self._mksrc('daemon/food', '#!/bin/sh', True) # not in bin/
@@ -355,6 +359,9 @@ setup(
         f = self.installed_files()
         self.assert_('/usr/bin/yell' in f)
         self.assert_('/usr/bin/shout' in f)
+        self.assert_('/usr/bin/shoutlink' in f)
+        self.assert_(os.path.islink(os.path.join(self.install_tree, 'usr',
+            'bin', 'shoutlink')))
         self.assert_('/usr/bin/foo' in f)
         ftext = '\n'.join(f)
         self.failIf('food' in ftext)
