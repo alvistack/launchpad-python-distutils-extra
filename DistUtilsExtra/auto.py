@@ -203,7 +203,9 @@ def __data(attrs, src):
     for f in src.copy():
         if f.startswith('data/') and not f.startswith('data/icons/') and \
                 not f.endswith('.desktop.in') and not f.endswith('*.notifyrc.in'):
-            v.append((os.path.join('share', attrs['name'], os.path.dirname(f[5:])), [f]))
+            if not os.path.islink(f):
+                # symlinks are handled in install_auto
+                v.append((os.path.join('share', attrs['name'], os.path.dirname(f[5:])), [f]))
             src_mark(src, f)
 
 def __scripts(attrs, src):
@@ -218,9 +220,12 @@ def __scripts(attrs, src):
     scripts = []
     for f in src.copy():
         if f.startswith('bin/') or f == attrs['name']:
-            st = os.stat(f)
+            st = os.lstat(f)
             if stat.S_ISREG(st.st_mode) and st.st_mode & stat.S_IEXEC:
                 scripts.append(f)
+                src_mark(src, f)
+            elif stat.S_ISLNK(st.st_mode):
+                # symlinks are handled in install_auto
                 src_mark(src, f)
 
     if scripts:
@@ -625,7 +630,7 @@ class sdist_auto(distutils.command.sdist.sdist):
             self.filelist.append(f)
 
 #
-# Automatic installation of ./etc/
+# Automatic installation of ./etc/ and symlinks
 #
 
 class install_auto(distutils.command.install.install):
@@ -634,7 +639,7 @@ class install_auto(distutils.command.install.install):
         if os.path.isdir('etc'):
             # work around a bug in copy_tree() which fails with "File exists" on
             # previously existing symlinks
-            for f in distutils.filelist.findall():
+            for f in distutils.filelist.findall('etc'):
                 if not f.startswith('etc' + os.path.sep) or not os.path.islink(f):
                     continue
                 try:
@@ -644,6 +649,28 @@ class install_auto(distutils.command.install.install):
 
             distutils.dir_util.copy_tree('etc', os.path.join(self.root, 'etc'),
                     preserve_times=0, preserve_symlinks=1, verbose=1)
+
+        # install data/scripts symlinks
+        for f in distutils.filelist.findall():
+            if not os.path.islink(f):
+                continue
+            if f.startswith('bin/') or f.startswith('data/'):
+                if f.startswith('bin'):
+                    dir = self.install_scripts
+                    dest = os.path.join(dir, os.path.sep.join(f.split(os.path.sep)[1:]))
+                elif f.startswith('data/icons'):
+                    dir = os.path.join(self.install_data, 'share', 'icons', 'hicolor')
+                    dest = os.path.join(dir, os.path.sep.join(f.split(os.path.sep)[2:]))
+                else:
+                    dir = os.path.join(self.install_data, 'share', self.distribution.get_name())
+                    dest = os.path.join(dir, os.path.sep.join(f.split(os.path.sep)[1:]))
+
+                d = os.path.dirname(dest)
+                if not os.path.isdir(d):
+                    os.makedirs(d)
+                if os.path.exists(dest):
+                    os.unlink(dest)
+                os.symlink(os.readlink(f), dest)
 
         distutils.command.install.install.run(self)
 

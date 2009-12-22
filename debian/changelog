@@ -3,6 +3,9 @@ python-distutils-extra (2.14) UNRELEASED; urgency=low
   * Bump Standards-Version to 3.8.3 (no changes necessary).
   * build_i18n.py: Fix crash when setup.py defines no data files. Thanks to
     Markus Korn! (LP: #493978)
+  * auto.py: Preserve symlinks in bin/ and data/. distutils copies them as
+    files by default, so we have to write the complete handling for those
+    ourselves. (LP: #392562)
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 21 Dec 2009 19:15:46 +0100
 
