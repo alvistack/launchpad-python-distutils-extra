@@ -194,8 +194,8 @@ def __dbus(attrs, src):
 def __apport_hooks(attrs, src):      
     '''Apport hooks'''  
     v = attrs.setdefault('data_files', [])
-    # /usr/share/apport/package-hooks/source_<package-name>.py
-    # /usr/share/apport/package-hooks/<package-name>.py
+
+    # files will be copied to /usr/share/apport/package-hooks/
     hooks = []
     assert 'name' in attrs, 'You need to set the "name" property in setup.py'
     for f in src.copy():
