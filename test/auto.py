@@ -153,6 +153,65 @@ Exec=/usr/bin/foo-gtk
         self.assert_('/usr/share/dbus-1/services/com.example.foo.gui.service' in f)
         self.failIf('super.service' in '\n'.join(f))
 
+    def test_apport_config(self):
+        self._mksrc('test-crashdb.conf', '''test = {
+    'impl' : 'launchpad',
+    'project' : 'test',
+    'bug_pattern_base' : None,
+}''')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.failIf('following files are not recognized' in o, o)
+        
+        f = self.installed_files()
+        self.assertEqual(len(f), 2) # 1 crashdb conf file plus .egg-info
+        self.assert_('/etc/apport/crashdb.conf.d/test-crashdb.conf' in f, f)
+        
+    def test_apport_hook(self):
+        '''ensure apport hook finds:
+                a file called foo.py importing apport
+                a file called source_foo.py importing apport
+           ensure apport hook does not detect a file that doesn't import apport, no matter the name'''
+        self._mksrc('working/foo.py', '''import os, apport
+def add_info(report):
+    pass
+''')
+
+        self._mksrc('foo/foo.py', '''import os
+"""random apport line"""
+def add_info(report):
+    pass
+''')
+
+        self._mksrc('foo/random_foo.py', '''import apport
+def add_info(report):
+    pass
+''')
+
+        self._mksrc('foo/source_foo.py', '''import apport
+def add_info(report):
+    pass
+''')
+
+        self._mksrc('notworking/source_foo.py', '''import os
+def add_info(report):
+    pass
+''')
+
+        (o, e, s) = self.do_install()
+        self.assert_('following files are not recognized' in o, o)
+        self.assert_('\n  foo/foo.py\n' in o, o)
+        self.assert_('\n  notworking/source_foo.py\n' in o, o)
+        
+        f = self.installed_files()
+        self.assertEqual(len(f), 3, f) # 2 hook files plus .egg-info
+        self.assert_('/usr/share/apport/package-hooks/foo.py' in f, f)
+        self.assert_('/usr/share/apport/package-hooks/source_foo.py' in f, f)
+        self.failIf('random_foo.py' in f, f)
+        
+        
     def test_po(self):
         '''gettext *.po files'''
 

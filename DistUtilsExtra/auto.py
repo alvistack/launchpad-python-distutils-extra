@@ -17,6 +17,8 @@ This currently supports:
  * Desktop files (*.desktop.in) [into prefix/share/applications, or
    prefix/share/autostart if they have "autostart" anywhere in the path]
  * KDE4 notifications (*.notifyrc.in)
+ * Apport crashdb configurations (*-crashdb.conf) [installed into /etc/apport/crashdb.conf.d]
+ * Apport hooks (<projectname>.py or source_<projectname>.py, that imports apport) [installed into /usr/share/apport/package-hooks]
  * scripts (all in bin/, and ./<projectname>
  * Auxiliary data files (in data/*) [into prefix/share/<projectname>/]
  * automatic po/POTFILES.in (with all source files which contain _())
@@ -80,6 +82,8 @@ def setup(**attrs):
     __packages(attrs, src)
     __provides(attrs, src)
     __dbus(attrs, src)
+    __apport_config(attrs, src)
+    __apport_hooks(attrs, src)
     __data(attrs, src)
     __scripts(attrs, src)
     __stdfiles(attrs, src)
@@ -188,6 +192,41 @@ def __dbus(attrs, src):
         v.append(('share/dbus-1/system-services', system_service))
     if session_service:
         v.append(('share/dbus-1/services', session_service))
+
+def __apport_config(attrs, src):
+    '''Apport configuration'''
+
+    v = attrs.setdefault('data_files', [])
+
+    # /etc/apport/crashdb.conf.d
+    crashdb_conf = []
+    for f in src_fileglob(src, '*-crashdb.conf'):        
+        src_mark(src, f)
+        crashdb_conf.append(f)
+    if crashdb_conf:
+        v.append(('/etc/apport/crashdb.conf.d/', crashdb_conf))
+
+def __apport_hooks(attrs, src):      
+    '''Apport hooks'''  
+    v = attrs.setdefault('data_files', [])
+    # /usr/share/apport/package-hooks/source_<package-name>.py
+    # /usr/share/apport/package-hooks/<package-name>.py
+    hooks = []
+    assert 'name' in attrs, 'You need to set the "name" property in setup.py'
+    for f in src_fileglob(src, '*%s.py'%attrs['name']):
+        (directory, file) = os.path.split(f)
+        if file == 'source_%s.py'%attrs['name'] or file == '%s.py'%attrs['name']:
+            py_file = open(f)
+            while True:
+                line = py_file.readline()
+                if not line:
+                    break
+                if (line.lstrip().startswith('import ') or line.lstrip().startswith('from ')) and line.find('apport') >= 0:
+                    hooks.append(f)
+                    src_mark(src, f)
+                    break
+    if hooks:
+        v.append(('share/apport/package-hooks/', hooks))
 
 def __data(attrs, src):
     '''Install auxiliary data files.
