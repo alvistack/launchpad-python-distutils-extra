@@ -17,7 +17,7 @@ This currently supports:
  * Desktop files (*.desktop.in) [into prefix/share/applications, or
    prefix/share/autostart if they have "autostart" anywhere in the path]
  * KDE4 notifications (*.notifyrc.in)
- * Apport hooks (<projectname>.py or source_<projectname>.py, that imports apport) [installed into /usr/share/apport/package-hooks]
+ * Apport hooks (apport/*) [installed into /usr/share/apport/package-hooks]
  * scripts (all in bin/, and ./<projectname>
  * Auxiliary data files (in data/*) [into prefix/share/<projectname>/]
  * automatic po/POTFILES.in (with all source files which contain _())
