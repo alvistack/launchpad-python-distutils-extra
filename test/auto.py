@@ -153,22 +153,6 @@ Exec=/usr/bin/foo-gtk
         self.assert_('/usr/share/dbus-1/services/com.example.foo.gui.service' in f)
         self.failIf('super.service' in '\n'.join(f))
 
-    def test_apport_config(self):
-        self._mksrc('etc/apport/crashdb.conf.d/test-crashdb.conf', '''test = {
-    'impl' : 'launchpad',
-    'project' : 'test',
-    'bug_pattern_base' : None,
-}''')
-
-        (o, e, s) = self.do_install()
-        self.assertEqual(e, '')
-        self.assertEqual(s, 0)
-        self.failIf('following files are not recognized' in o, o)
-        
-        f = self.installed_files()
-        self.assertEqual(len(f), 2) # 1 crashdb conf file plus .egg-info
-        self.assert_('/etc/apport/crashdb.conf.d/test-crashdb.conf' in f, f)
-        
     def test_apport_hook(self):
         '''ensure apport hooks will copy all files in the apport/ directory'''
         self._mksrc('apport/foo.py', '''import os, apport
