@@ -1,3 +1,9 @@
+python-distutils-extra (2.16) UNRELEASED; urgency=low
+
+  * test/auto.py: Make Apport hook test description consistent to other tests.
+
+ -- Martin Pitt <mpitt@debian.org>  Sun, 03 Jan 2010 22:31:56 +0100
+
 python-distutils-extra (2.15) unstable; urgency=low
 
   * auto.py: Add support for Apport package hooks in apport/*.py. Thanks

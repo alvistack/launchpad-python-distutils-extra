@@ -154,7 +154,8 @@ Exec=/usr/bin/foo-gtk
         self.failIf('super.service' in '\n'.join(f))
 
     def test_apport_hook(self):
-        '''ensure apport hooks will copy all files in the apport/ directory'''
+        '''Apport hooks'''
+
         self._mksrc('apport/foo.py', '''import os, apport
 def add_info(report):
     pass
