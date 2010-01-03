@@ -153,6 +153,26 @@ Exec=/usr/bin/foo-gtk
         self.assert_('/usr/share/dbus-1/services/com.example.foo.gui.service' in f)
         self.failIf('super.service' in '\n'.join(f))
 
+    def test_apport_hook(self):
+        '''ensure apport hooks will copy all files in the apport/ directory'''
+        self._mksrc('apport/foo.py', '''import os, apport
+def add_info(report):
+    pass
+''')
+
+        self._mksrc('apport/source_foo.py', '''import os, apport
+def add_info(report):
+    pass
+''')
+
+        (o, e, s) = self.do_install()
+        self.failIf('following files are not recognized' in o, o)
+        
+        f = self.installed_files()
+        self.assertEqual(len(f), 3, f) # 2 hook files plus .egg-info
+        self.assert_('/usr/share/apport/package-hooks/foo.py' in f, f)
+        self.assert_('/usr/share/apport/package-hooks/source_foo.py' in f, f)
+        
     def test_po(self):
         '''gettext *.po files'''
 
