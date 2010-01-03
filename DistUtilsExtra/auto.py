@@ -17,6 +17,7 @@ This currently supports:
  * Desktop files (*.desktop.in) [into prefix/share/applications, or
    prefix/share/autostart if they have "autostart" anywhere in the path]
  * KDE4 notifications (*.notifyrc.in)
+ * Apport hooks (apport/*) [installed into /usr/share/apport/package-hooks]
  * scripts (all in bin/, and ./<projectname>
  * Auxiliary data files (in data/*) [into prefix/share/<projectname>/]
  * automatic po/POTFILES.in (with all source files which contain _())
@@ -80,6 +81,7 @@ def setup(**attrs):
     __packages(attrs, src)
     __provides(attrs, src)
     __dbus(attrs, src)
+    __apport_hooks(attrs, src)
     __data(attrs, src)
     __scripts(attrs, src)
     __stdfiles(attrs, src)
@@ -188,6 +190,20 @@ def __dbus(attrs, src):
         v.append(('share/dbus-1/system-services', system_service))
     if session_service:
         v.append(('share/dbus-1/services', session_service))
+
+def __apport_hooks(attrs, src):      
+    '''Apport hooks'''  
+    v = attrs.setdefault('data_files', [])
+
+    # files will be copied to /usr/share/apport/package-hooks/
+    hooks = []
+    assert 'name' in attrs, 'You need to set the "name" property in setup.py'
+    for f in src_fileglob(src, '*.py'):
+        if f.startswith('apport/'):
+            hooks.append(f)
+            src_mark(src, f)
+    if hooks:
+        v.append(('share/apport/package-hooks/', hooks))
 
 def __data(attrs, src):
     '''Install auxiliary data files.
