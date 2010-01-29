@@ -1,4 +1,4 @@
-python-distutils-extra (2.16) UNRELEASED; urgency=low
+python-distutils-extra (2.16) unstable; urgency=low
 
   * test/auto.py: Make Apport hook test description consistent to other tests.
   * build_help.py: Fix --help-dir option, thanks to Severin Heiniger for
@@ -6,7 +6,7 @@ python-distutils-extra (2.16) UNRELEASED; urgency=low
   * auto.py: Clean up temporary *.py symlinks also if there is an exception in
     between. (LP: #490985)
 
- -- Martin Pitt <mpitt@debian.org>  Sun, 03 Jan 2010 22:31:56 +0100
+ -- Martin Pitt <mpitt@debian.org>  Fri, 29 Jan 2010 18:48:31 +0100
 
 python-distutils-extra (2.15) unstable; urgency=low
 
