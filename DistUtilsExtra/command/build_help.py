@@ -6,7 +6,7 @@ import distutils.cmd
 
 class build_help(distutils.cmd.Command):
     description = 'install docbook XML based documentation'
-    user_options= [('help_dir', None, 'help directory in the source tree')]
+    user_options= [('help-dir', None, 'help directory in the source tree')]
 	
     def initialize_options(self):
         self.help_dir = None
