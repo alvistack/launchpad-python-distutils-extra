@@ -4,6 +4,7 @@
 # Author: Martin Pitt
 # License: GPL v2 or later
 
+from optparse import OptionParser
 import subprocess, tempfile, shutil, sys, os, textwrap
 
 def get_egg_info():
@@ -41,7 +42,7 @@ def get_egg_info():
     finally:
         shutil.rmtree(instdir)
 
-def make_debian(egg):
+def make_debian(egg, force_control):
     '''Create/update debian/* from information in egg dictionary'''
 
     if not os.path.isdir('debian'):
@@ -68,7 +69,7 @@ include /usr/share/cdbs/1/rules/langpack.mk
     if not os.path.exists('debian/copyright'):
         make_copyright(egg)
 
-    make_control(egg)
+    make_control(egg, force_control)
     make_changelog(egg)
 
 def make_copyright(egg):
@@ -104,7 +105,7 @@ Upstream-Maintainer: %s
             print >> f, ''' The full text of the GPL is distributed in
  /usr/share/common-licenses/%s on Debian systems.''' % l
 
-def make_control(egg):
+def make_control(egg, force_control):
     author = egg.get('Author', '')
     if 'Author-email' in egg:
         author += ' <' + egg['Author-email'] + '>'
@@ -133,7 +134,7 @@ def make_control(egg):
  ${python:Depends}%s''' % ',\n '.join(['',] + list(deps))
     }
     # add additional fields (even when updating if user chooses them)
-    if not os.path.exists('debian/control') or '--force-control' in sys.argv:
+    if not os.path.exists('debian/control') or force_control:
         control_content.update({
         'Source': egg['Name'],
         'Build-Depends': '''cdbs (>= 0.4.43),
@@ -268,6 +269,11 @@ def mod2package(module):
 #
 # main
 #
+usage = "usage: %prog [options]"
+parser = OptionParser(prog='python_mkdebian', usage=usage)
+parser.add_option('', '--force-control', dest='force_control', action='store_true',
+                  help='Force whole control file to be recreated')
+options, args = parser.parse_args()
 
 egg = get_egg_info()
-make_debian(egg)
+make_debian(egg, force_control=options.force_control)
