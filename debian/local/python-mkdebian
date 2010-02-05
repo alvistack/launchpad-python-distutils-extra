@@ -56,8 +56,7 @@ def make_debian(egg, force_control, changelog, additional_dependencies):
     if not os.path.exists('debian/rules'):
         f = open('debian/rules', 'w')
         f.write('''#!/usr/bin/make -f
-
-DEB_PYTHON_SYSTEM := pycentral
+DEB_PYTHON_SYSTEM := pysupport
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/python-distutils.mk
@@ -140,7 +139,7 @@ def make_control(egg, force_control, additional_dependencies):
         'Build-Depends': '''cdbs (>= 0.4.43),
  debhelper (>= 6),
  python,
- python-central (>= 0.6.11),
+ python-support (>= 0.6.4),
  python-distutils-extra (>= 2.10)%s''' % bdeps,
         'Maintainer': author,
         'Package': egg['Name'],
@@ -154,7 +153,7 @@ Section: python
 Priority: extra
 Build-Depends: %(Build-Depends)s
 Maintainer: %(Maintainer)s
-Standards-Version: 3.8.2
+Standards-Version: 3.8.3
 XS-Python-Version: current
 
 Package: %(Package)s
@@ -282,7 +281,7 @@ parser.add_option('', '--changelog', dest='changelog', action='append',
                   help='Add string changelog to debian/changelog (can be specified multiple times)')
 parser.add_option('', '--dependency', dest='dependencies', action='append',
                   help='Add additional debian package dependency (can be specified multiple times)')
-parser.set_defaults(changelog=None, dependency=[])
+parser.set_defaults(changelog=None, dependencies=[])
 options, args = parser.parse_args()
 
 egg = get_egg_info()

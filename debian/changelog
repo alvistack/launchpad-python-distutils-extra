@@ -1,11 +1,20 @@
 python-distutils-extra (2.17) UNRELEASED; urgency=low
 
+  [ Didier Roche ]
   * python-mkdebian:
     - Use OptionParser for argv processing.
     - Add --changelog option to specify changelog message (can be used more
       than once for different tasks)
     - Add --dependency option to add a manual debian package dependency
       (can be used more than once for each package)
+
+  [ Elliot Murphy ]
+  * python-mkdebian:
+    - Change from python-central to python-support for consistency with
+      debian python packaging team preference.
+    - Update to Standards-Version: 3.8.3
+    - Fix a typo that caused additional_dependencies defaulting to None
+      instead of [].
 
  -- Didier Roche <didrocks@ubuntu.com>  Sun, 31 Jan 2010 16:41:42 -0800
 
