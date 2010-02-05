@@ -42,7 +42,7 @@ def get_egg_info():
     finally:
         shutil.rmtree(instdir)
 
-def make_debian(egg, force_control):
+def make_debian(egg, force_control, changelog, additional_dependencies):
     '''Create/update debian/* from information in egg dictionary'''
 
     if not os.path.isdir('debian'):
@@ -69,8 +69,8 @@ include /usr/share/cdbs/1/rules/langpack.mk
     if not os.path.exists('debian/copyright'):
         make_copyright(egg)
 
-    make_control(egg, force_control)
-    make_changelog(egg)
+    make_control(egg, force_control, additional_dependencies)
+    make_changelog(egg, changelog)
 
 def make_copyright(egg):
     author = egg.get('Author', '')
@@ -105,7 +105,7 @@ Upstream-Maintainer: %s
             print >> f, ''' The full text of the GPL is distributed in
  /usr/share/common-licenses/%s on Debian systems.''' % l
 
-def make_control(egg, force_control):
+def make_control(egg, force_control, additional_dependencies):
     author = egg.get('Author', '')
     if 'Author-email' in egg:
         author += ' <' + egg['Author-email'] + '>'
@@ -131,7 +131,7 @@ def make_control(egg, force_control):
 
     # prepare tags
     control_content = {'Depends': '''${misc:Depends},
- ${python:Depends}%s''' % ',\n '.join(['',] + list(deps))
+ ${python:Depends}%s''' % ',\n '.join(['',] + list(deps) + additional_dependencies)
     }
     # add additional fields (even when updating if user chooses them)
     if not os.path.exists('debian/control') or force_control:
@@ -194,25 +194,30 @@ Description: %(Description)s
             raise
         os.rename('debian/control.new', 'debian/control')
 
-def make_changelog(egg):
+def make_changelog(egg, changelog):
     lsb_release = subprocess.Popen(['lsb_release', '-sc'],
             stdout=subprocess.PIPE)
     release = lsb_release.communicate()[0].strip()
     assert lsb_release.returncode == 0
 
     if not os.path.exists('debian/changelog'):
+        if not changelog:
+            changelog = ['Initial release.']
         try:
             assert subprocess.call(['debchange', '--create', '--package', egg['Name'],
-                '-D' + release, '-v' + egg['Version'], 'Initial release.']) == 0
+                '-D' + release, '-v' + egg['Version'], changelog[0]]) == 0
         except OSError, e:
             print >> sys.stderr, 'ERROR: Could not run "debchange": %s\n' \
                 'You need to install the "devscripts" package for this.' % str(e)
             sys.exit(0)
     else:
+        if not changelog:
+                changelog = ['New release.']
         # this will just fail if we already have that version, which is okay.
         subprocess.call(['debchange', '-D' + release, '-v' + egg['Version'],
-            'New release.'], stderr=subprocess.PIPE)
-        # TODO: add CLI option to specify changelog
+            changelog[0]], stderr=subprocess.PIPE)
+    for message in changelog[1:]:
+        subprocess.call(['debchange', message])
 
 def mod2package(module):
     '''Convert Python module into a package name.
@@ -273,7 +278,14 @@ usage = "usage: %prog [options]"
 parser = OptionParser(prog='python_mkdebian', usage=usage)
 parser.add_option('', '--force-control', dest='force_control', action='store_true',
                   help='Force whole control file to be recreated')
+parser.add_option('', '--changelog', dest='changelog', action='append',
+                  help='Add string changelog to debian/changelog (can be specified multiple times)')
+parser.add_option('', '--dependency', dest='dependencies', action='append',
+                  help='Add additional debian package dependency (can be specified multiple times)')
+parser.set_defaults(changelog=None, dependency=[])
 options, args = parser.parse_args()
 
 egg = get_egg_info()
-make_debian(egg, force_control=options.force_control)
+make_debian(egg, force_control=options.force_control,
+                 changelog=options.changelog,
+                 additional_dependencies=options.dependencies)
