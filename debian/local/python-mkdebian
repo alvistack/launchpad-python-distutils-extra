@@ -48,25 +48,19 @@ def make_debian(egg, force_control, changelog, additional_dependencies):
     if not os.path.isdir('debian'):
         os.mkdir('debian')
 
-    if not os.path.isdir('debian/source'):
-        os.mkdir('debian/source')
-
-    if not os.path.exists('debian/source/format'):
-        f = open('debian/source/format', 'w')
-        f.write('3.0 (quilt)')
-        f.close()
-
     if not os.path.exists('debian/compat'):
         f = open('debian/compat', 'w')
-        f.write('7\n')
+        f.write('6\n')
         f.close()
 
     if not os.path.exists('debian/rules'):
         f = open('debian/rules', 'w')
         f.write('''#!/usr/bin/make -f
+DEB_PYTHON_SYSTEM := pysupport
 
-%:
-	dh --buildsystem=python_distutils $@
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/python-distutils.mk
+include /usr/share/cdbs/1/rules/langpack.mk
 ''')
         f.close()
         os.chmod('debian/rules', 0755)
