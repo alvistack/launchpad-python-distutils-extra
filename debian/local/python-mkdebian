@@ -48,20 +48,25 @@ def make_debian(egg, force_control, changelog, additional_dependencies):
     if not os.path.isdir('debian'):
         os.mkdir('debian')
 
+    if not os.path.isdir('debian/source'):
+        os.mkdir('debian/source')
+
+    if not os.path.exists('debian/source/format'):
+        f = open('debian/source/format', 'w')
+        f.write('3.0 (quilt)')
+        f.close()
+
     if not os.path.exists('debian/compat'):
         f = open('debian/compat', 'w')
-        f.write('6\n')
+        f.write('7\n')
         f.close()
 
     if not os.path.exists('debian/rules'):
         f = open('debian/rules', 'w')
         f.write('''#!/usr/bin/make -f
 
-DEB_PYTHON_SYSTEM := pycentral
-
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/python-distutils.mk
-include /usr/share/cdbs/1/rules/langpack.mk
+%:
+	dh --buildsystem=python_distutils $@
 ''')
         f.close()
         os.chmod('debian/rules', 0755)
@@ -138,9 +143,9 @@ def make_control(egg, force_control, additional_dependencies):
         control_content.update({
         'Source': egg['Name'],
         'Build-Depends': '''cdbs (>= 0.4.43),
- debhelper (>= 6),
+ debhelper (>= 7.0.50),
  python,
- python-central (>= 0.6.11),
+ python-support (>= 0.6.4),
  python-distutils-extra (>= 2.10)%s''' % bdeps,
         'Maintainer': author,
         'Package': egg['Name'],
@@ -154,7 +159,7 @@ Section: python
 Priority: extra
 Build-Depends: %(Build-Depends)s
 Maintainer: %(Maintainer)s
-Standards-Version: 3.8.2
+Standards-Version: 3.8.3
 XS-Python-Version: current
 
 Package: %(Package)s
@@ -282,7 +287,7 @@ parser.add_option('', '--changelog', dest='changelog', action='append',
                   help='Add string changelog to debian/changelog (can be specified multiple times)')
 parser.add_option('', '--dependency', dest='dependencies', action='append',
                   help='Add additional debian package dependency (can be specified multiple times)')
-parser.set_defaults(changelog=None, dependency=[])
+parser.set_defaults(changelog=None, dependencies=[])
 options, args = parser.parse_args()
 
 egg = get_egg_info()
