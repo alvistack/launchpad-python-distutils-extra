@@ -199,6 +199,11 @@ def make_changelog(egg, changelog):
     release = lsb_release.communicate()[0].strip()
     assert lsb_release.returncode == 0
 
+    if not os.path.exists('/usr/bin/debchange'):
+        print >> sys.stderr, 'ERROR: Could not find "debchange".\n' \
+            'You need to install the "devscripts" package for this.'
+        sys.exit(0)
+
     if not os.path.exists('debian/changelog'):
         if not changelog:
             changelog = ['Initial release.']
