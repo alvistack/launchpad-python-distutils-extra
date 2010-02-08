@@ -15,6 +15,8 @@ python-distutils-extra (2.17) UNRELEASED; urgency=low
     - Update to Standards-Version: 3.8.3
     - Fix a typo that caused additional_dependencies defaulting to None
       instead of [].
+    - If debchange is not available, give a more friendly error message.
+      (LP: #464137)
 
  -- Didier Roche <didrocks@ubuntu.com>  Sun, 31 Jan 2010 16:41:42 -0800
 
