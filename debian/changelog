@@ -18,6 +18,9 @@ python-distutils-extra (2.17) UNRELEASED; urgency=low
     - If debchange is not available, give a more friendly error message.
       (LP: #464137)
 
+  [ Martin Pitt ]
+  * auto.py: Document handling of icons.
+
  -- Didier Roche <didrocks@ubuntu.com>  Sun, 31 Jan 2010 16:41:42 -0800
 
 python-distutils-extra (2.16) unstable; urgency=low

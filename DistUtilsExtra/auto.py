@@ -24,6 +24,7 @@ This currently supports:
  * automatic MANIFEST (everything except swap and backup files, *.pyc, and
    revision control)
  * manpages (*.[0-9])
+ * icons (data/icons/<size>/<category>/*.{svg,png})
  * files which should go into /etc (./etc/*, copied verbatim)
  * determining "requires" from import statements in source code
  * determining "provides" from shipped packages and modules
