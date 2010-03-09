@@ -1,4 +1,4 @@
-python-distutils-extra (2.17) UNRELEASED; urgency=low
+python-distutils-extra (2.17) unstable; urgency=low
 
   [ Didier Roche ]
   * python-mkdebian:
@@ -21,7 +21,7 @@ python-distutils-extra (2.17) UNRELEASED; urgency=low
   [ Martin Pitt ]
   * auto.py: Document handling of icons.
 
- -- Didier Roche <didrocks@ubuntu.com>  Sun, 31 Jan 2010 16:41:42 -0800
+ -- Martin Pitt <mpitt@debian.org>  Tue, 09 Mar 2010 16:28:04 +0100
 
 python-distutils-extra (2.16) unstable; urgency=low
 
