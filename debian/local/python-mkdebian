@@ -289,6 +289,9 @@ parser.add_option('', '--dependency', dest='dependencies', action='append',
 parser.set_defaults(changelog=None, dependencies=[])
 options, args = parser.parse_args()
 
+# switch stdout to line buffering, for scripts reading our output on the fly
+sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 1)
+
 egg = get_egg_info()
 make_debian(egg, force_control=options.force_control,
                  changelog=options.changelog,
