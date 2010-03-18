@@ -1,3 +1,10 @@
+python-distutils-extra (2.18) UNRELEASED; urgency=low
+
+  * python-mkdebian: Switch stdout to line buffering, for scripts reading our
+    output on the fly.
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 18 Mar 2010 18:43:45 +0100
+
 python-distutils-extra (2.17) unstable; urgency=low
 
   [ Didier Roche ]
