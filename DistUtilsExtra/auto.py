@@ -70,7 +70,8 @@ def setup(**attrs):
 
     # mark files in etc/*, handled by install_auto
     # don't install DistUtilsExtra if bundled with a source tarball
-    ignore_dirs = ['etc', 'DistUtilsExtra']
+    # ignore packaging
+    ignore_dirs = ['etc', 'DistUtilsExtra', 'debian']
     
     for f in src.copy():
         for d in ignore_dirs:
