@@ -5,6 +5,9 @@ python-distutils-extra (2.18) UNRELEASED; urgency=low
   * auto.py: Ignore debian/ to avoid a lot of useless "does not recognize
     file" warnings. (LP: #519927)
   * Bump Standards-Version to 3.8.4 (no changes necessary).
+  * test/auto.py: Use python-xdg instead of python-crypto for the "automatic
+    requires" test, since -crypto uses obsolete libraries (sha in Python 2.6)
+    which cause extra warnings. (Closes: #571506)
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 18 Mar 2010 18:43:45 +0100
 
