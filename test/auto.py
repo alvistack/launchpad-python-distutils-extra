@@ -611,16 +611,16 @@ gui/foo.desktop.in
         '''automatic requires/provides'''
 
         try:
-            __import__('Crypto')
+            __import__('xdg')
             __import__('dateutil')
         except ImportError:
-            self.fail('You need to have Crypto and dateutil installed for this test suite to work')
+            self.fail('You need to have xdg and dateutil installed for this test suite to work')
 
         self._mksrc('foo/__init__.py', '')
         self._mksrc('foo/stuff.py', '''import xml.parsers.expat
 import os, os.path, email.mime, distutils.command.register
 from email import header as h
-import Crypto.PublicKey.DSA, unknown
+import xdg.Mime, unknown
 ''')
 
         self._mksrc('foo/bar/__init__.py', '')
@@ -632,7 +632,7 @@ import Crypto.PublicKey.DSA, unknown
 import sys
 from dateutil import tz
 import foo.bar
-from Crypto import Cipher
+from xdg import Menu
 
 print 'import iamnota.module'
 ''', executable=True)
@@ -667,7 +667,7 @@ print 'import iamnota.module'
 
         # check requires
         req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
-        self.assertEqual(set(req), set(['DistUtilsExtra.auto', 'Crypto', 'dateutil']))
+        self.assertEqual(set(req), set(['DistUtilsExtra.auto', 'xdg', 'dateutil']))
 
     def test_help(self):
         '''Docbook XML help'''
