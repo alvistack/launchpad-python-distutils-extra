@@ -5,7 +5,7 @@ XS-Python-Version: all
 Maintainer: Sebastian Heinlein <devel@glatzor.de>
 Uploaders: Martin Pitt <mpitt@debian.org>
 Build-Depends: cdbs, debhelper (>= 5.0.37.2), python-central (>= 0.5), python-all-dev, python-setuptools, python-crypto, python-dateutil, intltool
-Standards-Version: 3.8.3
+Standards-Version: 3.8.4
 Vcs-Bzr: http://bazaar.launchpad.net/~python-distutils-extra-hackers/python-distutils-extra/debian
 Vcs-Browser: https://code.launchpad.net/~python-distutils-extra-hackers/python-distutils-extra/debian
 

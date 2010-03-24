@@ -4,6 +4,7 @@ python-distutils-extra (2.18) UNRELEASED; urgency=low
     output on the fly.
   * auto.py: Ignore debian/ to avoid a lot of useless "does not recognize
     file" warnings. (LP: #519927)
+  * Bump Standards-Version to 3.8.4 (no changes necessary).
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 18 Mar 2010 18:43:45 +0100
 
