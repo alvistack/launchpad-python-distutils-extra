@@ -597,9 +597,13 @@ class build_kdeui_auto(build_kdeui.build_kdeui):
         # add *.ui files which belong to KDE4
         kdeui_files = []
         for f in src_fileglob(src, '*.ui'):
-            if open(f).readline().startswith('<ui version="'):
+            fd = open(f)
+            # might be on the first or second line
+            if fd.readline().startswith('<ui version="') or \
+               fd.readline().startswith('<ui version="'):
                 src_mark(src, f)
                 kdeui_files.append(f)
+            fd.close()
         if kdeui_files:
             try:
                 uf = eval(self.ui_files)

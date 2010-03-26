@@ -1,3 +1,10 @@
+python-distutils-extra (2.19) UNRELEASED; urgency=low
+
+  * auto.py: Also recognize Qt .ui files if they start with an "<?xml..."
+    first line. (LP: #543707)
+
+ -- Martin Pitt <mpitt@debian.org>  Fri, 26 Mar 2010 17:36:22 +0100
+
 python-distutils-extra (2.18) unstable; urgency=low
 
   * python-mkdebian: Switch stdout to line buffering, for scripts reading our
