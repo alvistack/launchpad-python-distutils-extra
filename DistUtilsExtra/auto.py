@@ -669,7 +669,8 @@ class install_auto(distutils.command.install.install):
                     os.unlink(os.path.join(self.root, f))
                 except OSError:
                     pass
-
+            if not self.root:
+                self.root = ''
             distutils.dir_util.copy_tree('etc', os.path.join(self.root, 'etc'),
                     preserve_times=0, preserve_symlinks=1, verbose=1)
 
