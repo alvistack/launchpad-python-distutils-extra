@@ -871,7 +871,7 @@ Exec=/usr/bin/foo''')
         # Executables without *.py extension
         self._mksrc('gtk/foo-gtk', '#!/usr/bin/python\nprint _("yes13")',
                 executable=True)
-        self._mksrc('cli/foo-cli', '#!/usr/bin/env python\nprint _("yes14")',
+        self._mksrc('cli/foo-cli', '#!/usr/bin/env python\nprint _(\'yes14\')',
                 executable=True)
         self._mksrc('daemon/foobarize', '#!/usr/bin/flex\np _("no8")',
                 executable=True)

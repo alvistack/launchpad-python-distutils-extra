@@ -2,6 +2,9 @@ python-distutils-extra (2.19) UNRELEASED; urgency=low
 
   * auto.py: Also recognize Qt .ui files if they start with an "<?xml..."
     first line. (LP: #543707)
+  * test/auto.py: Check that automatic translation extraction also works for
+    extensionless files and single quotation marks. (Side discussion in
+    LP #533565)
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 26 Mar 2010 17:36:22 +0100
 
