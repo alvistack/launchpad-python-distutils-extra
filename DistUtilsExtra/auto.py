@@ -557,7 +557,7 @@ class build_i18n_auto(build_i18n.build_i18n):
                 # find extensionless executable scripts which are Python files, and
                 # generate a temporary *.py alias, so that they get caught by
                 # intltool
-                for f in src_all:
+                for f in reduce(lambda x, y: x.union(y[1]), self.distribution.data_files, src_all):
                     f_py = f + '.py'
                     if os.access(f, os.X_OK) and os.path.splitext(f)[1] == '' and \
                             not os.path.exists(f_py):

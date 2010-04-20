@@ -448,6 +448,47 @@ gui/foo.desktop.in
         # above loop would match yes11 to yes1 as well, so test it explicitly
         self.assert_('msgid "yes1"' in pot)
 
+    def test_pot_auto_explicit(self):
+        '''PO template creation with automatic POTFILES.in and explicit scripts'''
+
+        self._mk_i18n_source()
+
+        # add some additional binaries here which aren't caught by default
+        self._mksrc('cli/client-cli', "#!/usr/bin/python\nprint _('yes15')", True)
+        self._mksrc('gtk/client-gtk', '#!/usr/bin/python\nprint _("yes16")', True)
+        # this is the most tricky case: intltool doesn't consider them Python
+        # files by default and thus just looks for _(""):
+        self._mksrc('kde/client-kde', "#!/usr/bin/python\nprint _('yes17')", True)
+        self._mksrc('po/POTFILES.in.in', 'gtk/client-gtk\nkde/client-kde')
+        self._mksrc('setup.py', '''
+from DistUtilsExtra.auto import setup
+
+setup(
+    name='foo',
+    version='0.1',
+    data_files=[('share/foo', ['gtk/client-gtk', 'kde/client-kde'])],
+    scripts=['cli/client-cli'],
+)
+''')
+
+        (o, e, s) = self.setup_py(['build'])
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        # POT file should not be shown as not recognized
+        self.failIf('\n  po/foo.pot\n' in o)
+
+        pot_path = os.path.join(self.src, 'po', 'foo.pot')
+        self.assert_(os.path.exists(pot_path))
+        pot = open(pot_path).read()
+
+        self.failIf('msgid "no"' in pot)
+        for i in range(2, 18):
+            self.assert_('msgid "yes%i' % i in pot or 
+                   'msgid ""\n"yes%i' % i in pot,
+                   'yes%i' % i)
+        # above loop would match yes11 to yes1 as well, so test it explicitly
+        self.assert_('msgid "yes1"' in pot)
+
     def test_standard_files(self):
         '''Standard files (MANIFEST.in, COPYING, etc.)'''
 
