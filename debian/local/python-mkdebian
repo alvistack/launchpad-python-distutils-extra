@@ -8,7 +8,7 @@ from optparse import OptionParser
 import subprocess, tempfile, shutil, sys, os, textwrap
 
 sys.path.insert(0, '.')
-from DistUtilsExtra.auto import __version__ as pkgversion
+from DistUtilsExtra import __version__ as pkgversion
 
 def get_egg_info():
     '''Get egg information from ./setup.py into a dictionary.'''
