@@ -12,6 +12,8 @@ python-distutils-extra (2.19) UNRELEASED; urgency=low
     POTFILES.in candidates. (LP: #533565)
   * debian/control: Swap maintainer (me) and uploaders (Sebastian), since I'm
     the de-facto maintainer now.
+  * debian/control: Replace python-all-dev build dependency with python-all,
+    which is enough. Also wrap build dependencies.
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 26 Mar 2010 17:36:22 +0100
 
