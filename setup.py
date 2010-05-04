@@ -3,9 +3,12 @@
 from setuptools import setup
 import glob, os, commands, sys
 
+sys.path.insert(0, '.')
+from DistUtilsExtra.auto import __version__ as pkgversion
+
 setup(
     name = 'python-distutils-extra',
-    version = '2.18',
+    version = pkgversion,
     author = 'Sebastian Heinlein, Martin Pitt',
     author_email = 'sebi@glatzor.de, martin.pitt@ubuntu.com',
     description = 'Add support for i18n, documentation and icons to distutils',
