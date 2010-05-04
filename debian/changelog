@@ -17,6 +17,7 @@ python-distutils-extra (2.19) UNRELEASED; urgency=low
   * Add debian/source/format: 3.0 (native).
   * setup.py: Grab version from DistUtilsExtra/auto.py instead of duplicating
     and hardcoding it.
+  * python_mkdebian: Add --version option.
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 26 Mar 2010 17:36:22 +0100
 

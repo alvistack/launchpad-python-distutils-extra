@@ -7,6 +7,9 @@
 from optparse import OptionParser
 import subprocess, tempfile, shutil, sys, os, textwrap
 
+sys.path.insert(0, '.')
+from DistUtilsExtra.auto import __version__ as pkgversion
+
 def get_egg_info():
     '''Get egg information from ./setup.py into a dictionary.'''
 
@@ -279,7 +282,7 @@ def mod2package(module):
 # main
 #
 usage = "usage: %prog [options]"
-parser = OptionParser(prog='python_mkdebian', usage=usage)
+parser = OptionParser(prog='python_mkdebian', usage=usage, version=pkgversion)
 parser.add_option('', '--force-control', dest='force_control', action='store_true',
                   help='Force whole control file to be recreated')
 parser.add_option('', '--changelog', dest='changelog', action='append',
