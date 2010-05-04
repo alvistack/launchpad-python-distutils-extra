@@ -10,6 +10,8 @@ python-distutils-extra (2.19) UNRELEASED; urgency=low
     reproduces LP #533565.
   * auto.py: Include scripts in setup.py's data_files into potential
     POTFILES.in candidates. (LP: #533565)
+  * debian/control: Swap maintainer (me) and uploaders (Sebastian), since I'm
+    the de-facto maintainer now.
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 26 Mar 2010 17:36:22 +0100
 
