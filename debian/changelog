@@ -21,6 +21,7 @@ python-distutils-extra (2.19) UNRELEASED; urgency=low
   * Move primary __version__ definition to DistUtilsExtra/__init__.py, where
     it makes more sense than just in the auto module.
   * Add debian/local/python-mkdebian.1. (Closes: #546266)
+  * Add debian/python-distutils-extra.manpages to install the new manpage.
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 26 Mar 2010 17:36:22 +0100
 
