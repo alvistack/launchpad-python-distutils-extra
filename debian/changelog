@@ -18,6 +18,8 @@ python-distutils-extra (2.19) UNRELEASED; urgency=low
   * setup.py: Grab version from DistUtilsExtra/auto.py instead of duplicating
     and hardcoding it.
   * python_mkdebian: Add --version option.
+  * Move primary __version__ definition to DistUtilsExtra/__init__.py, where
+    it makes more sense than just in the auto module.
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 26 Mar 2010 17:36:22 +0100
 
