@@ -14,6 +14,7 @@ python-distutils-extra (2.19) UNRELEASED; urgency=low
     the de-facto maintainer now.
   * debian/control: Replace python-all-dev build dependency with python-all,
     which is enough. Also wrap build dependencies.
+  * Add debian/source/format: 3.0 (native).
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 26 Mar 2010 17:36:22 +0100
 
