@@ -1,4 +1,4 @@
-python-distutils-extra (2.19) UNRELEASED; urgency=low
+python-distutils-extra (2.19) unstable; urgency=low
 
   * auto.py: Also recognize Qt .ui files if they start with an "<?xml..."
     first line. (LP: #543707)
@@ -23,7 +23,7 @@ python-distutils-extra (2.19) UNRELEASED; urgency=low
   * Add debian/local/python-mkdebian.1. (Closes: #546266)
   * Add debian/python-distutils-extra.manpages to install the new manpage.
 
- -- Martin Pitt <mpitt@debian.org>  Fri, 26 Mar 2010 17:36:22 +0100
+ -- Martin Pitt <mpitt@debian.org>  Sun, 09 May 2010 11:19:47 +0200
 
 python-distutils-extra (2.18) unstable; urgency=low
 
