@@ -1,3 +1,9 @@
+python-distutils-extra (2.20) UNRELEASED; urgency=low
+
+  * build_i18n.py: add support for LINGUAS (Siegfried Gevatter) (LP: #510957)
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 23 Jun 2010 20:47:44 +0200
+
 python-distutils-extra (2.19) unstable; urgency=low
 
   * auto.py: Also recognize Qt .ui files if they start with an "<?xml..."

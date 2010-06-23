@@ -77,6 +77,15 @@ WARNING: Intltool will use the values specified from the
          from setup.cfg.
          Remove the Makefile to avoid problems.""")
 
+        # If there is a po/LINGUAS file, or the LINGUAS environment variable
+        # is set, only compile the languages listed there.
+        selected_languages = None
+        linguas_file = os.path.join(self.po_dir, "LINGUAS")
+        if os.path.isfile(linguas_file):
+            selected_languages = open(linguas_file).read().split()
+        if "LINGUAS" in os.environ:
+            selected_languages = os.environ["LINGUAS"].split()
+
         # Update po(t) files and print a report
         # We have to change the working dir to the po dir for intltool
         cmd = ["intltool-update", (self.merge_po and "-r" or "-p"), "-g", self.domain]
@@ -87,6 +96,8 @@ WARNING: Intltool will use the values specified from the
         max_po_mtime = 0
         for po_file in glob.glob("%s/*.po" % self.po_dir):
             lang = os.path.basename(po_file[:-3])
+            if selected_languages and not lang in selected_languages:
+                continue
             mo_dir =  os.path.join("build", "mo", lang, "LC_MESSAGES")
             mo_file = os.path.join(mo_dir, "%s.mo" % self.domain)
             if not os.path.exists(mo_dir):
