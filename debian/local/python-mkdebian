@@ -198,10 +198,18 @@ Description: %(Description)s
         os.rename('debian/control.new', 'debian/control')
 
 def make_changelog(egg, changelog):
-    lsb_release = subprocess.Popen(['lsb_release', '-sc'],
+    lsb_release = subprocess.Popen(['lsb_release', '-si'],
             stdout=subprocess.PIPE)
-    release = lsb_release.communicate()[0].strip()
+    distro = lsb_release.communicate()[0].strip()
     assert lsb_release.returncode == 0
+
+    if distro == 'Debian':
+        release = 'unstable'
+    else:
+        lsb_release = subprocess.Popen(['lsb_release', '-sc'],
+                stdout=subprocess.PIPE)
+        release = lsb_release.communicate()[0].strip()
+        assert lsb_release.returncode == 0
 
     if not os.path.exists('/usr/bin/debchange'):
         print >> sys.stderr, 'ERROR: Could not find "debchange".\n' \
