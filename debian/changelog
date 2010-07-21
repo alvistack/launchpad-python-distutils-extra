@@ -6,6 +6,8 @@ python-distutils-extra (2.20) UNRELEASED; urgency=low
   [ Martin Pitt ]
   * debian/local/python-mkdebian: Make langpack.mk include optional, as it
     only exists in Ubuntu, not Debian. (Closes: #589802)
+  * debian/local/python-mkdebian: If we are on Debian, set upload target to
+    "unstable". (Closes: #589794)
 
  -- Didier Roche <didrocks@ubuntu.com>  Wed, 23 Jun 2010 20:47:44 +0200
 
