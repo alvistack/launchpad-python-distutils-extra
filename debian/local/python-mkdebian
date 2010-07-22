@@ -163,8 +163,7 @@ XS-Python-Version: current
 Package: %(Package)s
 Architecture: all
 XB-Python-Version: ${python:Versions}
-Depends: ${misc:Depends},
- ${python:Depends}%(Depends)s
+Depends: %(Depends)s
 Description: %(Description)s
 ''' % control_content)
         f.close()
