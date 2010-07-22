@@ -45,7 +45,7 @@ def get_egg_info():
     finally:
         shutil.rmtree(instdir)
 
-def make_debian(egg, force_control, changelog, additional_dependencies):
+def make_debian(egg, force_control, changelog, additional_dependencies, distribution):
     '''Create/update debian/* from information in egg dictionary'''
 
     if not os.path.isdir('debian'):
@@ -73,7 +73,7 @@ include /usr/share/cdbs/1/class/python-distutils.mk
         make_copyright(egg)
 
     make_control(egg, force_control, additional_dependencies)
-    make_changelog(egg, changelog)
+    make_changelog(egg, changelog, distribution)
 
 def make_copyright(egg):
     author = egg.get('Author', '')
@@ -197,19 +197,22 @@ Description: %(Description)s
             raise
         os.rename('debian/control.new', 'debian/control')
 
-def make_changelog(egg, changelog):
-    lsb_release = subprocess.Popen(['lsb_release', '-si'],
-            stdout=subprocess.PIPE)
-    distro = lsb_release.communicate()[0].strip()
-    assert lsb_release.returncode == 0
-
-    if distro == 'Debian':
-        release = 'unstable'
-    else:
-        lsb_release = subprocess.Popen(['lsb_release', '-sc'],
+def make_changelog(egg, changelog, distribution):
+    if not distribution:
+        lsb_release = subprocess.Popen(['lsb_release', '-si'],
                 stdout=subprocess.PIPE)
-        release = lsb_release.communicate()[0].strip()
+        distro = lsb_release.communicate()[0].strip()
         assert lsb_release.returncode == 0
+
+        if distro == 'Debian':
+            release = 'unstable'
+        else:
+            lsb_release = subprocess.Popen(['lsb_release', '-sc'],
+                    stdout=subprocess.PIPE)
+            release = lsb_release.communicate()[0].strip()
+            assert lsb_release.returncode == 0
+    else:
+        release = distribution
 
     if not os.path.exists('/usr/bin/debchange'):
         print >> sys.stderr, 'ERROR: Could not find "debchange".\n' \
@@ -221,7 +224,7 @@ def make_changelog(egg, changelog):
             changelog = ['Initial release.']
         try:
             assert subprocess.call(['debchange', '--create', '--package', egg['Name'],
-                '-D' + release, '-v' + egg['Version'], changelog[0]]) == 0
+                '-D' + release, '-v' + egg['Version'], changelog[0], '--force-distribution']) == 0
         except OSError, e:
             print >> sys.stderr, 'ERROR: Could not run "debchange": %s\n' \
                 'You need to install the "devscripts" package for this.' % str(e)
@@ -231,7 +234,7 @@ def make_changelog(egg, changelog):
                 changelog = ['New release.']
         # this will just fail if we already have that version, which is okay.
         subprocess.call(['debchange', '-D' + release, '-v' + egg['Version'],
-            changelog[0]], stderr=subprocess.PIPE)
+            changelog[0], '--force-distribution'], stderr=subprocess.PIPE)
     for message in changelog[1:]:
         subprocess.call(['debchange', message])
 
@@ -298,7 +301,9 @@ parser.add_option('', '--changelog', dest='changelog', action='append',
                   help='Add string changelog to debian/changelog (can be specified multiple times)')
 parser.add_option('', '--dependency', dest='dependencies', action='append',
                   help='Add additional debian package dependency (can be specified multiple times)')
-parser.set_defaults(changelog=None, dependencies=[])
+parser.add_option('-D', '--distribution', dest='distribution', action='store',
+                  help='Specify which Debian/Ubuntu distribution should be used in the changelog')
+parser.set_defaults(changelog=None, dependencies=[], distribution=None)
 options, args = parser.parse_args()
 
 # switch stdout to line buffering, for scripts reading our output on the fly
@@ -307,4 +312,5 @@ sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 1)
 egg = get_egg_info()
 make_debian(egg, force_control=options.force_control,
                  changelog=options.changelog,
-                 additional_dependencies=options.dependencies)
+                 additional_dependencies=options.dependencies,
+                 distribution=options.distribution)
