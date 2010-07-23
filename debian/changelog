@@ -1,3 +1,10 @@
+python-distutils-extra (2.21) UNRELEASED; urgency=low
+
+  [ Umang Varma ]
+  * python-mkdebian: Fix duplicate dependency substitutions. (LP: #608304)
+
+ -- Martin Pitt <mpitt@debian.org>  Fri, 23 Jul 2010 15:39:26 +0200
+
 python-distutils-extra (2.20) unstable; urgency=low
 
   [ Didier Roche ]
