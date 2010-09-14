@@ -12,7 +12,7 @@ Build-Depends: cdbs,
  python-xdg,
  python-dateutil,
  intltool
-Standards-Version: 3.8.4
+Standards-Version: 3.9.1
 Vcs-Bzr: http://bazaar.launchpad.net/~python-distutils-extra-hackers/python-distutils-extra/debian
 Vcs-Browser: https://code.launchpad.net/~python-distutils-extra-hackers/python-distutils-extra/debian
 

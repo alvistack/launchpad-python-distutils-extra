@@ -7,6 +7,9 @@ python-distutils-extra (2.21) UNRELEASED; urgency=low
     (LP: #608589)
   * python-mkdebian: Add --no-changelog flag. (LP: #587538)
 
+  [ Martin Pitt ]
+  * debian/control: Bump Standards-Version to 3.9.1, no changes necessary.
+
  -- Martin Pitt <mpitt@debian.org>  Fri, 23 Jul 2010 15:39:26 +0200
 
 python-distutils-extra (2.20) unstable; urgency=low
