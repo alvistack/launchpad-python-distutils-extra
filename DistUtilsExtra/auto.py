@@ -38,7 +38,7 @@ author, license, etc.) in ./setup.py.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
 import os, os.path, fnmatch, stat, sys, subprocess
-import compiler # TODO: deprecated
+import ast
 import distutils.core
 
 from DistUtilsExtra import __version__ as __pkgversion
@@ -330,16 +330,16 @@ def __add_imports(imports, file, attrs):
     This filters out modules which are shipped with Python itself.
     '''
     try:
-        ast = compiler.parseFile(file)
+        tree = ast.parse(open(file).read(), file)
 
-        for node in ast.node.nodes:
-            if isinstance(node, compiler.ast.Import):
-                for name, _ in node.names:
-                    if __external_mod(name, attrs):
-                        imports.add(name)
-            if isinstance(node, compiler.ast.From):
-                if __external_mod(node.modname, attrs):
-                    imports.add(node.modname)
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if __external_mod(alias.name, attrs):
+                        imports.add(alias.name)
+            if isinstance(node, ast.ImportFrom):
+                if __external_mod(node.module, attrs):
+                    imports.add(node.module)
     except SyntaxError, e:
         print >> sys.stderr, 'WARNING: syntax errors in', file, ':', e
 
