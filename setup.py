@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-import glob, os, commands, sys
+import glob, os, sys
 
 sys.path.insert(0, '.')
 from DistUtilsExtra import __version__ as pkgversion
