@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import distutils
 import glob
 import os
