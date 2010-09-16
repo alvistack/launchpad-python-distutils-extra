@@ -28,7 +28,6 @@ setup(
         try:
             # check that setup.py clean removes everything
             (o, e, s) = self.setup_py(['clean', '-a'])
-            self.assertEqual(e, '')
             self.assertEqual(s, 0)
             cruft = self.diff_snapshot()
             self.assertEqual(cruft, '', 'no cruft after cleaning:\n' + cruft)
