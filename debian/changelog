@@ -11,6 +11,9 @@ python-distutils-extra (2.22) UNRELEASED; urgency=low
   * test/auto.py: Use Python3 compatible octal constant.
   * test/auto.py: Decode stdout/stderr result from subprocess from bytes to
     str, to work with Python3.
+  * test/auto.py: Use whichever Python interpreter we got invoked with (using
+    /proc/self/exe) instead of hardcoding "python". With that we can run the
+    tests through python3 as well.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 14:06:01 +0200
 
