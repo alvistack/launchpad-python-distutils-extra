@@ -1,3 +1,9 @@
+python-distutils-extra (2.22-2) UNRELEASED; urgency=low
+
+  * Add debian/watch.
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 20:35:49 +0200
+
 python-distutils-extra (2.22-1) experimental; urgency=low
 
   [ Matthias Klose ]
