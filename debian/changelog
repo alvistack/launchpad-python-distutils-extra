@@ -3,6 +3,7 @@ python-distutils-extra (2.22) UNRELEASED; urgency=low
   [ Matthias Klose ]
   * setup.py: Drop import of "commands"; unused, and does not exist in
     python3.
+  * Build a python3 package.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 14:06:01 +0200
 
