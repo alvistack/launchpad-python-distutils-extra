@@ -760,7 +760,7 @@ print 'import iamnota.module'
         oldcwd = os.getcwd()
         env['PYTHONPATH'] = oldcwd
         os.chdir(self.src)
-        s = subprocess.Popen(['python', 'setup.py'] + args, env=env,
+        s = subprocess.Popen(['/proc/self/exe', 'setup.py'] + args, env=env,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (out, err) = s.communicate()
         out = out.decode()
