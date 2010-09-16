@@ -329,8 +329,8 @@ setup(
 ''')
 
         self._mksrc('data/stuff')
-        self._mksrc('data/handlers/red.py', 'import sys\nprint "RED"')
-        self._mksrc('data/handlers/blue.py', 'import sys\nprint "BLUE"')
+        self._mksrc('data/handlers/red.py', 'import sys\nprint ("RED")')
+        self._mksrc('data/handlers/blue.py', 'import sys\nprint ("BLUE")')
         self._mksrc('data/40-foo.rules')
         self._mksrc('data/blob1.conf')
         self._mksrc('data/blob2.conf')
@@ -453,11 +453,11 @@ gui/foo.desktop.in
         self._mk_i18n_source()
 
         # add some additional binaries here which aren't caught by default
-        self._mksrc('cli/client-cli', "#!/usr/bin/python\nprint _('yes15')", True)
-        self._mksrc('gtk/client-gtk', '#!/usr/bin/python\nprint _("yes16")', True)
+        self._mksrc('cli/client-cli', "#!/usr/bin/python\nprint (_('yes15'))", True)
+        self._mksrc('gtk/client-gtk', '#!/usr/bin/python\nprint (_("yes16"))', True)
         # this is the most tricky case: intltool doesn't consider them Python
         # files by default and thus just looks for _(""):
-        self._mksrc('kde/client-kde', "#!/usr/bin/python\nprint _('yes17')", True)
+        self._mksrc('kde/client-kde', "#!/usr/bin/python\nprint (_('yes17'))", True)
         self._mksrc('po/POTFILES.in.in', 'gtk/client-gtk\nkde/client-kde')
         self._mksrc('setup.py', '''
 from DistUtilsExtra.auto import setup
@@ -674,7 +674,7 @@ from dateutil import tz
 import foo.bar
 from xdg import Menu
 
-print 'import iamnota.module'
+print ('import iamnota.module')
 ''', executable=True)
 
         # this shouldn't be treated specially
@@ -851,26 +851,26 @@ msgstr "Bonjour"''')
     def _mk_i18n_source(self):
         '''Create some example source files with gettext calls'''
 
-        self._mksrc('gtk/main.py', '''print _("yes1")
-print "no1"
-print __("no2")
+        self._mksrc('gtk/main.py', '''print (_("yes1"))
+print ("no1")
+print (__("no2"))
 x = _('yes2 %s') % y
 
 def f():
-    print _(u"yes3")
-    return _(u'yes6')''')
+    print (_("yes3"))
+    return _('yes6')''')
 
         self._mksrc('helpers.py', '''
-print f(_(u"yes4"))
-print _(\'\'\'yes5
+print (f(_("yes4")))
+print (_(\'\'\'yes5
 even more
-lines\'\'\')
-print _("""yes6
-more lines""")
-print \'\'\'no3
-boo\'\'\'
-print """no4
-more"""''')
+lines\'\'\'))
+print (_("""yes6
+more lines"""))
+print (\'\'\'no3
+boo\'\'\')
+print ("""no4
+more""")''')
 
         self._mksrc('gui/foo.desktop.in', '''[Desktop Entry]
 _Name=yes7
@@ -913,9 +913,9 @@ Exec=/usr/bin/foo''')
         self._mksrc('Makefile', 'echo _("no7")')
 
         # Executables without *.py extension
-        self._mksrc('gtk/foo-gtk', '#!/usr/bin/python\nprint _("yes13")',
+        self._mksrc('gtk/foo-gtk', '#!/usr/bin/python\nprint (_("yes13"))',
                 executable=True)
-        self._mksrc('cli/foo-cli', '#!/usr/bin/env python\nprint _(\'yes14\')',
+        self._mksrc('cli/foo-cli', '#!/usr/bin/env python\nprint (_(\'yes14\'))',
                 executable=True)
         self._mksrc('daemon/foobarize', '#!/usr/bin/flex\np _("no8")',
                 executable=True)
