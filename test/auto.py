@@ -803,7 +803,7 @@ print 'import iamnota.module'
         f.close()
 
         if executable:
-            os.chmod(path, 0755)
+            os.chmod(path, 0o755)
 
     def do_snapshot(self):
         '''Snapshot source tree.

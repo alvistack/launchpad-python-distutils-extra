@@ -8,6 +8,7 @@ python-distutils-extra (2.22) UNRELEASED; urgency=low
   [ Martin Pitt ]
   * DistUtilsExtra/command/build_extra.py: Use "in" operator instead of
     has_key(). It's more elegant and Python 3 compatible.
+  * test/auto.py: Use Python3 compatible octal constant.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 14:06:01 +0200
 
