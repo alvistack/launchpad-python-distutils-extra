@@ -27,6 +27,9 @@ python-distutils-extra (2.22) UNRELEASED; urgency=low
     Python 3 distutils spews out.
   * debian/rules: Run tests with python3 as well, against the installed
     modules in debian/python3-distutils-extra.
+  * test/auto.py, debian/control: Use python{,3}-{pkg-resources,httplib2} as
+    external test modules instead of -xdg and -dateutil, since the latter are
+    not available for Python 3 yet.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 14:06:01 +0200
 
