@@ -2,7 +2,7 @@
 
 # test DistUtilsExtra.auto
 
-import sys, unittest, shutil, tempfile, os, os.path, subprocess
+import sys, unittest, shutil, tempfile, os, os.path, subprocess, re
 
 class T(unittest.TestCase):
     def setUp(self):
@@ -766,6 +766,13 @@ print ('import iamnota.module')
         out = out.decode()
         err = err.decode()
         os.chdir(oldcwd)
+
+        # python3 distutils bug workaround, filter out bogus errors
+        bogus_re = re.compile('^file .* \(for module .*\) not found$')
+        err = '\n'.join([l for l in err.splitlines() if not bogus_re.match(l)])
+        if err:
+            err += '\n'
+
         return (out, err, s.returncode)
 
     def do_install(self):
