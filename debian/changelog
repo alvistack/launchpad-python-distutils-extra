@@ -23,6 +23,8 @@ python-distutils-extra (2.22) UNRELEASED; urgency=low
     nonexisting directories.
   * test/auto.py: Changed print statements to work with both Python 2 and 3.
   * DistUtilsExtra/command/build_extra.py: Drop unnecessary hashbang line.
+  * debian/rules: Run tests with python3 as well, against the installed
+    modules in debian/python3-distutils-extra.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 14:06:01 +0200
 
