@@ -7,12 +7,12 @@ Uploaders: Sebastian Heinlein <devel@glatzor.de>
 Build-Depends: debhelper (>= 5.0.37.2), 
  python-all (>= 2.6.6-2~),
  python-setuptools,
- python-xdg,
- python-dateutil,
+ python-httplib2,
+ python-pkg-resources,
  python3-all (>= 3.1.2-10~),
  python3-setuptools,
- python3-xdg,
- python3-dateutil,
+ python3-httplib2,
+ python3-pkg-resources,
  intltool
 Standards-Version: 3.9.1
 Vcs-Bzr: http://bazaar.launchpad.net/~python-distutils-extra-hackers/python-distutils-extra/debian

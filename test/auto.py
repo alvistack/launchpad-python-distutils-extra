@@ -651,16 +651,16 @@ setup(
         '''automatic requires/provides'''
 
         try:
-            __import__('xdg')
-            __import__('dateutil')
+            __import__('pkg_resources')
+            __import__('httplib2')
         except ImportError:
-            self.fail('You need to have xdg and dateutil installed for this test suite to work')
+            self.fail('You need to have pkg_resources and httplib2 installed for this test suite to work')
 
         self._mksrc('foo/__init__.py', '')
         self._mksrc('foo/stuff.py', '''import xml.parsers.expat
 import os, os.path, email.mime, distutils.command.register
 from email import header as h
-import xdg.Mime, unknown
+import httplib2.iri2uri, unknown
 ''')
 
         self._mksrc('foo/bar/__init__.py', '')
@@ -670,9 +670,9 @@ import xdg.Mime, unknown
 
         self._mksrc('bin/foo-cli', '''#!/usr/bin/python
 import sys
-from dateutil import tz
+import pkg_resources
 import foo.bar
-from xdg import Menu
+from httplib2 import iri2uri
 
 print ('import iamnota.module')
 ''', executable=True)
@@ -707,7 +707,7 @@ print ('import iamnota.module')
 
         # check requires
         req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
-        self.assertEqual(set(req), set(['DistUtilsExtra.auto', 'xdg', 'dateutil']))
+        self.assertEqual(set(req), set(['DistUtilsExtra.auto', 'httplib2', 'pkg_resources']))
 
     def test_help(self):
         '''Docbook XML help'''
