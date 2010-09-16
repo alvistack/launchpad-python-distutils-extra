@@ -16,6 +16,8 @@ python-distutils-extra (2.22) UNRELEASED; urgency=low
     tests through python3 as well.
   * DistUtilsExtra/auto.py: Port from deprecated "compiler" module to current
     "ast" module.
+  * test/auto.py: Only set PYTHONPATH if it isn't set already, so that we can
+    override it from outside.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 14:06:01 +0200
 
