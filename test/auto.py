@@ -192,7 +192,7 @@ def add_info(report):
             os.path.join(self.install_tree,
             'usr/share/locale/de/LC_MESSAGES/foo.mo')],
             stdout=subprocess.PIPE)
-        out = msgunfmt.communicate()[0]
+        out = msgunfmt.communicate()[0].decode()
         self.assertEqual(out, open(os.path.join(self.src, 'po/de.po')).read())
 
     def test_policykit(self):
@@ -763,6 +763,8 @@ print 'import iamnota.module'
         s = subprocess.Popen(['python', 'setup.py'] + args, env=env,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (out, err) = s.communicate()
+        out = out.decode()
+        err = err.decode()
         os.chdir(oldcwd)
         return (out, err, s.returncode)
 
@@ -824,7 +826,8 @@ print 'import iamnota.module'
         diff = subprocess.Popen(['diff', '-x', 'foo.pot', '-Nur', os.path.join(self.snapshot, 's'), 
             self.src], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (out, err) = diff.communicate()
-        self.assertEqual(err, '', 'diff error messages')
+        out = out.decode()
+        self.assertEqual(err, b'', 'diff error messages')
         return out
 
     def _mkpo(self):
