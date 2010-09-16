@@ -758,7 +758,8 @@ print 'import iamnota.module'
 
         env = os.environ
         oldcwd = os.getcwd()
-        env['PYTHONPATH'] = oldcwd
+        if 'PYTHONPATH' not in env:
+            env['PYTHONPATH'] = oldcwd
         os.chdir(self.src)
         s = subprocess.Popen(['/proc/self/exe', 'setup.py'] + args, env=env,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
