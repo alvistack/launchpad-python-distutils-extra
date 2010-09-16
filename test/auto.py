@@ -797,9 +797,9 @@ print 'import iamnota.module'
         f = open(path, 'w')
         if content is None:
             # default content, to spot with diff
-            print >> f, 'dummy'
+            f.write('dummy')
         else:
-            print >> f, content
+            f.write(content + '\n')
         f.close()
 
         if executable:
