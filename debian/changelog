@@ -2,6 +2,9 @@ python-distutils-extra (2.22-2) UNRELEASED; urgency=low
 
   * Add debian/watch.
   * Add bzr-builddeb configuration (merge mode).
+  * debian/copyright: Add missing Canonical copyright (Closes: #597548).
+    While we are at it, also convert the file to DEP-5, and fix the
+    common-licenses link to point to the versioned GPL.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 20:35:49 +0200
 
