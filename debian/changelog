@@ -9,6 +9,7 @@ python-distutils-extra (2.22-2) UNRELEASED; urgency=low
     that the file falls under the package's general GPL-2+ license. Rodney
     Dawes, the author, gave his explicit permission for this in #597548 (in
     fact, GPL-3 was unintended in the first place).
+  * test/auto.py: Ignore python warning about import from local path.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 20:35:49 +0200
 

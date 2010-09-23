@@ -9,6 +9,10 @@ class T(unittest.TestCase):
         self.src = tempfile.mkdtemp()
 
         self._mksrc('setup.py', '''
+# ignore warning about import from local path
+import warnings
+warnings.filterwarnings('ignore', 'Module DistUtilsExtra was already imported from.*')
+
 from DistUtilsExtra.auto import setup
 
 setup(
