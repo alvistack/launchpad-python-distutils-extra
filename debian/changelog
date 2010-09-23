@@ -5,6 +5,10 @@ python-distutils-extra (2.22-2) UNRELEASED; urgency=low
   * debian/copyright: Add missing Canonical copyright (Closes: #597548).
     While we are at it, also convert the file to DEP-5, and fix the
     common-licenses link to point to the versioned GPL.
+  * DistUtilsExtra/command/check.py: Remove explicit GPL-3 license header, so
+    that the file falls under the package's general GPL-2+ license. Rodney
+    Dawes, the author, gave his explicit permission for this in #597548 (in
+    fact, GPL-3 was unintended in the first place).
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 20:35:49 +0200
 
