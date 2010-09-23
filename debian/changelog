@@ -1,5 +1,6 @@
-python-distutils-extra (2.22-2) UNRELEASED; urgency=low
+python-distutils-extra (2.22-2) unstable; urgency=low
 
+  * Upload to unstable, now that the current python3 is in unstable.
   * Add debian/watch.
   * Add bzr-builddeb configuration (merge mode).
   * debian/copyright: Add missing Canonical copyright (Closes: #597548).
@@ -11,7 +12,7 @@ python-distutils-extra (2.22-2) UNRELEASED; urgency=low
     fact, GPL-3 was unintended in the first place).
   * test/auto.py: Ignore python warning about import from local path.
 
- -- Martin Pitt <mpitt@debian.org>  Thu, 16 Sep 2010 20:35:49 +0200
+ -- Martin Pitt <mpitt@debian.org>  Thu, 23 Sep 2010 16:00:58 +0200
 
 python-distutils-extra (2.22-1) experimental; urgency=low
 
