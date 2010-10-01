@@ -1,3 +1,11 @@
+python-distutils-extra (2.22-3) UNRELEASED; urgency=low
+
+  * auto.py: Skip setup.py when calculating automatic requires, since
+    modules from that script are just build dependencies. Thanks Michael
+    Terry! (LP: #643655)
+
+ -- Martin Pitt <mpitt@debian.org>  Fri, 01 Oct 2010 18:02:03 +0200
+
 python-distutils-extra (2.22-2) unstable; urgency=low
 
   * Upload to unstable, now that the current python3 is in unstable.

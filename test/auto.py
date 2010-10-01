@@ -711,7 +711,7 @@ print ('import iamnota.module')
 
         # check requires
         req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
-        self.assertEqual(set(req), set(['DistUtilsExtra.auto', 'httplib2', 'pkg_resources']))
+        self.assertEqual(set(req), set(['httplib2', 'pkg_resources']))
 
     def test_help(self):
         '''Docbook XML help'''
