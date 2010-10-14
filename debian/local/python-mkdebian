@@ -236,12 +236,14 @@ def make_changelog(egg, changelog, distribution, use_old_changelog):
             sys.exit(0)
     else:
         if not changelog:
-                changelog = use_old_changelog and [''] or ['New release.']
+            changelog = use_old_changelog and [''] or ['New release.']
         if not use_old_changelog:
             command.append('-v' + egg['Version'])
         command.append(changelog[0])
 
-        subprocess.call(command, stderr=subprocess.PIPE)
+        if (subprocess.call(command, stderr=subprocess.PIPE) != 0):
+            print >> sys.stderr, "Can\'t update changelog."
+            sys.exit(1)
     for message in changelog[1:]:
         subprocess.call(['debchange', message])
 
