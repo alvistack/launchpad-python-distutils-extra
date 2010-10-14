@@ -45,7 +45,8 @@ def get_egg_info():
     finally:
         shutil.rmtree(instdir)
 
-def make_debian(egg, force_control, changelog, additional_dependencies, distribution, use_old_changelog):
+def make_debian(egg, force_control, changelog, additional_dependencies,
+                distribution, use_old_changelog, force_copyright):
     '''Create/update debian/* from information in egg dictionary'''
 
     if not os.path.isdir('debian'):
@@ -69,7 +70,7 @@ include /usr/share/cdbs/1/class/python-distutils.mk
         f.close()
         os.chmod('debian/rules', 0755)
 
-    if not os.path.exists('debian/copyright'):
+    if not os.path.exists('debian/copyright') or force_copyright:
         make_copyright(egg)
 
     make_control(egg, force_control, additional_dependencies)
@@ -306,6 +307,8 @@ usage = "usage: %prog [options]"
 parser = OptionParser(prog='python_mkdebian', usage=usage, version=pkgversion)
 parser.add_option('', '--force-control', dest='force_control', action='store_true',
                   help='Force whole control file to be recreated')
+parser.add_option('', '--force-copyright', dest='force_copyright', action='store_true',
+                  help='Force the copyright file to be recreated')
 parser.add_option('', '--changelog', dest='changelog', action='append',
                   help='Add string changelog to debian/changelog (can be specified multiple times)')
 parser.add_option('', '--dependency', dest='dependencies', action='append',
@@ -325,4 +328,5 @@ make_debian(egg, force_control=options.force_control,
                  changelog=options.changelog,
                  additional_dependencies=options.dependencies,
                  distribution=options.distribution,
-                 use_old_changelog=options.use_old_changelog)
+                 use_old_changelog=options.use_old_changelog,
+                 force_copyright=options.force_copyright)
