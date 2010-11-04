@@ -2,7 +2,7 @@
 
 # test DistUtilsExtra.auto
 
-import sys, unittest, shutil, tempfile, os, os.path, subprocess, re
+import unittest, shutil, tempfile, os, os.path, subprocess, re
 
 class T(unittest.TestCase):
     def setUp(self):
@@ -32,7 +32,7 @@ setup(
         try:
             # check that setup.py clean removes everything
             (o, e, s) = self.setup_py(['clean', '-a'])
-            self.assertEqual(s, 0)
+            self.assertEqual(s, 0, o+e)
             cruft = self.diff_snapshot()
             self.assertEqual(cruft, '', 'no cruft after cleaning:\n' + cruft)
         finally:
@@ -759,9 +759,11 @@ print ('import iamnota.module')
         if not self.snapshot:
             self.do_snapshot()
 
-        env = os.environ
+        env = os.environ.copy()
         oldcwd = os.getcwd()
-        if 'PYTHONPATH' not in env:
+        if 'PYTHONPATH' in env:
+            env['PYTHONPATH'] = oldcwd + os.pathsep + env['PYTHONPATH']
+        else:
             env['PYTHONPATH'] = oldcwd
         os.chdir(self.src)
         s = subprocess.Popen(['/proc/self/exe', 'setup.py'] + args, env=env,

@@ -1,3 +1,11 @@
+python-distutils-extra (2.22-4) unstable; urgency=low
+
+  * When the environment has $PYTHONPATH in it, we still need to prepend
+    oldcwd in test/auto.py, so that the DistUtilsExtra package can be
+    found.  (LP: #670188)
+
+ -- Barry Warsaw <barry@ubuntu.com>  Thu, 04 Nov 2010 14:33:04 -0400
+
 python-distutils-extra (2.22-3) unstable; urgency=low
 
   [ Martin Pitt ]
