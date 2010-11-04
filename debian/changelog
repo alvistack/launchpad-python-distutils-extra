@@ -1,11 +1,17 @@
 python-distutils-extra (2.22-3) UNRELEASED; urgency=low
 
+  [ Martin Pitt ]
   * auto.py: Skip setup.py when calculating automatic requires, since
     modules from that script are just build dependencies. Thanks Michael
     Terry! (LP: #643655)
   * python-mkdebian: Update python-mkdebian's generated copyright fields with
     latest names/values from http://dep.debian.net/deps/dep5/. Thanks Michael
     Terry!
+
+  [ Didier Roche ]
+  * Return an error when can't update changelog (LP: #656950)
+  * Add --force-copyright to force copyright file to be recreated
+    (LP: #656943)
 
  -- Martin Pitt <mpitt@debian.org>  Fri, 01 Oct 2010 18:02:03 +0200
 
