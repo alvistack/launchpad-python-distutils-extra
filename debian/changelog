@@ -7,6 +7,7 @@ python-distutils-extra (2.22-3) UNRELEASED; urgency=low
   * python-mkdebian: Update python-mkdebian's generated copyright fields with
     latest names/values from http://dep.debian.net/deps/dep5/. Thanks Michael
     Terry!
+  * Rebuild against Python 2.7 in Ubuntu. (LP: #670188)
 
   [ Didier Roche ]
   * Return an error when can't update changelog (LP: #656950)
