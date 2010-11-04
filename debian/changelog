@@ -1,4 +1,4 @@
-python-distutils-extra (2.22-3) UNRELEASED; urgency=low
+python-distutils-extra (2.22-3) unstable; urgency=low
 
   [ Martin Pitt ]
   * auto.py: Skip setup.py when calculating automatic requires, since
@@ -14,7 +14,7 @@ python-distutils-extra (2.22-3) UNRELEASED; urgency=low
   * Add --force-copyright to force copyright file to be recreated
     (LP: #656943)
 
- -- Martin Pitt <mpitt@debian.org>  Fri, 01 Oct 2010 18:02:03 +0200
+ -- Martin Pitt <mpitt@debian.org>  Wed, 03 Nov 2010 22:37:27 -0400
 
 python-distutils-extra (2.22-2) unstable; urgency=low
 
