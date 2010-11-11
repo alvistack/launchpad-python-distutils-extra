@@ -133,6 +133,7 @@ def __modules(attrs, src):
 
     if 'py_modules' in attrs:
         for mod in attrs['py_modules']:
+            print mod
             src_markglob(src, os.path.join(mod, '*.py'))
         return
 

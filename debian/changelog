@@ -1,3 +1,10 @@
+python-distutils-extra (2.22-5) UNRELEASED; urgency=low
+
+  * debian/local/python-mkdebian.1:
+    - add man for --force-copyright
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 11 Nov 2010 14:32:21 +0100
+
 python-distutils-extra (2.22-4) unstable; urgency=low
 
   [ Barry Warsaw ]
