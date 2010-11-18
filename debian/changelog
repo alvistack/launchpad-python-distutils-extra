@@ -1,5 +1,6 @@
-python-distutils-extra (2.22-5) UNRELEASED; urgency=low
+python-distutils-extra (2.23-1) unstable; urgency=low
 
+  [ Didier Roche ]
   * debian/local/python-mkdebian: (LP: #625581)
     - add --force-rules to force the rules file to be recreated
     - add --prefix to force a prefix other than /usr for installing your python
@@ -8,7 +9,7 @@ python-distutils-extra (2.22-5) UNRELEASED; urgency=low
     - add man for --force-copyright
     - add man for --force-rules and --prefix
 
- -- Didier Roche <didrocks@ubuntu.com>  Thu, 11 Nov 2010 14:42:13 +0100
+ -- Martin Pitt <mpitt@debian.org>  Thu, 18 Nov 2010 11:39:08 +0100
 
 python-distutils-extra (2.22-4) unstable; urgency=low
 
