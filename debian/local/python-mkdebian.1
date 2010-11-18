@@ -43,6 +43,11 @@ Force whole copyright file to be recreated. By default it will not touch an
 already existing copyright file, so that you can customize them.
 
 .TP
+\fB\-\-force\-rules\fR
+Force whole rules file to be recreated. By default it will not touch an
+already existing rules file, so that you can customize them.
+
+.TP
 \fB\-\-changelog\fR=\fICHANGELOG\fR
 Add changelog entry to debian/changelog (can be
 specified multiple times)
@@ -50,6 +55,9 @@ specified multiple times)
 \fB\-\-dependency\fR=\fIPACKAGENAME\fR
 Add additional debian package dependency (can be
 specified multiple times)
+.TP
+\fB\-\-prefix\fR=\fIPREFIX\fR
+Ask for installing all your modules in the dedicated PREFIX (default is /usr)
 .TP
 \fB\-\-version\fR
 Show program's version number and exit

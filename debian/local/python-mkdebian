@@ -46,7 +46,8 @@ def get_egg_info():
         shutil.rmtree(instdir)
 
 def make_debian(egg, force_control, changelog, additional_dependencies,
-                distribution, use_old_changelog, force_copyright):
+                distribution, use_old_changelog, force_copyright, 
+                force_rules, prefix):
     '''Create/update debian/* from information in egg dictionary'''
 
     if not os.path.isdir('debian'):
@@ -57,16 +58,20 @@ def make_debian(egg, force_control, changelog, additional_dependencies,
         f.write('6\n')
         f.close()
 
-    if not os.path.exists('debian/rules'):
+    prefix_string = ''
+    if prefix:
+        prefix_string = "DEB_PYTHON_PREFIX_ARG := %s" % prefix
+    if not os.path.exists('debian/rules') or force_rules:
         f = open('debian/rules', 'w')
         f.write('''#!/usr/bin/make -f
 DEB_PYTHON_SYSTEM := pysupport
+%s
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/python-distutils.mk
 # langpack.mk is relevant on Ubuntu only, not Debian; it does not matter if it's missing
 -include /usr/share/cdbs/1/rules/langpack.mk
-''')
+''' % prefix_string)
         f.close()
         os.chmod('debian/rules', 0755)
 
@@ -309,6 +314,8 @@ parser.add_option('', '--force-control', dest='force_control', action='store_tru
                   help='Force whole control file to be recreated')
 parser.add_option('', '--force-copyright', dest='force_copyright', action='store_true',
                   help='Force the copyright file to be recreated')
+parser.add_option('', '--force-rules', dest='force_rules', action='store_true',
+                  help='Force the rules file to be recreated')
 parser.add_option('', '--changelog', dest='changelog', action='append',
                   help='Add string changelog to debian/changelog (can be specified multiple times)')
 parser.add_option('', '--dependency', dest='dependencies', action='append',
@@ -317,7 +324,9 @@ parser.add_option('-D', '--distribution', dest='distribution', action='store',
                   help='Specify which Debian/Ubuntu distribution should be used in the changelog')
 parser.add_option('', '--no-changelog', dest='use_old_changelog', action='store_true',
                   help='Don\'t create a new changelog entry')
-parser.set_defaults(changelog=None, dependencies=[], distribution=None, use_old_changelog=False)
+parser.add_option('', '--prefix', dest='prefix', action='store',
+                  help='Ask to install into a dedicated prefix')
+parser.set_defaults(changelog=None, dependencies=[], distribution=None, use_old_changelog=False, prefix=None)
 options, args = parser.parse_args()
 
 # switch stdout to line buffering, for scripts reading our output on the fly
@@ -329,4 +338,6 @@ make_debian(egg, force_control=options.force_control,
                  additional_dependencies=options.dependencies,
                  distribution=options.distribution,
                  use_old_changelog=options.use_old_changelog,
-                 force_copyright=options.force_copyright)
+                 force_copyright=options.force_copyright,
+                 force_rules=options.force_rules,
+                 prefix=options.prefix)
