@@ -222,7 +222,7 @@ def __data(attrs, src):
     data_files = []
     for f in src.copy():
         if f.startswith('data/') and not f.startswith('data/icons/') and \
-                not f.endswith('.desktop.in') and not f.endswith('*.notifyrc.in'):
+                not f.endswith('.desktop.in') and not f.endswith('.notifyrc.in'):
             if not os.path.islink(f):
                 # symlinks are handled in install_auto
                 v.append((os.path.join('share', attrs['name'], os.path.dirname(f[5:])), [f]))
