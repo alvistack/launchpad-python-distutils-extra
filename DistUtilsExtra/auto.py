@@ -127,6 +127,7 @@ def __cmdclass(attrs):
     v.setdefault('install', install_auto)
     v.setdefault('clean', clean_build_tree)
     v.setdefault('sdist', sdist_auto)
+    v.setdefault('pylint', pylint.pylint)
 
 def __modules(attrs, src):
     '''Default modules'''
