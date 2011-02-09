@@ -10,8 +10,8 @@ This currently supports:
  * Python modules (./*.py, only in root directory)
  * Python packages (all directories with __init__.py)
  * Docbook-XML GNOME help files (help/<language>/{*.xml,*.omf,figures})
- * GtkBuilder (*.ui) [installed into prefix/share/<projectname>/]
- * Qt4 user interfaces (*.ui) [compiled with pykdeuic into Python modules]
+ * GtkBuilder and Qt4 user interfaces (*.ui) [installed into
+   prefix/share/<projectname>/]
  * D-Bus (*.conf and *.service)
  * PolicyKit (*.policy.in)
  * Desktop files (*.desktop.in) [into prefix/share/applications, or
@@ -88,7 +88,7 @@ def setup(**attrs):
     __data(attrs, src)
     __scripts(attrs, src)
     __stdfiles(attrs, src)
-    __gtkbuilder(attrs, src)
+    __ui(attrs, src)
     __manpages(attrs, src)
 
     if 'clean' not in sys.argv:
@@ -123,7 +123,6 @@ def __cmdclass(attrs):
     v.setdefault('build_help', build_help_auto)
     v.setdefault('build_i18n', build_i18n_auto)
     v.setdefault('build_icons', build_icons.build_icons)
-    v.setdefault('build_kdeui', build_kdeui_auto)
     v.setdefault('install', install_auto)
     v.setdefault('clean', clean_build_tree)
     v.setdefault('sdist', sdist_auto)
@@ -277,13 +276,16 @@ def __stdfiles(attrs, src):
         attrs.setdefault('data_files', []).append((os.path.join('share', 'doc',
             attrs['name']), readme))
 
-def __gtkbuilder(attrs, src):
-    '''Install GtkBuilder *.ui files'''
+def __ui(attrs, src):
+    '''Install GtkBuilder/Qt *.ui files'''
 
     ui = []
     for f in src_fileglob(src, '*.ui'):
-        contents = open(f).read()
-        if ('<interface>\n' in contents or '<interface ' in contents) and 'class="Gtk' in contents:
+        fd = open(f)
+        firstlines = fd.readline()
+        firstlines += '\n' + fd.readline()
+        fd.close()
+        if '<interface' in firstlines or '<ui version=' in firstlines:
             src_mark(src, f)
             ui.append(f)
     if ui:
@@ -594,30 +596,6 @@ class build_i18n_auto(build_i18n.build_i18n):
                 os.rmdir('po')
             except:
                 pass
-
-class build_kdeui_auto(build_kdeui.build_kdeui):
-    def finalize_options(self):
-        global src
-
-        # add *.ui files which belong to KDE4
-        kdeui_files = []
-        for f in src_fileglob(src, '*.ui'):
-            fd = open(f)
-            # might be on the first or second line
-            if fd.readline().startswith('<ui version="') or \
-               fd.readline().startswith('<ui version="'):
-                src_mark(src, f)
-                kdeui_files.append(f)
-            fd.close()
-        if kdeui_files:
-            try:
-                uf = eval(self.ui_files)
-            except TypeError:
-                uf = []
-            uf += kdeui_files
-            self.ui_files = repr(uf)
-
-        build_kdeui.build_kdeui.finalize_options(self)
 
 #
 # Automatic sdist
