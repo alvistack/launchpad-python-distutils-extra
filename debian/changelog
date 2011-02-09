@@ -5,6 +5,8 @@ python-distutils-extra (2.23-2) UNRELEASED; urgency=low
   * DistUtilsExtra/auto.py, __provides(): Do not accidentally clobber
     "py_modules" with "packages", by using a proper copy of the list. Remove
     error filter workaround from test/auto.py.
+  * Rename "check" command to "pylint", to avoid clobbering distutils' own
+    check command in 2.7/3.x. (LP: #714655)
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 07 Feb 2011 09:21:11 +0100
 
