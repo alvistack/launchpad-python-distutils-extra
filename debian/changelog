@@ -1,4 +1,4 @@
-python-distutils-extra (2.23-2) UNRELEASED; urgency=low
+python-distutils-extra (2.24-1) UNRELEASED; urgency=low
 
   * auto.py: Fix the string comparison to not install *.notifyrc.in files
     twice. Thanks Éric Araujo for spotting this!
