@@ -558,8 +558,8 @@ setup(
             self.failIf(f in manifest, '%s not in manifest' % f)
         os.unlink(os.path.join(self.src, 'MANIFEST'))
 
-    def test_gtkbuilder(self):
-        '''GtkBuilder *.ui'''
+    def test_ui(self):
+        '''GtkBuilder/Qt *.ui'''
 
         self._mksrc('gtk/test.ui', '''<?xml version="1.0"?>
 <interface>
@@ -579,6 +579,14 @@ setup(
   </object>
 </interface>''')
 
+        self._mksrc('kde/mainwindow.ui', '''<?xml version="1.0"?>
+<ui version="4.0">
+ <class>CrashDialog</class>
+ <widget class="QDialog" name="CrashDialog">
+ </widget>
+</ui>
+''')
+
         self._mksrc('someweird.ui')
 
         (o, e, s) = self.do_install()
@@ -590,6 +598,7 @@ setup(
         f = self.installed_files()
         self.assert_('/usr/share/foo/test.ui' in f)
         self.assert_('/usr/share/foo/settings.ui' in f)
+        self.assert_('/usr/share/foo/mainwindow.ui' in f)
         ftext = '\n'.join(f)
         self.failIf('someweird' in ftext)
 
