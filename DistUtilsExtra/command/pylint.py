@@ -1,11 +1,11 @@
-# DistUtilsExtra.command.check - check command for DistUtilsExtra
+# DistUtilsExtra.command.pylint - DistUtilsExtra command to call pylint
 #
 # Author: Rodney Dawes <rodney.dawes@canonical.com>
 # Copyright 2009 Canonical Ltd.
 
-"""DistUtilsExtra.command.check
+"""DistUtilsExtra.command.pylint
 
-Implements the DistUtilsExtra 'check' command.
+Implements the DistUtilsExtra 'pylint' command.
 """
 
 import os
@@ -14,8 +14,8 @@ import subprocess
 from distutils.core import Command
 
 
-class check (Command):
-    """Command to run lint and tests on a module."""
+class pylint (Command):
+    """Command to run pylint and tests on a module."""
 
     description = "integrate pylint checks"
 
