@@ -402,7 +402,7 @@ def __provides(attrs, src_all):
     if 'provides' in attrs:
         return
 
-    provides = attrs.get('py_modules', [])
+    provides = list(attrs.get('py_modules', [])) # we need a copy here
     for p in attrs.get('packages', []):
         provides.append(p.replace(os.path.sep, '.'))
     attrs['provides'] = __filter_namespace(provides)

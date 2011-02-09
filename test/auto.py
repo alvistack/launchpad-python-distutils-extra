@@ -773,12 +773,6 @@ print ('import iamnota.module')
         err = err.decode()
         os.chdir(oldcwd)
 
-        # python3 distutils bug workaround, filter out bogus errors
-        bogus_re = re.compile('^file .* \(for module .*\) not found$')
-        err = '\n'.join([l for l in err.splitlines() if not bogus_re.match(l)])
-        if err:
-            err += '\n'
-
         return (out, err, s.returncode)
 
     def do_install(self):
