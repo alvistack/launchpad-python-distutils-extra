@@ -13,6 +13,8 @@ python-distutils-extra (2.24-1) UNRELEASED; urgency=low
     failures and bugs. Using uic.loadUi() is much more robust.
     Instead, install Qt *.ui files into /usr/share/projectname/ just like the
     GtkBuilder *.ui files.
+  * debian/compat, debian/control: Bump to dh 7 compatibility, as we are using
+    dh_auto_* magic.
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 07 Feb 2011 09:21:11 +0100
 

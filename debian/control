@@ -4,7 +4,7 @@ Priority: optional
 XS-Python-Version: all
 Maintainer: Martin Pitt <mpitt@debian.org>
 Uploaders: Sebastian Heinlein <devel@glatzor.de>
-Build-Depends: debhelper (>= 5.0.37.2), 
+Build-Depends: debhelper (>= 7.0.50~), 
  python-all (>= 2.6.6-2~),
  python-setuptools,
  python-httplib2,
