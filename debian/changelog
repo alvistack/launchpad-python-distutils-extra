@@ -1,4 +1,4 @@
-python-distutils-extra (2.24-1) UNRELEASED; urgency=low
+python-distutils-extra (2.24-1) unstable; urgency=low
 
   * auto.py: Fix the string comparison to not install *.notifyrc.in files
     twice. Thanks Éric Araujo for spotting this!
@@ -16,7 +16,7 @@ python-distutils-extra (2.24-1) UNRELEASED; urgency=low
   * debian/compat, debian/control: Bump to dh 7 compatibility, as we are using
     dh_auto_* magic.
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 07 Feb 2011 09:21:11 +0100
+ -- Martin Pitt <mpitt@debian.org>  Fri, 11 Feb 2011 10:39:50 +0100
 
 python-distutils-extra (2.23-1) unstable; urgency=low
 
