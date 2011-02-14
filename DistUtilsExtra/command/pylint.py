@@ -56,8 +56,8 @@ class pylint (Command):
 
         output = "".join(notices.readlines())
         if output != "":
-            print "== Pylint notices =="
-            print self.__group_lines_by_file(output)
+            print("== Pylint notices ==")
+            print(self.__group_lines_by_file(output))
 
     def __group_lines_by_file(self, input):
         """Format file:line:message output as lines grouped by file."""
