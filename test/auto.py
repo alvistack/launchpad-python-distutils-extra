@@ -197,7 +197,7 @@ def add_info(report):
             'usr/share/locale/de/LC_MESSAGES/foo.mo')],
             stdout=subprocess.PIPE)
         out = msgunfmt.communicate()[0].decode()
-        self.assertEqual(out, open(os.path.join(self.src, 'po/de.po')).read())
+        self.assertEqual(out, self._src_contents('po/de.po'))
 
     def test_policykit(self):
         '''*.policy.in PolicyKit files'''
@@ -227,8 +227,7 @@ def add_info(report):
 
         f = self.installed_files()
         self.assertTrue('/usr/share/PolicyKit/policy/com.example.foo.policy' in f)
-        p = open(os.path.join(self.install_tree,
-            'usr/share/PolicyKit/policy/com.example.foo.policy')).read()
+        p = self._installed_contents('usr/share/PolicyKit/policy/com.example.foo.policy')
         self.assertTrue('<description>Good morning</description>' in p)
         self.assertTrue('<description xml:lang="de">Guten Morgen</description>' in p)
         self.assertTrue('<message>Hello</message>' in p)
@@ -280,8 +279,7 @@ Exec=/bin/foosettings''')
         # data/*.desktop.in shouldn't go to data dir
         self.assertFalse('/usr/share/foo/' in f)
 
-        p = open(os.path.join(self.install_tree,
-            'usr/share/autostart/fooapplet.desktop')).read()
+        p = self._installed_contents('usr/share/autostart/fooapplet.desktop')
         self.assertTrue('\nName=Hello\n' in p)
         self.assertTrue('\nName[de]=Hallo\n' in p)
         self.assertTrue('\nComment[fr]=Bonjour\n' in p)
@@ -416,9 +414,7 @@ gui/foo.desktop.in
         # POT file should not be shown as not recognized
         self.assertFalse('\n  po/foo.pot\n' in o)
 
-        pot_path = os.path.join(self.src, 'po', 'foo.pot')
-        self.assertTrue(os.path.exists(pot_path))
-        pot = open(pot_path).read()
+        pot = self._src_contents('po/foo.pot')
 
         self.assertFalse('msgid "no"' in pot)
         self.assertTrue('msgid "yes1"' in pot)
@@ -440,9 +436,7 @@ gui/foo.desktop.in
         # POT file should not be shown as not recognized
         self.assertFalse('\n  po/foo.pot\n' in o)
 
-        pot_path = os.path.join(self.src, 'po', 'foo.pot')
-        self.assertTrue(os.path.exists(pot_path))
-        pot = open(pot_path).read()
+        pot = self._src_contents('po/foo.pot')
 
         self.assertFalse('msgid "no"' in pot)
         for i in range(2, 15):
@@ -481,9 +475,7 @@ setup(
         # POT file should not be shown as not recognized
         self.assertFalse('\n  po/foo.pot\n' in o)
 
-        pot_path = os.path.join(self.src, 'po', 'foo.pot')
-        self.assertTrue(os.path.exists(pot_path))
-        pot = open(pot_path).read()
+        pot = self._src_contents('po/foo.pot')
 
         self.assertFalse('msgid "no"' in pot)
         for i in range(2, 18):
@@ -551,7 +543,7 @@ setup(
         self.assertTrue("'MANIFEST.in' does not exist" in e)
         self.assertEqual(s, 0)
 
-        manifest = open(os.path.join(self.src, 'MANIFEST')).read().splitlines()
+        manifest = self._src_contents('MANIFEST').splitlines()
 
         for f in good:
             self.assertTrue(f in manifest, '%s in manifest' % f)
@@ -711,8 +703,7 @@ print ('import iamnota.module')
         # parse .egg-info
         (o, e, s) = self.setup_py(['install_egg_info', '-d', self.install_tree])
         self.assertEqual(e, 'ERROR: Python module unknown not found\n')
-        egg = open(os.path.join(self.install_tree,
-            'foo-0.1.egg-info')).read().splitlines()
+        egg = self._installed_contents('foo-0.1.egg-info').splitlines()
         self.assertTrue('Name: foo' in egg)
 
         # check provides
@@ -936,5 +927,17 @@ Exec=/usr/bin/foo''')
                 executable=True)
         self._mksrc('daemon/foobarize', '#!/usr/bin/flex\np _("no8")',
                 executable=True)
+
+    def _src_contents(self, path):
+        f = open(os.path.join(self.src, path))
+        contents = f.read()
+        f.close()
+        return contents
+
+    def _installed_contents(self, path):
+        f = open(os.path.join(self.install_tree, path))
+        contents = f.read()
+        f.close()
+        return contents
 
 unittest.main()
