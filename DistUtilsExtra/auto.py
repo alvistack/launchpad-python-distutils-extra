@@ -40,6 +40,7 @@ author, license, etc.) in ./setup.py.
 import os, os.path, fnmatch, stat, sys, subprocess
 import ast
 import distutils.core
+from functools import reduce
 
 from DistUtilsExtra import __version__ as __pkgversion
 from DistUtilsExtra.command import *
@@ -97,9 +98,9 @@ def setup(**attrs):
     distutils.core.setup(**attrs)
 
     if src:
-        print 'WARNING: the following files are not recognized by DistUtilsExtra.auto:'
+        print('WARNING: the following files are not recognized by DistUtilsExtra.auto:')
         for f in sorted(src):
-            print ' ', f
+            print ('  ' + f)
 
 #
 # parts of setup()
@@ -133,7 +134,7 @@ def __modules(attrs, src):
 
     if 'py_modules' in attrs:
         for mod in attrs['py_modules']:
-            print mod
+            print(mod)
             src_markglob(src, os.path.join(mod, '*.py'))
         return
 
@@ -304,7 +305,7 @@ def __manpages(attrs, src):
             src_mark(src, f)
             mans.setdefault(f[-1], []).append(f)
     v = attrs.setdefault('data_files', [])
-    for section, files in mans.iteritems():
+    for section, files in mans.items():
         v.append((os.path.join('share', 'man', 'man' + section), files))
 
 def __external_mod(module, attrs):
@@ -320,7 +321,7 @@ def __external_mod(module, attrs):
     try:
         path = __import__(module).__file__
     except ImportError:
-        print >> sys.stderr, 'ERROR: Python module %s not found' % module
+        sys.stderr.write('ERROR: Python module %s not found\n' % module)
         return False
     except AttributeError: # builtin modules
         return False
@@ -344,8 +345,8 @@ def __add_imports(imports, file, attrs):
             if isinstance(node, ast.ImportFrom):
                 if __external_mod(node.module, attrs):
                     imports.add(node.module)
-    except SyntaxError, e:
-        print >> sys.stderr, 'WARNING: syntax errors in', file, ':', e
+    except SyntaxError as e:
+        sys.stderr.write('WARNING: syntax errors in %s: %s\n' % (file, str(e)))
 
 def _module_parents(mod):
     '''Iterate over all parents of a module'''
@@ -578,9 +579,9 @@ class build_i18n_auto(build_i18n.build_i18n):
                     if not os.path.isdir('po'):
                         os.mkdir('po')
                     potfiles_in = open('po/POTFILES.in', 'w')
-                    print >> potfiles_in, '[encoding: UTF-8]'
+                    potfiles_in.write('[encoding: UTF-8]\n')
                     for f in files:
-                        print >> potfiles_in, f
+                        potfiles_in.write(f + '\n')
                     potfiles_in.close()
 
                     auto_potfiles_in = True
