@@ -13,6 +13,7 @@ class T(unittest.TestCase):
 # ignore warning about import from local path
 import warnings
 warnings.filterwarnings('ignore', 'Module DistUtilsExtra was already imported from.*')
+warnings.filterwarnings('ignore', 'pipe2 set errno ENOSYS.*')
 
 from DistUtilsExtra.auto import setup
 
@@ -460,6 +461,9 @@ gui/foo.desktop.in
         self._mksrc('po/POTFILES.in.in', 'gtk/client-gtk\nkde/client-kde')
         self._mksrc('setup.py', '''
 from DistUtilsExtra.auto import setup
+
+import warnings
+warnings.filterwarnings('ignore', 'pipe2 set errno ENOSYS.*')
 
 setup(
     name='foo',
