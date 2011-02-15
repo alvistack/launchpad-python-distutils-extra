@@ -1,4 +1,4 @@
-python-distutils-extra (2.25-1) UNRELEASED; urgency=low
+python-distutils-extra (2.25-1) unstable; urgency=low
 
   * Port code to be fully Python 3 compatible; apply some small tricks to
     still work with Python 2 as well.
@@ -9,7 +9,7 @@ python-distutils-extra (2.25-1) UNRELEASED; urgency=low
     pipe+fcntl" warning which happens when building on the Ubuntu buildds (see
     LP #718784). These cause unexpected stderr output and break the tests.
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 14 Feb 2011 13:20:30 +0100
+ -- Martin Pitt <mpitt@debian.org>  Tue, 15 Feb 2011 12:41:49 +0100
 
 python-distutils-extra (2.24-1) unstable; urgency=low
 
