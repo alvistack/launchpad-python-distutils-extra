@@ -1,3 +1,10 @@
+python-distutils-extra (2.25-2) UNRELEASED; urgency=low
+
+  [ Michael Terry ]
+  * build_help.py: Support mallard help files too. (LP: #729451)
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 15 Mar 2011 11:44:44 +0100
+
 python-distutils-extra (2.25-1) unstable; urgency=low
 
   * Port code to be fully Python 3 compatible; apply some small tricks to
