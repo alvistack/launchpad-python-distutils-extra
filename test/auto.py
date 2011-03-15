@@ -718,7 +718,7 @@ print ('import iamnota.module')
         req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
         self.assertEqual(set(req), set(['httplib2', 'pkg_resources']))
 
-    def test_help(self):
+    def test_help_docbook(self):
         '''Docbook XML help'''
 
         self._mksrc('help/C/myprogram-C.omf')
@@ -748,6 +748,35 @@ print ('import iamnota.module')
         self.assertTrue('/usr/share/gnome/help/foo/C/figures/mainscreen.png' in f)
         self.assertTrue('/usr/share/gnome/help/foo/de/myprogram.xml' in f)
         self.assertTrue('/usr/share/gnome/help/foo/de/legal.xml' in f)
+        self.assertTrue('/usr/share/gnome/help/foo/de/figures/mainscreen.png' in f)
+
+    def test_help_mallard(self):
+        '''Mallard XML help'''
+
+        self._mksrc('help/C/index.page')
+        self._mksrc('help/C/legal.page')
+        self._mksrc('help/C/figures/mainscreen.png')
+        self._mksrc('help/de/index.page')
+        self._mksrc('help/de/legal.page')
+        self._mksrc('help/de/figures/mainscreen.png')
+
+        self._mksrc('help/weird.page')
+        self._mksrc('help/notme.png')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.assertTrue('following files are not recognized' in o)
+        self.assertTrue('\n  help/weird.page\n' in o)
+        self.assertTrue('\n  help/notme.png\n' in o)
+
+        f = self.installed_files()
+        self.assertFalse('/usr/share/omf/foo' in f)
+        self.assertTrue('/usr/share/gnome/help/foo/C/index.page' in f)
+        self.assertTrue('/usr/share/gnome/help/foo/C/legal.page' in f)
+        self.assertTrue('/usr/share/gnome/help/foo/C/figures/mainscreen.png' in f)
+        self.assertTrue('/usr/share/gnome/help/foo/de/index.page' in f)
+        self.assertTrue('/usr/share/gnome/help/foo/de/legal.page' in f)
         self.assertTrue('/usr/share/gnome/help/foo/de/figures/mainscreen.png' in f)
 
     #
