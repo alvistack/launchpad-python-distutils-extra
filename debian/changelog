@@ -3,6 +3,11 @@ python-distutils-extra (2.25-2) UNRELEASED; urgency=low
   [ Michael Terry ]
   * build_help.py: Support mallard help files too. (LP: #729451)
 
+  [ Martin Pitt ]
+  * auto.py: Revert to "except SyntaxError, e" syntax, as Python 2.5 (which we
+    still support in current sid) does not yet get along with the new "as"
+    syntax. (Closes: #615177)
+
  -- Martin Pitt <mpitt@debian.org>  Tue, 15 Mar 2011 11:44:44 +0100
 
 python-distutils-extra (2.25-1) unstable; urgency=low
