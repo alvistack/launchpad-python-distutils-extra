@@ -7,6 +7,8 @@ python-distutils-extra (2.25-2) UNRELEASED; urgency=low
   * auto.py: Revert to "except SyntaxError, e" syntax, as Python 2.5 (which we
     still support in current sid) does not yet get along with the new "as"
     syntax. (Closes: #615177)
+  * debian/rules: Reintroduce 2to3 call, as we now need to convert above
+    except clause back to "as" for the Python 3.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 15 Mar 2011 11:44:44 +0100
 
