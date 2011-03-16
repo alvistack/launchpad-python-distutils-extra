@@ -325,6 +325,8 @@ def __external_mod(module, attrs):
         return False
     except AttributeError: # builtin modules
         return False
+    except ValueError: # weird ctypes case with wintypes
+        return False 
 
     return 'dist-packages' in path or 'site-packages' in path or \
             not path.startswith(os.path.dirname(os.__file__))

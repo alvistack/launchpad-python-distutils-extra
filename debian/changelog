@@ -1,3 +1,11 @@
+python-distutils-extra (2.26-2) UNRELEASED; urgency=low
+
+  [ Manuel de la Pena ]
+  * DistUtilsExtra/auto.py: Fix ValueError crash when scanning the ctypes
+    import under Windows. (LP: #735698)
+
+ -- Martin Pitt <mpitt@debian.org>  Wed, 16 Mar 2011 09:47:40 +0100
+
 python-distutils-extra (2.26-1) unstable; urgency=low
 
   [ Michael Terry ]
