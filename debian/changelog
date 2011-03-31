@@ -1,7 +1,7 @@
 python-distutils-extra (2.26-3) UNRELEASED; urgency=low
 
-  * auto.py: Ignore explicitly relative 'from' imports when scanning for
-    dependencies. Thanks to Mike Terry for the patch! (LP: #746565)
+  * auto.py: Cleaner approach to determine whether a module is locally
+    provided. This now catches all relative imports. (LP: #746565)
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 31 Mar 2011 22:01:22 +0200
 
