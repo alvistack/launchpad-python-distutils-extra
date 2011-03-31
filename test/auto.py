@@ -671,6 +671,7 @@ setup(
 import os, os.path, email.mime, distutils.command.register
 from email import header as h
 import httplib2.iri2uri, unknown
+from . bar import poke
 ''')
 
         self._mksrc('foo/bar/__init__.py', '')
