@@ -345,7 +345,7 @@ def __add_imports(imports, file, attrs):
                     if __external_mod(alias.name, attrs):
                         imports.add(alias.name)
             if isinstance(node, ast.ImportFrom):
-                if __external_mod(node.module, attrs):
+                if node.level == 0 and __external_mod(node.module, attrs):
                     imports.add(node.module)
     except SyntaxError, e:
         sys.stderr.write('WARNING: syntax errors in %s: %s\n' % (file, str(e)))
