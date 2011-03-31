@@ -308,44 +308,57 @@ def __manpages(attrs, src):
     for section, files in mans.items():
         v.append((os.path.join('share', 'man', 'man' + section), files))
 
-def __external_mod(module, attrs):
+def __external_mod(cur_module, module, attrs):
     '''Check if given Python module is not included in Python or locally'''
 
-    # filter out locally provided modules
-    if module in attrs['provides']:
-        return False
-    for m in _module_parents(module):
-        if m in attrs['provides']:
-            return False
-
     try:
-        path = __import__(module).__file__
+        mod = __import__(module)
     except ImportError:
-        sys.stderr.write('ERROR: Python module %s not found\n' % module)
-        return False
-    except AttributeError: # builtin modules
-        return False
+        # try relative import
+        try:
+            if cur_module:
+                mod = __import__(cur_module + '.' + module)
+            else:
+                raise ImportError
+        except ImportError:
+            sys.stderr.write('ERROR: Python module %s not found\n' % module)
+            return False
     except ValueError: # weird ctypes case with wintypes
         return False 
 
-    return 'dist-packages' in path or 'site-packages' in path or \
-            not path.startswith(os.path.dirname(os.__file__))
+    if not hasattr(mod, '__file__'):
+        # buildin module
+        return False
+
+    # filter out locally provided modules
+    if mod.__name__ in attrs['provides']:
+        return False
+
+    return 'dist-packages' in mod.__file__ or 'site-packages' in mod.__file__ or \
+            not mod.__file__.startswith(os.path.dirname(os.__file__))
 
 def __add_imports(imports, file, attrs):
     '''Add all imported modules from file to imports set.
 
     This filters out modules which are shipped with Python itself.
     '''
+    if os.path.exists(os.path.join(os.path.dirname(file), '__init__.py')):
+        cur_module = '.'.join(file.split(os.path.sep)[:-1])
+    else:
+        # this might happen for paths like bin/<script> which we do not want to
+        # treat as module for checking relative imports
+        cur_module = None
+
     try:
         tree = ast.parse(open(file).read(), file)
 
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
-                    if __external_mod(alias.name, attrs):
+                    if __external_mod(cur_module, alias.name, attrs):
                         imports.add(alias.name)
             if isinstance(node, ast.ImportFrom):
-                if node.level == 0 and __external_mod(node.module, attrs):
+                if __external_mod(cur_module, node.module, attrs):
                     imports.add(node.module)
     except SyntaxError, e:
         sys.stderr.write('WARNING: syntax errors in %s: %s\n' % (file, str(e)))

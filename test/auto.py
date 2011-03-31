@@ -672,6 +672,7 @@ import os, os.path, email.mime, distutils.command.register
 from email import header as h
 import httplib2.iri2uri, unknown
 from . bar import poke
+from bar.poke import x
 ''')
 
         self._mksrc('foo/bar/__init__.py', '')
@@ -694,7 +695,7 @@ print ('import iamnota.module')
         self._mksrc('data/example-code/mymod/shiny.py', 'import example.othermod')
 
         (o, e, s) = self.do_install()
-        self.assertEqual(s, 0)
+        self.assertEqual(s, 0, e)
         self.assertEqual(e, 'ERROR: Python module unknown not found\n')
         self.assertFalse('following files are not recognized' in o)
 
@@ -865,10 +866,11 @@ print ('import iamnota.module')
         Return diff -Nur output.
         '''
         assert self.snapshot, 'no snapshot taken'
-        diff = subprocess.Popen(['diff', '-x', 'foo.pot', '-Nur', os.path.join(self.snapshot, 's'), 
-            self.src], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        diff = subprocess.Popen(['diff', '-x', 'foo.pot', '-x', '*.pyc',
+            '-Nur', os.path.join(self.snapshot, 's'), self.src],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (out, err) = diff.communicate()
-        out = out.decode()
+        out = out.decode('UTF-8')
         self.assertEqual(err, b'', 'diff error messages')
         return out
 
