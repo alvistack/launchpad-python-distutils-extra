@@ -327,7 +327,7 @@ def __external_mod(cur_module, module, attrs):
         return False 
 
     if not hasattr(mod, '__file__'):
-        # buildin module
+        # builtin module
         return False
 
     # filter out locally provided modules
