@@ -290,10 +290,14 @@ Exec=/bin/foosettings''')
 
         self._mksrc('data/icons/scalable/actions/press.png')
         self._mksrc('data/icons/48x48/apps/foo.png')
-        action_icon_path = os.path.join(self.src, 'data', 'icons', 'scalable',
-                'actions')
-        os.symlink(os.path.join(action_icon_path, 'press.png'),
-                os.path.join(action_icon_path, 'crunch.png'))
+        scalable_icon_path = os.path.join(self.src, 'data', 'icons', 'scalable')
+        os.symlink(os.path.join(scalable_icon_path, 'actions', 'press.png'),
+                os.path.join(scalable_icon_path, 'actions', 'crunch.png'))
+
+        # test broken symlink, too
+        os.mkdir(os.path.join(scalable_icon_path, 'mimetypes'))
+        os.symlink('../apps/foo.svg', 
+                os.path.join(scalable_icon_path, 'mimetypes', 'text-x-foo.svg'))
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
@@ -306,6 +310,8 @@ Exec=/bin/foosettings''')
         self.assertTrue('/usr/share/icons/hicolor/48x48/apps/foo.png' in f)
         self.assertTrue(os.path.islink(os.path.join(self.install_tree, 
            'usr/share/icons/hicolor/scalable/actions/crunch.png')))
+        self.assertTrue(os.path.islink(os.path.join(self.install_tree, 
+           'usr/share/icons/hicolor/scalable/mimetypes/text-x-foo.svg')))
 
     def test_data(self):
         '''Auxiliary files in data/'''
@@ -858,7 +864,7 @@ print ('import iamnota.module')
         assert self.snapshot is None, 'snapshot already taken'
 
         self.snapshot = tempfile.mkdtemp()
-        shutil.copytree(self.src, os.path.join(self.snapshot, 's'))
+        shutil.copytree(self.src, os.path.join(self.snapshot, 's'), symlinks=True)
 
     def diff_snapshot(self):
         '''Compare source tree to snapshot.
@@ -871,7 +877,6 @@ print ('import iamnota.module')
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (out, err) = diff.communicate()
         out = out.decode('UTF-8')
-        self.assertEqual(err, b'', 'diff error messages')
         return out
 
     def _mkpo(self):

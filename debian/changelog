@@ -2,6 +2,20 @@ python-distutils-extra (2.26-3) UNRELEASED; urgency=low
 
   * auto.py: Cleaner approach to determine whether a module is locally
     provided. This now catches all relative imports. (LP: #746565)
+  * Fix installation of symlinks in data/ dir (LP: #770566):
+    - test/auto.py: Add test for installing a symlink which points to a
+      nonexisting target directory/file. This reproduces the gist of the
+      problem.
+    - test/auto.py: Preserve symlinks in copytree() calls, so that we can
+      actually verify that symlinks are preserved properly.
+    - test/auto.py: Drop requirement that diff throws no error messages, as it
+      will complain about the broken symlink.
+    - DistUtilsExtra/auto.py, install_auto: Use os.walk() instead of
+      distutils.filelist.findall() to pick out symlinks, as the latter fails
+      badly with broken symlinks.
+    - DistUtilsExtra/command/build_icons.py: Ignore symbolic links. distutils
+      breaks on them when they point to a nonexisting target, and we handle
+      them in auto.py.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 31 Mar 2011 22:01:22 +0200
 
