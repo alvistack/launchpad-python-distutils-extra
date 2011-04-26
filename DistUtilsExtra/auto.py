@@ -674,26 +674,29 @@ class install_auto(distutils.command.install.install):
                     preserve_times=0, preserve_symlinks=1, verbose=1)
 
         # install data/scripts symlinks
-        for f in distutils.filelist.findall():
-            if not os.path.islink(f):
-                continue
-            if f.startswith('bin/') or f.startswith('data/'):
-                if f.startswith('bin'):
-                    dir = self.install_scripts
-                    dest = os.path.join(dir, os.path.sep.join(f.split(os.path.sep)[1:]))
-                elif f.startswith('data/icons'):
-                    dir = os.path.join(self.install_data, 'share', 'icons', 'hicolor')
-                    dest = os.path.join(dir, os.path.sep.join(f.split(os.path.sep)[2:]))
-                else:
-                    dir = os.path.join(self.install_data, 'share', self.distribution.get_name())
-                    dest = os.path.join(dir, os.path.sep.join(f.split(os.path.sep)[1:]))
+        for (path, dirs, files) in os.walk('.'):
+            for f in files:
+                f = os.path.join(path, f)
+                if not os.path.islink(f):
+                    continue
 
-                d = os.path.dirname(dest)
-                if not os.path.isdir(d):
-                    os.makedirs(d)
-                if os.path.exists(dest):
-                    os.unlink(dest)
-                os.symlink(os.readlink(f), dest)
+                if f.startswith('./bin/') or f.startswith('./data/'):
+                    if f.startswith('./bin'):
+                        dir = self.install_scripts
+                        dest = os.path.join(dir, os.path.sep.join(f.split(os.path.sep)[2:]))
+                    elif f.startswith('./data/icons'):
+                        dir = os.path.join(self.install_data, 'share', 'icons', 'hicolor')
+                        dest = os.path.join(dir, os.path.sep.join(f.split(os.path.sep)[3:]))
+                    else:
+                        dir = os.path.join(self.install_data, 'share', self.distribution.get_name())
+                        dest = os.path.join(dir, os.path.sep.join(f.split(os.path.sep)[2:]))
+
+                    d = os.path.dirname(dest)
+                    if not os.path.isdir(d):
+                        os.makedirs(d)
+                    if os.path.exists(dest):
+                        os.unlink(dest)
+                    os.symlink(os.readlink(f), dest)
 
         distutils.command.install.install.run(self)
 
