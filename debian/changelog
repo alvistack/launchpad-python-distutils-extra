@@ -1,4 +1,4 @@
-python-distutils-extra (2.26-3) UNRELEASED; urgency=low
+python-distutils-extra (2.27-1) UNRELEASED; urgency=low
 
   * auto.py: Cleaner approach to determine whether a module is locally
     provided. This now catches all relative imports. (LP: #746565)
