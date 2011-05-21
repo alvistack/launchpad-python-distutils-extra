@@ -1,7 +1,7 @@
 Source: python-distutils-extra
 Section: python
 Priority: optional
-XS-Python-Version: all
+X-Python-Version: >= 2.6
 Maintainer: Martin Pitt <mpitt@debian.org>
 Uploaders: Sebastian Heinlein <devel@glatzor.de>
 Build-Depends: debhelper (>= 7.0.50~), 
@@ -35,7 +35,6 @@ Description: enhancements to the Python build system
 
 Package: python3-distutils-extra
 Architecture: all
-XB-Python3-Version: ${python3:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, intltool
 Suggests: devscripts
 Description: enhancements to the Python3 build system
