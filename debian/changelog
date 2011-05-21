@@ -16,6 +16,8 @@ python-distutils-extra (2.27-1) UNRELEASED; urgency=low
     - DistUtilsExtra/command/build_icons.py: Ignore symbolic links. distutils
       breaks on them when they point to a nonexisting target, and we handle
       them in auto.py.
+  * DistUtilsExtra/auto.py: Put back "except .. as" syntax, now that we
+    dropped Python 2.5. Drop 2to3 from debian/rules for good now.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 31 Mar 2011 22:01:22 +0200
 
