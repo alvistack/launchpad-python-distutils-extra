@@ -33,9 +33,10 @@ has complete information it will work with any distutils setup.
 
 .SH OPTIONS
 .TP
-\fB\-\-force\-control\fR
-Force whole control file to be recreated. By default it will not touch an
-already existing control file, so that you can customize them.
+\fB\-\-force\-control\fR=\fIFORCE_CONTROL\fR
+Force control file behaviour. Can be one of "none" (keep unchanged), "deps" 
+(only update dependencies), or "full" (recreate whole file). By default
+only dependencies will be updated ("deps").
 
 .TP
 \fB\-\-force\-copyright\fR

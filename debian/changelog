@@ -1,3 +1,13 @@
+python-distutils-extra (2.27-2) UNRELEASED; urgency=low
+
+  * debian/local/python-mkdebian{,.1}: Change --force-control from a binary to
+    a ternary option with modes "none" (don't touch it at all), "deps" (only
+    update dependencies; old and new default behaviour), and "full" (always
+    regenerate it). Update the manpage accordingly. Thanks to Jordan Mantha
+    for the patch!
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 31 May 2011 09:43:26 +0200
+
 python-distutils-extra (2.27-1) unstable; urgency=low
 
   * auto.py: Cleaner approach to determine whether a module is locally
