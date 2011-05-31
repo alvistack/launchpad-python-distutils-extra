@@ -77,8 +77,12 @@ include /usr/share/cdbs/1/class/python-distutils.mk
 
     if not os.path.exists('debian/copyright') or force_copyright:
         make_copyright(egg)
-
-    make_control(egg, force_control, additional_dependencies)
+    if force_control not in ('none', 'deps', 'full'):
+        print >> sys.stderr, 'ERROR: --force-control takes one of the following options:\n' \
+            '"none", "deps", or "full"'
+        sys.exit(0)
+    if force_control != 'none':
+        make_control(egg, force_control, additional_dependencies)
     make_changelog(egg, changelog, distribution, use_old_changelog)
 
 def make_copyright(egg):
@@ -143,7 +147,7 @@ def make_control(egg, force_control, additional_dependencies):
  ${python:Depends}%s''' % ',\n '.join(['',] + list(deps) + additional_dependencies)
     }
     # add additional fields (even when updating if user chooses them)
-    if not os.path.exists('debian/control') or force_control:
+    if not os.path.exists('debian/control') or force_control == 'full':
         control_content.update({
         'Source': egg['Name'],
         'Build-Depends': '''cdbs (>= 0.4.43),
@@ -310,8 +314,8 @@ def mod2package(module):
 #
 usage = "usage: %prog [options]"
 parser = OptionParser(prog='python_mkdebian', usage=usage, version=pkgversion)
-parser.add_option('', '--force-control', dest='force_control', action='store_true',
-                  help='Force whole control file to be recreated')
+parser.add_option('', '--force-control', dest='force_control', action='store',
+                  help='Force control file behaviour. Can be one of "none" (keep unchanged), "deps" (only update dependencies), or "full" (recreate whole file). By default only dependencies will be updated ("deps").')
 parser.add_option('', '--force-copyright', dest='force_copyright', action='store_true',
                   help='Force the copyright file to be recreated')
 parser.add_option('', '--force-rules', dest='force_rules', action='store_true',
@@ -326,7 +330,7 @@ parser.add_option('', '--no-changelog', dest='use_old_changelog', action='store_
                   help='Don\'t create a new changelog entry')
 parser.add_option('', '--prefix', dest='prefix', action='store',
                   help='Ask to install into a dedicated prefix')
-parser.set_defaults(changelog=None, dependencies=[], distribution=None, use_old_changelog=False, prefix=None)
+parser.set_defaults(changelog=None, dependencies=[], force_control="deps", distribution=None, use_old_changelog=False, prefix=None)
 options, args = parser.parse_args()
 
 # switch stdout to line buffering, for scripts reading our output on the fly
