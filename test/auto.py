@@ -679,12 +679,18 @@ from email import header as h
 import httplib2.iri2uri, unknown
 from . bar import poke
 from bar.poke import x
+import grab_cli
+import broken
 ''')
 
         self._mksrc('foo/bar/__init__.py', '')
         self._mksrc('foo/bar/poke.py', 'def x(): pass')
 
         self._mksrc('mymod.py', 'import foo\nfrom foo.bar.poke import x')
+        # trying to import this will cause setup.py to not process any args any more
+        self._mksrc('grab_cli.py', 'from optparse import OptionParser\nOptionParser().parse_args()')
+        # trying to import this will break setup.py
+        self._mksrc('broken.py', 'raise SystemError("cannot initialize system")')
 
         self._mksrc('bin/foo-cli', '''#!/usr/bin/python
 import sys
@@ -720,7 +726,7 @@ print ('import iamnota.module')
 
         # check provides
         prov = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Provides: ')]
-        self.assertEqual(set(prov), set(['foo', 'mymod']))
+        self.assertEqual(set(prov), set(['foo', 'mymod', 'broken', 'grab_cli']))
 
         # check requires
         req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]

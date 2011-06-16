@@ -311,6 +311,14 @@ def __manpages(attrs, src):
 def __external_mod(cur_module, module, attrs):
     '''Check if given Python module is not included in Python or locally'''
 
+    # filter out locally provided modules early, to avoid importing them (which
+    # might raise an exception, or parse argv, etc.)
+    if module in attrs['provides']:
+        return False
+    for m in _module_parents(module):
+        if m in attrs['provides']:
+            return False
+
     try:
         mod = __import__(module)
     except ImportError:
