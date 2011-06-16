@@ -1,10 +1,20 @@
-python-distutils-extra (2.27-2) UNRELEASED; urgency=low
+python-distutils-extra (2.28-1) UNRELEASED; urgency=low
 
   * debian/local/python-mkdebian{,.1}: Change --force-control from a binary to
     a ternary option with modes "none" (don't touch it at all), "deps" (only
     update dependencies; old and new default behaviour), and "full" (always
     regenerate it). Update the manpage accordingly. Thanks to Jordan Mantha
     for the patch!
+  * test/auto.py: Add test for a local module which raises an exception
+    (replicates the current xdiagnose FTBFS), and a local module which runs
+    optparse on import (replicates the current onboard bzr head FTBFS).
+  * auto.py, __external_mod(): Put back the early decision for locally
+    provided modules based on their name, without importing them. Running
+    __import__ is dangerous in some cases like the above two, but
+    unfortunately necessary to fully determine relative imports. This is still
+    not quite perfect, as it will fail the same way if externally provided
+    modules do dangerous things on mere imports, but at least fixes the
+    regression from r248 (release 2.27). (See LP #746565)
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 31 May 2011 09:43:26 +0200
 
