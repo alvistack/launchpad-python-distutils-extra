@@ -227,29 +227,12 @@ def add_info(report):
         self.assertFalse('following files are not recognized' in o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/PolicyKit/policy/com.example.foo.policy' in f)
-        p = self._installed_contents('usr/share/PolicyKit/policy/com.example.foo.policy')
+        self.assertTrue('/usr/share/polkit-1/actions/com.example.foo.policy' in f)
+        p = self._installed_contents('usr/share/polkit-1/actions/com.example.foo.policy')
         self.assertTrue('<description>Good morning</description>' in p)
         self.assertTrue('<description xml:lang="de">Guten Morgen</description>' in p)
         self.assertTrue('<message>Hello</message>' in p)
         self.assertTrue('<message xml:lang="de">Hallo</message>' in p)
-
-        # polkit-1
-        self._mksrc('foo.py', '''polkit = dbus.Interface(dbus.SystemBus().get_object(
-    'org.freedesktop.PolicyKit1',
-    '/org/freedesktop/PolicyKit1/Authority', False),
-    'org.freedesktop.PolicyKit1.Authority')
-''')
-        self.setup_py(['clean', '-a'])
-        self.snapshot = None
-        (o, e, s) = self.do_install()
-        self.assertEqual(e, '')
-        self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o)
-
-        f = self.installed_files()
-        self.assertFalse('/usr/share/PolicyKit/policy/com.example.foo.policy' in f)
-        self.assertTrue('/usr/share/polkit-1/actions/com.example.foo.policy' in f)
 
     def test_desktop(self):
         '''*.desktop.in files'''

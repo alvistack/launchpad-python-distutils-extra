@@ -13,7 +13,7 @@ This currently supports:
  * GtkBuilder and Qt4 user interfaces (*.ui) [installed into
    prefix/share/<projectname>/]
  * D-Bus (*.conf and *.service)
- * PolicyKit (*.policy.in)
+ * polkit (*.policy.in)
  * Desktop files (*.desktop.in) [into prefix/share/applications, or
    prefix/share/autostart if they have "autostart" anywhere in the path]
  * KDE4 notifications (*.notifyrc.in)
@@ -516,24 +516,17 @@ class build_i18n_auto(build_i18n.build_i18n):
         global src
         global src_all
 
-        # add PolicyKit files
+        # add polkit files
         policy_files = []
         for f in src_fileglob(src, '*.policy.in'):
             src_mark(src, f)
             policy_files.append(f)
         if policy_files:
-            # check if we have PolicyKit 1 API
-            if subprocess.call(['grep', '-q', 'org\.freedesktop\.PolicyKit1'] +
-                    list(src_fileglob(src_all, '*.py')),
-                    stderr=subprocess.PIPE) == 0:
-                destdir = os.path.join('share', 'polkit-1', 'actions')
-            else:
-                destdir = os.path.join('share', 'PolicyKit', 'policy')
             try:
                 xf = eval(self.xml_files)
             except TypeError:
                 xf = []
-            xf.append((destdir, policy_files))
+            xf.append((os.path.join('share', 'polkit-1', 'actions'), policy_files))
             self.xml_files = repr(xf)
 
         # add desktop files
