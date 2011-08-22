@@ -1,4 +1,4 @@
-python-distutils-extra (2.28-2) UNRELEASED; urgency=low
+python-distutils-extra (2.29-1) UNRELEASED; urgency=low
 
   [ Martin Pitt ]
   * Drop support for the long-obsolete PolicyKit (pre polkit 1.0 API).
