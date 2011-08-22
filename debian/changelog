@@ -1,4 +1,4 @@
-python-distutils-extra (2.29-1) UNRELEASED; urgency=low
+python-distutils-extra (2.29-1) unstable; urgency=low
 
   [ Martin Pitt ]
   * Drop support for the long-obsolete PolicyKit (pre polkit 1.0 API).
@@ -7,7 +7,7 @@ python-distutils-extra (2.29-1) UNRELEASED; urgency=low
   * auto.py: Ignore RuntimeError, which Gdk/Gtk throw if DISPLAY is unset.
     (LP: #735408)
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 09 Aug 2011 19:20:52 +0200
+ -- Martin Pitt <mpitt@debian.org>  Mon, 22 Aug 2011 07:02:19 +0200
 
 python-distutils-extra (2.28-1) unstable; urgency=medium
 
