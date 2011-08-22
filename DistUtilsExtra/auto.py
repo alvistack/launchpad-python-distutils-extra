@@ -333,6 +333,8 @@ def __external_mod(cur_module, module, attrs):
             return False
     except ValueError: # weird ctypes case with wintypes
         return False 
+    except RuntimeError: # When Gdk can't be initialized
+        return False
 
     if not hasattr(mod, '__file__'):
         # builtin module
