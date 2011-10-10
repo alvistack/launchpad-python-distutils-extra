@@ -273,26 +273,21 @@ def mod2package(module):
         '/%s.py\n' % module.replace('.', '/') in out):
         return package
 
+    # try for gi modules
+    if module.startswith('gi.repository.'):
+        module_name = module.split('.')[-1]
+        _module = __import__(module, fromlist=[module_name])
+        pkg = _get_pkg_from_path(_module.__path__)
+        if pkg:
+            return pkg
     # bigger hammer: dpkg -S for Python packages
     # module can be module.submodule.subsubmodule packaged independently
     # (e. g. python-desktopcouch and python-desktopcouch-records)
     module_name = module.split('.')
     while(module_name):
-        dpkg = subprocess.Popen(['dpkg', '-S', '*/%s/__init__.py' % '/'.join(module_name)],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out = dpkg.communicate()[0]
-        pkgs = set()
-        for line in out.splitlines():
-            pkgs.add(line.split(':')[0])
-        if len(pkgs) == 1:
-            package = list(pkgs)[0]
-            return package
-        elif len(pkgs) > 1:
-            py_pkgs = [p for p in pkgs if p.startswith('python-')]
-            if len(py_pkgs) == 1:
-                return py_pkgs[0]
-            else:
-                print '[dpkg -S found more than one package: %s; ignoring]' % ', '.join(pkgs),
+        pkg = _get_pkg_from_path('*/%s/__init__.py' % '/'.join(module_name))
+        if pkg:
+            return pkg
         module_name = module_name[:-1]
 
     # bigger hammer: dpkg -S for compiled extensions
@@ -307,6 +302,24 @@ def mod2package(module):
     elif len(pkgs) > 1:
         print '[dpkg -S found more than one extension: %s; ignoring]' % ', '.join(pkgs),
 
+    return None
+
+def _get_pkg_from_path(path):
+    dpkg = subprocess.Popen(['dpkg', '-S', path],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = dpkg.communicate()[0]
+    pkgs = set()
+    for line in out.splitlines():
+        pkgs.add(line.split(':')[0])
+    if len(pkgs) == 1:
+        package = list(pkgs)[0]
+        return package
+    elif len(pkgs) > 1:
+        py_pkgs = [p for p in pkgs if p.startswith('python-')]
+        if len(py_pkgs) == 1:
+            return py_pkgs[0]
+        else:
+            print '[dpkg -S found more than one package: %s; ignoring]' % ', '.join(pkgs),
     return None
 
 #
