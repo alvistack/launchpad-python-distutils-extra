@@ -652,8 +652,9 @@ setup(
         try:
             __import__('pkg_resources')
             __import__('httplib2')
+            __import__('gi.repository.GLib')
         except ImportError:
-            self.fail('You need to have pkg_resources and httplib2 installed for this test suite to work')
+            self.fail('You need to have pkg_resources, httplib2, and gi.repository.GLib installed for this test suite to work')
 
         self._mksrc('foo/__init__.py', '')
         self._mksrc('foo/stuff.py', '''import xml.parsers.expat
@@ -674,6 +675,7 @@ import broken
         self._mksrc('grab_cli.py', 'from optparse import OptionParser\nOptionParser().parse_args()')
         # trying to import this will break setup.py
         self._mksrc('broken.py', 'raise SystemError("cannot initialize system")')
+        self._mksrc('pygi.py', 'from gi.repository import GLib\nimport gi.repository.GObject')
 
         self._mksrc('bin/foo-cli', '''#!/usr/bin/python
 import sys
@@ -709,11 +711,12 @@ print ('import iamnota.module')
 
         # check provides
         prov = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Provides: ')]
-        self.assertEqual(set(prov), set(['foo', 'mymod', 'broken', 'grab_cli']))
+        self.assertEqual(set(prov), set(['foo', 'mymod', 'broken', 'grab_cli', 'pygi']))
 
         # check requires
         req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
-        self.assertEqual(set(req), set(['httplib2', 'pkg_resources']))
+        self.assertEqual(set(req), set(['httplib2', 'pkg_resources',
+            'gi.repository.GLib', 'gi.repository.GObject']))
 
     def test_help_docbook(self):
         '''Docbook XML help'''
