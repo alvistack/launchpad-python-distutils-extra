@@ -368,7 +368,11 @@ def __add_imports(imports, file, attrs):
                     if __external_mod(cur_module, alias.name, attrs):
                         imports.add(alias.name)
             if isinstance(node, ast.ImportFrom):
-                if __external_mod(cur_module, node.module, attrs):
+                if node.module == 'gi.repository':
+                    for name in node.names:
+                        imports.add('gi.repository.%s' % name.name)
+
+                elif __external_mod(cur_module, node.module, attrs):
                     imports.add(node.module)
     except SyntaxError as e:
         sys.stderr.write('WARNING: syntax errors in %s: %s\n' % (file, str(e)))
@@ -391,6 +395,9 @@ def __filter_namespace(modules):
     result = set()
 
     for m in modules:
+        if m.startswith('gi.repository.'):
+            result.add(m)
+            continue
         for p in _module_parents(m):
             if p in modules:
                 break
