@@ -1,9 +1,9 @@
-python-distutils-extra (2.30-2) UNRELEASED; urgency=low
+python-distutils-extra (2.30-2) unstable; urgency=low
 
   * debian/control: Add python-gobject and python3-gobject build dependencies,
     for the test suite to succeed on the buildds.
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 25 Oct 2011 08:26:53 +0200
+ -- Martin Pitt <mpitt@debian.org>  Tue, 25 Oct 2011 08:27:17 +0200
 
 python-distutils-extra (2.30-1) unstable; urgency=low
 
