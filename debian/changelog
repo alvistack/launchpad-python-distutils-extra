@@ -5,6 +5,8 @@ python-distutils-extra (2.31-1) UNRELEASED; urgency=low
     test/auto.py.
   * auto.py: Fix crash in module dependency generator, uncovered by previously
     added test case.
+  * debian/local/python-mkdebian: Ignore -dbg packages when calculating
+    dependencies, to avoid finding multiple matches.
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 08 Nov 2011 16:35:42 +0100
 
