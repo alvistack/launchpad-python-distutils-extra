@@ -1,3 +1,11 @@
+python-distutils-extra (2.31-1) UNRELEASED; urgency=low
+
+  * auto.py: Also catch ValueError and RuntimeError on relative imports.
+    Thanks Mike Terry for the patch! Add corresponding test case to
+    test/auto.py.
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 08 Nov 2011 16:35:42 +0100
+
 python-distutils-extra (2.30-2) unstable; urgency=low
 
   * debian/control: Add python-gobject and python3-gobject build dependencies,
