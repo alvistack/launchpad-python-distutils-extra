@@ -302,7 +302,11 @@ def mod2package(module):
     out = dpkg.communicate()[0]
     pkgs = set()
     for line in out.splitlines():
-        pkgs.add(line.split(':')[0])
+        p = line.split(':')[0]
+        # ignore debug extensions
+        if p.endswith('-dbg'):
+            continue
+        pkgs.add(p)
     if len(pkgs) == 1:
         return list(pkgs)[0]
     elif len(pkgs) > 1:
