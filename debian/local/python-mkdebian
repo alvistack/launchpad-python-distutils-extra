@@ -282,7 +282,11 @@ def mod2package(module):
     # try for gi modules
     if module.startswith('gi.repository.'):
         module_name = module.split('.')[-1]
-        _module = __import__(module, fromlist=[module_name])
+        try:
+            _module = __import__(module, fromlist=[module_name])
+        except RuntimeError: # thrown by Gtk without $DISPLAY
+            print '[cannot import, ignoring]',
+            return None
         pkg = _get_pkg_from_path(_module.__path__)
         if pkg:
             return pkg
