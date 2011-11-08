@@ -369,14 +369,14 @@ def __add_imports(imports, file, attrs):
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
-                    if __external_mod(cur_module, alias.name, attrs):
+                    if alias.name and __external_mod(cur_module, alias.name, attrs):
                         imports.add(alias.name)
             if isinstance(node, ast.ImportFrom):
                 if node.module == 'gi.repository':
                     for name in node.names:
                         imports.add('gi.repository.%s' % name.name)
 
-                elif __external_mod(cur_module, node.module, attrs):
+                elif node.module and __external_mod(cur_module, node.module, attrs):
                     imports.add(node.module)
     except SyntaxError as e:
         sys.stderr.write('WARNING: syntax errors in %s: %s\n' % (file, str(e)))
