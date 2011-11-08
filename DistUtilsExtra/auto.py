@@ -331,6 +331,10 @@ def __external_mod(cur_module, module, attrs):
         except ImportError:
             sys.stderr.write('ERROR: Python module %s not found\n' % module)
             return False
+        except ValueError: # weird ctypes case with wintypes
+            return False 
+        except RuntimeError: # When Gdk can't be initialized
+            return False
     except ValueError: # weird ctypes case with wintypes
         return False 
     except RuntimeError: # When Gdk can't be initialized

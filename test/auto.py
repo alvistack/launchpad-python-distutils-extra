@@ -668,7 +668,8 @@ import broken
 ''')
 
         self._mksrc('foo/bar/__init__.py', '')
-        self._mksrc('foo/bar/poke.py', 'def x(): pass')
+        self._mksrc('foo/bar/poke.py', 'from . import broken\ndef x(): pass')
+        self._mksrc('foo/bar/broken.py', 'raise RuntimeError("cannot initialize system")')
 
         self._mksrc('mymod.py', 'import foo\nfrom foo.bar.poke import x')
         # trying to import this will cause setup.py to not process any args any more
