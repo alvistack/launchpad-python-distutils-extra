@@ -1,4 +1,4 @@
-python-distutils-extra (2.31-1) UNRELEASED; urgency=low
+python-distutils-extra (2.31-1) unstable; urgency=low
 
   * auto.py: Also catch ValueError and RuntimeError on relative imports.
     Thanks Mike Terry for the patch! Add corresponding test case to
@@ -11,7 +11,7 @@ python-distutils-extra (2.31-1) UNRELEASED; urgency=low
     when calculating dependencies, to fix a crash when trying to import
     gi.repository.Gtk without a $DISPLAY.
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 08 Nov 2011 16:35:42 +0100
+ -- Martin Pitt <mpitt@debian.org>  Tue, 08 Nov 2011 16:52:14 +0100
 
 python-distutils-extra (2.30-2) unstable; urgency=low
 
