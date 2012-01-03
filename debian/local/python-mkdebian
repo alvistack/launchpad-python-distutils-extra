@@ -55,28 +55,30 @@ def make_debian(egg, force_control, changelog, additional_dependencies,
 
     if not os.path.exists('debian/compat'):
         f = open('debian/compat', 'w')
-        f.write('6\n')
+        f.write('8\n')
         f.close()
 
     prefix_string = ''
     if prefix:
-        prefix_string = "DEB_PYTHON_PREFIX_ARG := %s" % prefix
+        prefix_string = '''override_dh_auto_install:
+	dh_auto_install -- --install-scripts=%s \
+                --install-lib=%s
+
+override_dh_python2:
+	dh_python2 %s
+''' % (prefix, prefix, prefix)
+
     if not os.path.exists('debian/rules') or force_rules:
         f = open('debian/rules', 'w')
         f.write('''#!/usr/bin/make -f
-DEB_PYTHON_SYSTEM := pysupport
+%%:
+ifneq ($(shell dh -l | grep -xF translations),)
+	dh $@ --with python2,translations
+else
+	dh $@ --with python2
+endif
+
 %s
-
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/python-distutils.mk
-# langpack.mk is relevant on Ubuntu only, not Debian; it does not matter if it's missing
--include /usr/share/cdbs/1/rules/langpack.mk
-
-common-binary-post-install-arch::
-	-dh_icons -a
-
-common-binary-post-install-indep::
-	-dh_icons -i
 ''' % prefix_string)
         f.close()
         os.chmod('debian/rules', 0755)
@@ -158,8 +160,7 @@ def make_control(egg, force_control, additional_dependencies):
         'Source': egg['Name'],
         'Build-Depends': '''cdbs (>= 0.4.43),
  debhelper (>= 6),
- python,
- python-support (>= 0.6.4),
+ python (>= 2.6.6-3~),
  python-distutils-extra (>= 2.10)%s''' % bdeps,
         'Maintainer': author,
         'Package': egg['Name'],
