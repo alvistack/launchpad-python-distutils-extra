@@ -1,4 +1,4 @@
-python-distutils-extra (2.31-3) UNRELEASED; urgency=low
+python-distutils-extra (2.31-3) unstable; urgency=low
 
   [ Michael Vogt ]
   * python-mkdebian: Update to use dh_python2, dh7 and a more current DEP-5
@@ -8,7 +8,7 @@ python-distutils-extra (2.31-3) UNRELEASED; urgency=low
   * python-mkdebian: In above dh7 conversion, use the "translations" module if
     available (for Ubuntu's dh-translations).
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 03 Jan 2012 16:57:12 +0100
+ -- Martin Pitt <mpitt@debian.org>  Tue, 03 Jan 2012 17:09:28 +0100
 
 python-distutils-extra (2.31-2) unstable; urgency=low
 
