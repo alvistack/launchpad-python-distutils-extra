@@ -158,6 +158,21 @@ Exec=/usr/bin/foo-gtk
         self.assertTrue('/usr/share/dbus-1/services/com.example.foo.gui.service' in f)
         self.assertFalse('super.service' in '\n'.join(f))
 
+    def test_gsettings(self):
+        '''GSettings schema files'''
+
+        self._mksrc('data/glib-2.0/schemas/org.test.myapp.gschema.xml')
+        self._mksrc('data/glib-2.0/schemas/gschemas.compiled')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = self.installed_files()
+        self.assertEqual(len(f), 2) # 1 schema file plus .egg-info
+        self.assertTrue('/usr/share/glib-2.0/schemas/org.test.myapp.gschema.xml' in f)
+        self.assertFalse('gschemas.compiled' in '\n'.join(f))
+
     def test_apport_hook(self):
         '''Apport hooks'''
 
