@@ -13,6 +13,7 @@ This currently supports:
  * GtkBuilder and Qt4 user interfaces (*.ui) [installed into
    prefix/share/<projectname>/]
  * D-Bus (*.conf and *.service)
+ * GSettings schemas (*.gschema.xml)
  * polkit (*.policy.in)
  * Desktop files (*.desktop.in) [into prefix/share/applications, or
    prefix/share/autostart if they have "autostart" anywhere in the path]
@@ -85,6 +86,7 @@ def setup(**attrs):
     __packages(attrs, src)
     __provides(attrs, src)
     __dbus(attrs, src)
+    __gschema(attrs, src)
     __apport_hooks(attrs, src)
     __data(attrs, src)
     __scripts(attrs, src)
@@ -195,6 +197,17 @@ def __dbus(attrs, src):
         v.append(('share/dbus-1/system-services', system_service))
     if session_service:
         v.append(('share/dbus-1/services', session_service))
+
+def __gschema(attrs, src):
+    '''Install GSettings schema files'''
+    
+    v = attrs.setdefault('data_files', [])
+    schema_glob = '*.gschema.xml'
+    schemas = src_fileglob(src, schema_glob)
+    if schemas:
+        src_markglob(src, schema_glob)
+        src_markglob(src, '*gschemas.compiled')
+        v.append(('share/glib-2.0/schemas/', schemas))
 
 def __apport_hooks(attrs, src):      
     '''Apport hooks'''  
