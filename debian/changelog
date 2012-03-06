@@ -1,9 +1,13 @@
 python-distutils-extra (2.32-1) UNRELEASED; urgency=low
 
+  [ Martin Pitt ]
   * auto.py: Add support for installing GSettings schema files
     (*.gsettings.xml). Thanks to Frederik Elwert! (LP: #936546)
 
- -- Martin Pitt <mpitt@debian.org>  Fri, 02 Mar 2012 17:46:26 +0100
+  [ Michael Terry ]
+  * python-mkdebian: If installing into a prefix, also install data there
+
+ -- Michael Terry <mterry@ubuntu.com>  Tue, 06 Mar 2012 16:58:48 -0500
 
 python-distutils-extra (2.31-3) unstable; urgency=low
 
