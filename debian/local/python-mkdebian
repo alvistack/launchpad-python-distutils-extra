@@ -62,11 +62,12 @@ def make_debian(egg, force_control, changelog, additional_dependencies,
     if prefix:
         prefix_string = '''override_dh_auto_install:
 	dh_auto_install -- --install-scripts=%s \
+                --install-data=%s \
                 --install-lib=%s
 
 override_dh_python2:
 	dh_python2 %s
-''' % (prefix, prefix, prefix)
+''' % (prefix, prefix, prefix, prefix)
 
     if not os.path.exists('debian/rules') or force_rules:
         f = open('debian/rules', 'w')
