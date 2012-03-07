@@ -1,3 +1,9 @@
+python-distutils-extra (2.32-2) UNRELEASED; urgency=low
+
+  * python-mkdebian: If installing into a prefix, also install data there
+
+ -- Michael Terry <mterry@ubuntu.com>  Tue, 06 Mar 2012 16:58:48 -0500
+
 python-distutils-extra (2.32-1) unstable; urgency=low
 
   * auto.py: Add support for installing GSettings schema files
