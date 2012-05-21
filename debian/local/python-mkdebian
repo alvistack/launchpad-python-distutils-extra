@@ -174,7 +174,7 @@ Section: python
 Priority: extra
 Build-Depends: %(Build-Depends)s
 Maintainer: %(Maintainer)s
-Standards-Version: 3.8.3
+Standards-Version: 3.9.3
 XS-Python-Version: current
 
 Package: %(Package)s
