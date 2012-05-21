@@ -175,11 +175,10 @@ Priority: extra
 Build-Depends: %(Build-Depends)s
 Maintainer: %(Maintainer)s
 Standards-Version: 3.9.3
-XS-Python-Version: current
+X-Python-Version: >= 2.6
 
 Package: %(Package)s
 Architecture: all
-XB-Python-Version: ${python:Versions}
 Depends: %(Depends)s
 Description: %(Description)s
 ''' % control_content)
