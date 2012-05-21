@@ -146,7 +146,7 @@ def make_control(egg, force_control, additional_dependencies):
  
     # calculate extra build dependencies
     bdeps = ''
-    if subprocess.call('find -name "*.ui" | xargs grep -q \'<widget class="Q\'', 
+    if subprocess.call('find -name "*.ui" | xargs grep -q \'<widget class="K\'', 
             shell=True) == 0:
         print 'Package uses KDE *.ui files, adding python-kde4-dev build dependency'
         bdeps += ',\n python-kde4-dev'
