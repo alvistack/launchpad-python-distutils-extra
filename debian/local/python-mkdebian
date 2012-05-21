@@ -159,7 +159,7 @@ def make_control(egg, force_control, additional_dependencies):
     if not os.path.exists('debian/control') or force_control == 'full':
         control_content.update({
         'Source': egg['Name'],
-        'Build-Depends': '''debhelper (>= 6),
+        'Build-Depends': '''debhelper (>= 8),
  python (>= 2.6.6-3~),
  python-distutils-extra (>= 2.10)%s''' % bdeps,
         'Maintainer': author,
