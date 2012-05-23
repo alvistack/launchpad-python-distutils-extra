@@ -100,9 +100,9 @@ def make_copyright(egg):
         author += ' <' + egg['Author-email'] + '>'
 
     f = open('debian/copyright', 'w')
-    f.write('''Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
-Name: %s
-Maintainer: %s
+    f.write('''Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: %s
+Upstream-Contact: %s
 ''' % (egg['Name'], author))
     if 'Home-page' in egg:
         print >> f, 'Source:', egg['Home-page']

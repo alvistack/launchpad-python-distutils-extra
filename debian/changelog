@@ -1,3 +1,10 @@
+python-distutils-extra (2.32-4) UNRELEASED; urgency=low
+
+  * debian/local/python-mkdebian: Create copyright format 1.0 compatible
+    copyright files. Thanks Andrew Starr-Bochicchio! (LP: #1002379)
+
+ -- Martin Pitt <mpitt@debian.org>  Wed, 23 May 2012 17:08:24 +0200
+
 python-distutils-extra (2.32-3) unstable; urgency=low
 
   * python-mkdebian: Fix wrong kde4 ui file detection regular expression.
