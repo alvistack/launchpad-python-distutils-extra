@@ -1,6 +1,6 @@
-Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
-Name: python-distutils-extra
-Maintainer: Martin Pitt <martin.pitt@ubuntu.com>
+Format-Specification: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: python-distutils-extra
+Upstream-Contact: Martin Pitt <mpitt@debian.org>
 Source: https://launchpad.net/python-distutils-extra
 
 Files: *
