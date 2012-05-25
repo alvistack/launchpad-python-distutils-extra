@@ -1,3 +1,15 @@
+python-distutils-extra (2.32-5) UNRELEASED; urgency=low
+
+  [ Andrew Starr-Bochicchio ]
+  * debian/local/python-mkdebian cleanups: (LP: #706051)
+    - Don't use {XS, XB}-Python-Version.
+    - Generate an up to date Standards-Version.
+    - Generate build dep on debhelper (>= 8) as debian/compat is set to '8'
+      and debhelper overrides are used.
+    - No need to generate a build dep on cdbs.
+
+ -- Martin Pitt <mpitt@debian.org>  Fri, 25 May 2012 06:47:05 +0200
+
 python-distutils-extra (2.32-4) unstable; urgency=low
 
   * debian/local/python-mkdebian: Create copyright format 1.0 compatible
