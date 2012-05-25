@@ -8,6 +8,12 @@ python-distutils-extra (2.32-5) UNRELEASED; urgency=low
       and debhelper overrides are used.
     - No need to generate a build dep on cdbs.
 
+  [ Martin Pitt ]
+  * debian/local/python-mkdebian: For projects using --prefix, install
+    binaries into a .../bin/ subdirectory instead of into the main project
+    directory. This avoids potential name collisions with local Python
+    modules. Thanks to Michael Terry for the patch!
+
  -- Martin Pitt <mpitt@debian.org>  Fri, 25 May 2012 06:47:05 +0200
 
 python-distutils-extra (2.32-4) unstable; urgency=low
