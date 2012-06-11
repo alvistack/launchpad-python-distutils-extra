@@ -351,7 +351,7 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o)
+        self.assertFalse('following files are not recognized' in o, o)
 
         f = self.installed_files()
         self.assertTrue('/usr/share/foo/stuff' in f)
@@ -799,6 +799,21 @@ print ('import iamnota.module')
         self.assertTrue('/usr/share/gnome/help/foo/de/legal.page' in f)
         self.assertTrue('/usr/share/gnome/help/foo/de/figures/mainscreen.png' in f)
 
+    def test_binary_files(self):
+        '''Binary files are ignored'''
+
+        with open(os.path.join(self.src, 'binary_trap'), 'wb') as f:
+            f.write(b'\x00\x01abc\xFF\xFE')
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+        self.assertTrue('following files are not recognized' in o, o)
+        self.assertTrue('\n  binary_trap\n' in o)
+
+        f = self.installed_files()
+        self.assertEqual(len(f), 1, f)
+        self.assertTrue('egg-info' in f[0])
+            
     #
     # helper methods
     #
