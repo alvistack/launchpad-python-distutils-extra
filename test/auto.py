@@ -85,8 +85,8 @@ setup(
     def test_modules(self):
         '''Python modules'''
 
-        self._mksrc('yesme.py')
-        self._mksrc('stuff/notme.py')
+        self._mksrc('yesme.py', b'x ="a\xc3\xa4b\xe2\x99\xa5"'.decode('UTF-8'))
+        self._mksrc('stuff/notme.py', b'x ="a\xc3\xa4b\xe2\x99\xa5"'.decode('UTF-8'))
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
@@ -872,13 +872,12 @@ print ('import iamnota.module')
         dir = os.path.dirname(path)
         if not os.path.isdir(dir):
             os.makedirs(dir)
-        f = open(path, 'w')
-        if content is None:
-            # default content, to spot with diff
-            f.write('dummy')
-        else:
-            f.write(content + '\n')
-        f.close()
+        with open(path, 'wb') as f:
+            if content is None:
+                # default content, to spot with diff
+                f.write(b'dummy')
+            else:
+                f.write((content + '\n').encode('UTF-8'))
 
         if executable:
             os.chmod(path, 0o755)
