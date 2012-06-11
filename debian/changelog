@@ -1,10 +1,10 @@
-python-distutils-extra (2.33-1) UNRELEASED; urgency=low
+python-distutils-extra (2.33-1) unstable; urgency=low
 
   * auto.py: Fix crash when encountering binary files with Python 3.
     (LP: #995653)
   * auto.py: Fix crash when encountering an UTF-8 Python source code file.
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 11 Jun 2012 18:01:18 +0200
+ -- Martin Pitt <mpitt@debian.org>  Mon, 11 Jun 2012 18:14:28 +0200
 
 python-distutils-extra (2.32-5) unstable; urgency=low
 
