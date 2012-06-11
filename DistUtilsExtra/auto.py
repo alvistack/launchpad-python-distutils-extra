@@ -377,7 +377,8 @@ def __add_imports(imports, file, attrs):
         cur_module = None
 
     try:
-        tree = ast.parse(open(file).read(), file)
+        with open(file, 'rb') as f:
+            tree = ast.parse(f.read().decode('UTF-8'), file)
 
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
