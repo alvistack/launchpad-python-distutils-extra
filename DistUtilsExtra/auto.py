@@ -439,8 +439,11 @@ def __requires(attrs, src_all):
             continue
         ext = os.path.splitext(s)[1]
         if ext == '':
-            f = open(s)
-            line = f.readline()
+            try:
+                with open(s) as f:
+                    line = f.readline()
+            except (UnicodeDecodeError, IOError):
+                continue
             if not line.startswith('#!') or 'python' not in line:
                 continue
         elif ext != '.py':
