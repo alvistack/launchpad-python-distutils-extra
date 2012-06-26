@@ -566,14 +566,14 @@ setup(
     def test_ui(self):
         '''GtkBuilder/Qt *.ui'''
 
-        self._mksrc('gtk/test.ui', '''<?xml version="1.0"?>
+        self._mksrc('gtk/test.ui', b'''<?xml version="1.0"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <object class="GtkWindow" id="window1">
-    <property name="title" translatable="yes">yes11</property>
+    <property name="title" translatable="yes">my\xe2\x99\xa5</property>
     <child><placeholder/></child>
   </object>
-</interface>''')
+</interface>'''.decode('UTF-8'))
 
         self._mksrc('gtk/settings.ui', '''<?xml version="1.0"?>
 <interface domain="foobar">

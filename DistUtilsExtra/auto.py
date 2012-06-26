@@ -295,11 +295,11 @@ def __ui(attrs, src):
 
     ui = []
     for f in src_fileglob(src, '*.ui'):
-        fd = open(f)
+        fd = open(f, 'rb')
         firstlines = fd.readline()
-        firstlines += '\n' + fd.readline()
+        firstlines += b'\n' + fd.readline()
         fd.close()
-        if '<interface' in firstlines or '<ui version=' in firstlines:
+        if b'<interface' in firstlines or b'<ui version=' in firstlines:
             src_mark(src, f)
             ui.append(f)
     if ui:
@@ -604,8 +604,8 @@ class build_i18n_auto(build_i18n.build_i18n):
                 files.update(src_fileglob(src_all, '*.policy.in'))
 
                 for f in src_fileglob(src_all, '*.ui'):
-                    contents = open(f).read()
-                    if ('<interface>\n' in contents or '<interface ' in contents) and 'class="Gtk' in contents:
+                    contents = open(f, 'rb').read()
+                    if (b'<interface>\n' in contents or b'<interface ' in contents) and b'class="Gtk' in contents:
                         files.add('[type: gettext/glade]' + f)
 
                 # find extensionless executable scripts which are Python files, and
