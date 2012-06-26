@@ -1,3 +1,10 @@
+python-distutils-extra (2.33-2) UNRELEASED; urgency=low
+
+  * debian/rules: Run Python3 tests under C locale, to expose more unicode
+    errors.
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 26 Jun 2012 07:29:13 +0200
+
 python-distutils-extra (2.33-1) unstable; urgency=low
 
   * auto.py: Fix crash when encountering binary files with Python 3.
