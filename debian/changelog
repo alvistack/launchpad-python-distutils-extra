@@ -1,4 +1,4 @@
-python-distutils-extra (2.34-1) UNRELEASED; urgency=low
+python-distutils-extra (2.34-1) unstable; urgency=low
 
   [ Martin Pitt ]
   * debian/rules: Run Python3 tests under C locale, to expose more unicode
@@ -10,7 +10,7 @@ python-distutils-extra (2.34-1) UNRELEASED; urgency=low
   * auto.py: Fix a regression with python2 if files have some utf-8 directives
     (LP: #1021969)
 
- -- Martin Pitt <mpitt@debian.org>  Tue, 26 Jun 2012 07:29:13 +0200
+ -- Martin Pitt <mpitt@debian.org>  Mon, 09 Jul 2012 11:12:38 +0200
 
 python-distutils-extra (2.33-1) unstable; urgency=low
 
