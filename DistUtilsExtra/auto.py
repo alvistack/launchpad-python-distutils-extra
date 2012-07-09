@@ -378,7 +378,13 @@ def __add_imports(imports, file, attrs):
 
     try:
         with open(file, 'rb') as f:
-            tree = ast.parse(f.read().decode('UTF-8'), file)
+            # send binary blob for python2, otherwise sending an unicode object with
+            # "encoding" directive makes ast triggering an exception in python2
+            if(sys.version_info.major < 3):
+                file_content = f.read()
+            else:
+                file_content = f.read().decode('UTF-8')
+            tree = ast.parse(file_content, file)
 
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
