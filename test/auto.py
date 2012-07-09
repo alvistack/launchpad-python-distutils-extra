@@ -87,6 +87,7 @@ setup(
 
         self._mksrc('yesme.py', b'x ="a\xc3\xa4b\xe2\x99\xa5"'.decode('UTF-8'))
         self._mksrc('stuff/notme.py', b'x ="a\xc3\xa4b\xe2\x99\xa5"'.decode('UTF-8'))
+        self._mksrc('stuff/withencoding.py', b'# -*- Mode: Python; coding: utf-8; -*- \nfoo = 1'.decode('UTF-8'))
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')

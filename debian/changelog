@@ -1,9 +1,14 @@
 python-distutils-extra (2.34-1) UNRELEASED; urgency=low
 
+  [ Martin Pitt ]
   * debian/rules: Run Python3 tests under C locale, to expose more unicode
     errors.
   * auto.py: Fix *.ui detection to be robust for non-ASCII files.
     (LP: #1017468)
+
+  [ Didier Roche ]
+  * auto.py: Fix a regression with python2 if files have some utf-8 directives
+    (LP: #1021969)
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 26 Jun 2012 07:29:13 +0200
 
