@@ -2,6 +2,8 @@ python-distutils-extra (2.35-1) UNRELEASED; urgency=low
 
   * auto.py: Fix printing of unrecognized non-ASCII file names under ASCII
     locales. (LP: #1025031)
+  * auto.py: Fix detection of extensionless Python scripts with non-ASCII
+    characters in the first few lines. (LP: #1025022)
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 18 Jul 2012 14:56:53 +0200
 

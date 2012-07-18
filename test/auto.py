@@ -373,13 +373,14 @@ setup(
         # these should get autoinstalled
         self._mksrc('bin/yell', '#!/bin/sh', True)
         self._mksrc('bin/shout', '#!/bin/sh', True)
-        self._mksrc('bin/foo', '#!/bin/sh', True)
+        self._mksrc('bin/foo', b'#!/usr/bin/python\n# \xc2\xa9 copyright'.decode('UTF-8'), True)
         os.symlink('shout', os.path.join(self.src, 'bin', 'shoutlink'))
 
         # these shouldn't
         self._mksrc('daemon/food', '#!/bin/sh', True) # not in bin/
         self._mksrc('foob', '#!/bin/sh', True) # not named like project
-        self._mksrc('bin/whisper', '#!/bin/sh') # not executable
+        # not executable
+        self._mksrc('bin/whisper', b'#!/usr/bin/python\n# \xc2\xa9 copyright'.decode('UTF-8'))
 
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
