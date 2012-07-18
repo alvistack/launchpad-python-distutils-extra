@@ -39,7 +39,7 @@ author, license, etc.) in ./setup.py.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
 import os, os.path, fnmatch, stat, sys, subprocess
-import ast
+import ast, locale
 import distutils.core
 from functools import reduce
 
@@ -101,8 +101,15 @@ def setup(**attrs):
 
     if src:
         print('WARNING: the following files are not recognized by DistUtilsExtra.auto:')
+        enc = locale.getpreferredencoding()
         for f in sorted(src):
-            print ('  ' + f)
+            # ensure that we can always print the file name
+            if(sys.version_info.major < 3):
+                # hack to make this work with Python 2
+                f_loc = f.decode('ascii', errors='ignore')
+            else:
+                f_loc = f.encode(enc, errors='replace').decode(enc, errors='replace')
+            print ('  ' + f_loc)
 
 #
 # parts of setup()
