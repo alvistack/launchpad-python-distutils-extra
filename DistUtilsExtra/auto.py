@@ -628,8 +628,8 @@ class build_i18n_auto(build_i18n.build_i18n):
                     f_py = f + '.py'
                     if os.access(f, os.X_OK) and os.path.splitext(f)[1] == '' and \
                             not os.path.exists(f_py):
-                        line = open(f).readline()
-                        if line.startswith('#!') and 'python' in line:
+                        line = open(f, 'rb').readline()
+                        if line.startswith(b'#!') and b'python' in line:
                             os.symlink(os.path.basename(f), f_py)
                             files.add(f_py)
                             exe_symlinks.append(f_py)
