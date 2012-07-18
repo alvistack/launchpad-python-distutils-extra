@@ -814,7 +814,26 @@ print ('import iamnota.module')
         f = self.installed_files()
         self.assertEqual(len(f), 1, f)
         self.assertTrue('egg-info' in f[0])
+
+    def test_utf8_filenames(self):
+        '''UTF-8 file names'''
             
+        bin_fname = b'a\xc3\xa4b.bin'.decode('UTF-8')
+        with open(os.path.join(self.src, bin_fname).encode('UTF-8'), 'wb') as f:
+            f.write(b'\x00\x01abc\xFF\xFE')
+
+        (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
+
+        f = self.installed_files()
+        self.assertEqual(len(f), 1, f)
+        self.assertTrue('egg-info' in f[0])
+
+        self.assertTrue('following files are not recognized' in o)
+        # this might not be the correct file name when the locale is e. g. C
+        self.assertTrue('b.bin\n' in o, o)
+
     #
     # helper methods
     #
