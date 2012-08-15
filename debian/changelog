@@ -1,4 +1,4 @@
-python-distutils-extra (2.35-2) UNRELEASED; urgency=low
+python-distutils-extra (2.36-1) UNRELEASED; urgency=low
 
   * debian/rules: Run tests against all supported python 2 and 3 versions.
     This catches bugs with Python 2.6. (Closes: #684967)
@@ -6,6 +6,8 @@ python-distutils-extra (2.35-2) UNRELEASED; urgency=low
     (Closes: #684966)
   * debian/rules: Run tests under LC_ALL=C, to fix FTBFS in cases where
     LC_CTYPE is set explicitly. Thanks Gregor Hermann!
+  * auto.py: Use python 2.6 friendly sys.version_info test. Thanks Salvatore
+    Bonaccorso and Gregor Hermann! (First half of #682631)
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 15 Aug 2012 11:01:24 +0200
 
