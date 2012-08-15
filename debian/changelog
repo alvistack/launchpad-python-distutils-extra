@@ -8,6 +8,8 @@ python-distutils-extra (2.36-1) UNRELEASED; urgency=low
     LC_CTYPE is set explicitly. Thanks Gregor Hermann!
   * auto.py: Use python 2.6 friendly sys.version_info test. Thanks Salvatore
     Bonaccorso and Gregor Hermann! (First half of #682631)
+  * auto.py: Do not call decode() with an "errors" keyword, as this does not
+    yet work with Python 2.6. Thanks Gregor Hermann! (Closes: #682631)
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 15 Aug 2012 11:01:24 +0200
 
