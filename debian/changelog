@@ -1,4 +1,4 @@
-python-distutils-extra (2.36-1) UNRELEASED; urgency=low
+python-distutils-extra (2.36-1) unstable; urgency=low
 
   * debian/rules: Run tests against all supported python 2 and 3 versions.
     This catches bugs with Python 2.6. (Closes: #684967)
@@ -11,7 +11,7 @@ python-distutils-extra (2.36-1) UNRELEASED; urgency=low
   * auto.py: Do not call decode() with an "errors" keyword, as this does not
     yet work with Python 2.6. Thanks Gregor Hermann! (Closes: #682631)
 
- -- Martin Pitt <mpitt@debian.org>  Wed, 15 Aug 2012 11:01:24 +0200
+ -- Martin Pitt <mpitt@debian.org>  Wed, 15 Aug 2012 11:20:58 +0200
 
 python-distutils-extra (2.35-1) unstable; urgency=low
 
