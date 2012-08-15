@@ -25,7 +25,7 @@ ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
 	# run tests with all supported python 2 and 3 versions
 	set -e; for python in `pyversions -s` `py3versions -s`; do \
 	  echo "-- Running tests with $$python ----------------"; \
-	  LC_ALL= LANGUAGE= LANG=C PYTHONPATH=. $$python test/auto.py -v; \
+	  LC_ALL=C LANGUAGE= LANG=C PYTHONPATH=. $$python test/auto.py -v; \
 	done
 endif
 
