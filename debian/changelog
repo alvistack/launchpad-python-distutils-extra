@@ -1,3 +1,10 @@
+python-distutils-extra (2.35-2) UNRELEASED; urgency=low
+
+  * debian/rules: Run tests against all supported python 2 and 3 versions.
+    This catches bugs with Python 2.6. (Closes: #684967)
+
+ -- Martin Pitt <mpitt@debian.org>  Wed, 15 Aug 2012 11:01:24 +0200
+
 python-distutils-extra (2.35-1) unstable; urgency=low
 
   * auto.py: Fix printing of unrecognized non-ASCII file names under ASCII
