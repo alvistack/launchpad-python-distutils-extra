@@ -8,7 +8,6 @@ override_dh_auto_build:
 	set -ex; for python in $(shell py3versions -r); do \
 		$$python setup.py build; \
 	done
-	test/auto.py -v
 
 override_dh_auto_install:
 	dh_auto_install
@@ -21,8 +20,12 @@ override_dh_auto_install:
 	#install -D -m 755 debian/local/python-mkdebian debian/python3-distutils-extra/usr/bin/python3-mkdebian
 	#sed -i 's,^#!/usr/bin/python,#!/usr/bin/python3,' debian/python3-distutils-extra/usr/bin/python3-mkdebian
 
-	# run tests with python3
-	cd test; LC_ALL= LANGUAGE= LANG=C PYTHONPATH=`pwd`/../debian/python3-distutils-extra/usr/lib/python3/dist-packages/ python3 ./auto.py -v
+override_dh_auto_test:
+	# run tests with all supported python 2 and 3 versions
+	set -e; for python in `pyversions -s` `py3versions -s`; do \
+	  echo "-- Running tests with $$python ----------------"; \
+	  LC_ALL= LANGUAGE= LANG=C PYTHONPATH=. $$python test/auto.py -v; \
+	done
 
 override_dh_auto_clean:
 	dh_auto_clean
