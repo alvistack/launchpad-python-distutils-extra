@@ -106,7 +106,7 @@ def setup(**attrs):
             # ensure that we can always print the file name
             if(sys.version_info[0] < 3):
                 # hack to make this work with Python 2
-                f_loc = f.decode('ascii', errors='ignore')
+                f_loc = f.decode('ascii', 'ignore')
             else:
                 f_loc = f.encode(enc, errors='replace').decode(enc, errors='replace')
             print ('  ' + f_loc)
