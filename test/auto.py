@@ -613,7 +613,7 @@ setup(
         '''manpages'''
 
         self._mksrc('man/foo.1', '.TH foo 1 "Jan 01, 1900" "Joe Developer"')
-        self._mksrc('daemon/food.8', '.TH food 8 "Jan 01, 1900" "Joe Developer"')
+        self._mksrc('daemon/food.8', '.\" some comment\n.TH food 8 "Jan 01, 1900" "Joe Developer"')
         self._mksrc('cruft/food.1', '')
         self._mksrc('daemon/notme.s', '.TH food 8 "Jan 01, 1900" "Joe Developer"')
 

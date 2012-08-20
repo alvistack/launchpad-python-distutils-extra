@@ -1,3 +1,11 @@
+python-distutils-extra (2.36-2) UNRELEASED; urgency=low
+
+  * auto.py: Recognize manpages which have comments before the initial .TH
+    comment. Thanks to Dominique Lasserre for the initial patch!
+    (LP: #893337)
+
+ -- Martin Pitt <mpitt@debian.org>  Mon, 20 Aug 2012 09:22:58 +0200
+
 python-distutils-extra (2.36-1) unstable; urgency=low
 
   * debian/rules: Run tests against all supported python 2 and 3 versions.
