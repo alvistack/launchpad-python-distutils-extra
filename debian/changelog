@@ -1,4 +1,4 @@
-python-distutils-extra (2.37-1) UNRELEASED; urgency=low
+python-distutils-extra (2.37-1) unstable; urgency=low
 
   [ Martin Pitt ]
   * auto.py: Recognize manpages which have comments before the initial .TH
@@ -10,7 +10,7 @@ python-distutils-extra (2.37-1) UNRELEASED; urgency=low
     generating the copyright file. Also ignore backup files.
     (LP: #1025491)
 
- -- Martin Pitt <mpitt@debian.org>  Mon, 20 Aug 2012 09:22:58 +0200
+ -- Martin Pitt <mpitt@debian.org>  Mon, 17 Sep 2012 12:47:44 +0200
 
 python-distutils-extra (2.36-1) unstable; urgency=low
 
