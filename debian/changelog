@@ -1,8 +1,14 @@
 python-distutils-extra (2.37-1) UNRELEASED; urgency=low
 
+  [ Martin Pitt ]
   * auto.py: Recognize manpages which have comments before the initial .TH
     comment. Thanks to Dominique Lasserre for the initial patch!
     (LP: #893337)
+
+  [ Andrew Starr-Bochicchio ]
+  * debian/local/python-mkdebian: Handle Glade .ui files correctly when
+    generating the copyright file. Also ignore backup files.
+    (LP: #1025491)
 
  -- Martin Pitt <mpitt@debian.org>  Mon, 20 Aug 2012 09:22:58 +0200
 
