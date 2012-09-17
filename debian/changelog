@@ -1,4 +1,4 @@
-python-distutils-extra (2.36-2) UNRELEASED; urgency=low
+python-distutils-extra (2.37-1) UNRELEASED; urgency=low
 
   * auto.py: Recognize manpages which have comments before the initial .TH
     comment. Thanks to Dominique Lasserre for the initial patch!
