@@ -1,10 +1,14 @@
 python-distutils-extra (2.38-1) UNRELEASED; urgency=low
 
+  [ Jeremy Bicha ]
   * build_help.py: Use yelp-tools style help installation.
     - Help is installed to /usr/share/help/ instead of /usr/share/gnome/help/
     - Delete your .omf files since they are ignored
     - Rename your main docbook help to index.docbook instead of foo.xml
     - Link to help:foo/bar instead of ghelp:foo?bar
+
+  [ Martin Pitt ]
+  * debian/copyright: Fix duplicate Copyright: field.
 
  -- Jeremy Bicha <jbicha@ubuntu.com>  Sat, 20 Jul 2013 12:40:05 -0400
 
