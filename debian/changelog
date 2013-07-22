@@ -1,4 +1,4 @@
-python-distutils-extra (2.38-1) UNRELEASED; urgency=low
+python-distutils-extra (2.38-1) unstable; urgency=low
 
   [ Jeremy Bicha ]
   * build_help.py: Use yelp-tools style help installation.
@@ -11,7 +11,7 @@ python-distutils-extra (2.38-1) UNRELEASED; urgency=low
   * debian/copyright: Fix duplicate Copyright: field.
   * Bump Standards-Version to 3.9.4.
 
- -- Jeremy Bicha <jbicha@ubuntu.com>  Sat, 20 Jul 2013 12:40:05 -0400
+ -- Martin Pitt <mpitt@debian.org>  Mon, 22 Jul 2013 17:46:42 +0200
 
 python-distutils-extra (2.37-1) unstable; urgency=low
 
