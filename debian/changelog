@@ -9,6 +9,7 @@ python-distutils-extra (2.38-1) UNRELEASED; urgency=low
 
   [ Martin Pitt ]
   * debian/copyright: Fix duplicate Copyright: field.
+  * Bump Standards-Version to 3.9.4.
 
  -- Jeremy Bicha <jbicha@ubuntu.com>  Sat, 20 Jul 2013 12:40:05 -0400
 
