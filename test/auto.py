@@ -670,12 +670,11 @@ setup(
     def test_requires_provides(self):
         '''automatic requires/provides'''
 
-        try:
-            __import__('pkg_resources')
-            __import__('httplib2')
-            __import__('gi.repository.GLib')
-        except ImportError:
-            self.fail('You need to have pkg_resources, httplib2, and gi.repository.GLib installed for this test suite to work')
+        for needed_pkg in ['pkg_resources','httplib2','gi.repository.GLib']:
+            try:
+                __import__(needed_pkg)
+            except ImportError:
+                self.fail('You need to have %s installed for this test suite to work' % needed_pkg)
 
         self._mksrc('foo/__init__.py', '')
         self._mksrc('foo/stuff.py', '''import xml.parsers.expat
