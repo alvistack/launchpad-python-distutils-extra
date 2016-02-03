@@ -7,6 +7,7 @@ python-distutils-extra (2.38-2) UNRELEASED; urgency=medium
   * Drop obsolete X-Python-Version.
   * Convert build systemd to pybuild.
   * Bump Standards-Version to 3.9.6.
+  * debian/copyright: Rename field to "Format:".
 
  -- Martin Pitt <mpitt@debian.org>  Wed, 03 Feb 2016 09:29:27 +0100
 
