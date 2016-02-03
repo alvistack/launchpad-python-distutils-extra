@@ -578,6 +578,7 @@ setup(
 </interface>'''.decode('UTF-8'))
 
         self._mksrc('gtk/settings.ui', '''<?xml version="1.0"?>
+<!-- Generated with glade 3.18.3 -->
 <interface domain="foobar">
   <requires lib="gtk+" version="2.16"/>
   <object class="GtkWindow" id="window2">

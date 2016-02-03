@@ -305,6 +305,7 @@ def __ui(attrs, src):
         fd = open(f, 'rb')
         firstlines = fd.readline()
         firstlines += b'\n' + fd.readline()
+        firstlines += b'\n' + fd.readline()
         fd.close()
         if b'<interface' in firstlines or b'<ui version=' in firstlines:
             src_mark(src, f)
