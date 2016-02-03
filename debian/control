@@ -1,7 +1,6 @@
 Source: python-distutils-extra
 Section: python
 Priority: optional
-X-Python-Version: >= 2.6
 Maintainer: Martin Pitt <mpitt@debian.org>
 Uploaders: Sebastian Heinlein <devel@glatzor.de>
 Build-Depends: debhelper (>= 7.0.50~), 
