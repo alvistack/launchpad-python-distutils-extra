@@ -1,24 +1,7 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@ --with python2,python3
-
-override_dh_auto_build:
-	dh_auto_build
-	set -ex; for python in $(shell py3versions -r); do \
-		$$python setup.py build; \
-	done
-
-override_dh_auto_install:
-	dh_auto_install
-	install -D -m 755 debian/local/python-mkdebian debian/python-distutils-extra/usr/bin/python-mkdebian
-
-	# build python3 module
-	set -ex; for python in $(shell py3versions -r); do \
-		$$python setup.py install --root=$(CURDIR)/debian/python3-distutils-extra --install-layout=deb; \
-	done
-	#install -D -m 755 debian/local/python-mkdebian debian/python3-distutils-extra/usr/bin/python3-mkdebian
-	#sed -i 's,^#!/usr/bin/python,#!/usr/bin/python3,' debian/python3-distutils-extra/usr/bin/python3-mkdebian
+	dh $@ --with python2,python3 --buildsystem=pybuild
 
 override_dh_auto_test:
 ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
@@ -29,7 +12,3 @@ ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
 	done
 endif
 
-override_dh_auto_clean:
-	dh_auto_clean
-	rm -rf build
-	rm -rf python_distutils_extra.egg-info
