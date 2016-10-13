@@ -7,6 +7,7 @@ python-distutils-extra (2.40) UNRELEASED; urgency=medium
   * Remove trailing whitespace.
   * Remove obsolete DistUtilsPlus/ from source (was never shipped).
   * Bump dh compat level to 9.
+  * Bump Standards-Version to 3.9.8.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 13 Oct 2016 15:19:43 +0200
 
