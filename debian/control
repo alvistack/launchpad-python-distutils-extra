@@ -1,8 +1,8 @@
 Source: python-distutils-extra
 Section: python
 Priority: optional
-Maintainer: Martin Pitt <mpitt@debian.org>
-Uploaders: Sebastian Heinlein <devel@glatzor.de>
+Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
+Uploaders: Martin Pitt <mpitt@debian.org>, Sebastian Heinlein <devel@glatzor.de>
 Build-Depends: debhelper (>= 7.0.50~),
  dh-python,
  python-all (>= 2.6.6-2~),
