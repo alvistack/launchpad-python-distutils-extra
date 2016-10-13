@@ -4,6 +4,7 @@ python-distutils-extra (2.40) UNRELEASED; urgency=medium
   * Convert to native package, there is no realistic separate upstream for it.
   * Set Maintainer: to Debian Python Modules Team. Keep Sebastian and me as
     uploaders.
+  * Remove trailing whitespace.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 13 Oct 2016 15:19:43 +0200
 
@@ -617,7 +618,7 @@ python-distutils-extra (2.4) unstable; urgency=low
   * auto.py: Ignore manually installed *.ui files (Thanks Severin Heiniger!)
     and manpages.
   * auto.py: Support polkit-1 (determined by checking source code for
-    org.freedesktop.PolicyKit1). 
+    org.freedesktop.PolicyKit1).
 
  -- Martin Pitt <mpitt@debian.org>  Tue, 14 Jul 2009 10:33:03 +0200
 

@@ -16,7 +16,7 @@ class HelpViewer:
             if os.path.exists(viewer):
                 self.command = [viewer, "ghelp:%s" % docu]
                 break
-        
+
     def check(self):
         """check if a viewer is available"""
         if self.command == []:

@@ -126,7 +126,7 @@ WARNING: Intltool will use the values specified from the
                 continue
             for (target, files) in file_set:
                 build_target = os.path.join("build", target)
-                if not os.path.exists(build_target): 
+                if not os.path.exists(build_target):
                     os.makedirs(build_target)
                 files_merged = []
                 for file in files:
@@ -135,13 +135,13 @@ WARNING: Intltool will use the values specified from the
                     else:
                         file_merged = os.path.basename(file)
                     file_merged = os.path.join(build_target, file_merged)
-                    cmd = ["intltool-merge", switch, self.po_dir, file, 
+                    cmd = ["intltool-merge", switch, self.po_dir, file,
                            file_merged]
                     mtime_merged = os.path.exists(file_merged) and \
                                    os.path.getmtime(file_merged) or 0
                     mtime_file = os.path.getmtime(file)
                     if mtime_merged < max_po_mtime or mtime_merged < mtime_file:
-                        # Only build if output is older than input (.po,.in) 
+                        # Only build if output is older than input (.po,.in)
                         self.spawn(cmd)
                     files_merged.append(file_merged)
                 data_files.append((target, files_merged))

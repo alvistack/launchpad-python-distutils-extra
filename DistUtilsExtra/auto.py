@@ -75,7 +75,7 @@ def setup(**attrs):
     # don't install DistUtilsExtra if bundled with a source tarball
     # ignore packaging
     ignore_dirs = ['etc', 'DistUtilsExtra', 'debian']
-    
+
     for f in src.copy():
         for d in ignore_dirs:
             if f.startswith(d + os.path.sep):
@@ -207,7 +207,7 @@ def __dbus(attrs, src):
 
 def __gschema(attrs, src):
     '''Install GSettings schema files'''
-    
+
     v = attrs.setdefault('data_files', [])
     schema_glob = '*.gschema.xml'
     schemas = src_fileglob(src, schema_glob)
@@ -216,8 +216,8 @@ def __gschema(attrs, src):
         src_markglob(src, '*gschemas.compiled')
         v.append(('share/glib-2.0/schemas/', schemas))
 
-def __apport_hooks(attrs, src):      
-    '''Apport hooks'''  
+def __apport_hooks(attrs, src):
+    '''Apport hooks'''
     v = attrs.setdefault('data_files', [])
 
     # files will be copied to /usr/share/apport/package-hooks/
@@ -313,7 +313,7 @@ def __ui(attrs, src):
     if ui:
         assert 'name' in attrs, 'You need to set the "name" property in setup.py'
 
-        attrs.setdefault('data_files', []).append((os.path.join('share', 
+        attrs.setdefault('data_files', []).append((os.path.join('share',
             attrs['name']), ui))
 
 def __manpages(attrs, src):
@@ -358,11 +358,11 @@ def __external_mod(cur_module, module, attrs):
             sys.stderr.write('ERROR: Python module %s not found\n' % module)
             return False
         except ValueError: # weird ctypes case with wintypes
-            return False 
+            return False
         except RuntimeError: # When Gdk can't be initialized
             return False
     except ValueError: # weird ctypes case with wintypes
-        return False 
+        return False
     except RuntimeError: # When Gdk can't be initialized
         return False
 
@@ -425,7 +425,7 @@ def _module_parents(mod):
 
 def __filter_namespace(modules):
     '''Filter out modules which are already covered by a parent module
-    
+
     E. g. this transforms ['os.path', 'os', 'foo.bar.baz', 'foo.bar'] to
     ['os', 'foo.bar'].
     '''
@@ -482,14 +482,14 @@ def __provides(attrs, src_all):
     for p in attrs.get('packages', []):
         provides.append(p.replace(os.path.sep, '.'))
     attrs['provides'] = __filter_namespace(provides)
- 
+
 #
 # helper functions
 #
 
 def src_find(attrs):
     '''Find source files.
-    
+
     This ignores all source files which are explicitly specified as setup()
     arguments.
     '''
@@ -518,7 +518,7 @@ def src_find(attrs):
             # po/*.po is taken care of by build_i18n
             if root == 'po' and (ext == '.po' or f == 'POTFILES.in'):
                 continue
-            
+
             path = os.path.join(root, f)
             if path not in explicit:
                 src.add(path)
@@ -554,7 +554,7 @@ class build_help_auto(build_help.build_help):
     def finalize_options(self):
         build_help.build_help.finalize_options(self)
         global src
-        
+
         for data_set in self.get_data_files():
             for filepath in data_set[1]:
                 src.remove(filepath)
@@ -602,7 +602,7 @@ class build_i18n_auto(build_i18n.build_i18n):
         if notify_files:
             df.append(('share/kde4/apps/' + self.distribution.get_name(), notify_files))
         self.desktop_files = repr(df)
-        
+
         # mark PO template as known to handle
         try:
             src_mark(src, os.path.join(self.po_dir, self.distribution.get_name() + '.pot'))
@@ -669,36 +669,36 @@ class build_i18n_auto(build_i18n.build_i18n):
 
 class sdist_auto(distutils.command.sdist.sdist):
     '''Default values for the 'sdist' command.
-    
+
     Replace the manually maintained MANIFEST.in file by providing information
     about what the source tarball created using the 'sdist' command should
     contain in normal cases.
-    
+
     It prevents the 'build' directory, version control related files, as well as
     compiled Python and gettext files and temporary files from being included in
     the source tarball.
-    
+
     It's possible for subclasses to extend the 'filter_prefix' and
     'filter_suffix' properties.
     '''
     filter_prefix = ['build', '.git', '.svn', '.CVS', '.bzr', '.shelf']
     filter_suffix = ['.pyc', '.mo', '~', '.swp']
-    
+
     def add_defaults(self):
         distutils.command.sdist.sdist.add_defaults(self)
-        
+
         if os.path.exists('MANIFEST.in'):
             return
 
         self.filter_prefix.append(os.path.join('dist',
             self.distribution.get_name()))
-        
+
         for f in distutils.filelist.findall():
             if f in self.filelist.files or \
                 any(map(f.startswith, self.filter_prefix)) or \
                 any(map(f.endswith, self.filter_suffix)):
                 continue
-            
+
             self.filelist.append(f)
 
 #

@@ -46,7 +46,7 @@ def get_egg_info():
         shutil.rmtree(instdir)
 
 def make_debian(egg, force_control, changelog, additional_dependencies,
-                distribution, use_old_changelog, force_copyright, 
+                distribution, use_old_changelog, force_copyright,
                 force_rules, prefix):
     '''Create/update debian/* from information in egg dictionary'''
 
@@ -61,12 +61,12 @@ def make_debian(egg, force_control, changelog, additional_dependencies,
     prefix_string = ''
     if prefix:
         prefix_string = '''override_dh_auto_install:
-	dh_auto_install -- --install-scripts=%s/bin \
+        dh_auto_install -- --install-scripts=%s/bin \
                 --install-data=%s \
                 --install-lib=%s
 
 override_dh_python2:
-	dh_python2 %s
+        dh_python2 %s
 ''' % (prefix, prefix, prefix, prefix)
 
     if not os.path.exists('debian/rules') or force_rules:
@@ -74,9 +74,9 @@ override_dh_python2:
         f.write('''#!/usr/bin/make -f
 %%:
 ifneq ($(shell dh -l | grep -xF translations),)
-	dh $@ --with python2,translations
+        dh $@ --with python2,translations
 else
-	dh $@ --with python2
+        dh $@ --with python2
 endif
 
 %s
@@ -143,10 +143,10 @@ def make_control(egg, force_control, additional_dependencies):
             print p
         else:
             print '[not found]'
- 
+
     # calculate extra build dependencies
     bdeps = ''
-    if subprocess.call('find -name "*.ui" | xargs grep -q \'<widget class="K\'', 
+    if subprocess.call('find -name "*.ui" | xargs grep -q \'<widget class="K\'',
             shell=True) == 0:
         print 'Package uses KDE *.ui files, adding python-kde4-dev build dependency'
         bdeps += ',\n python-kde4-dev'
@@ -243,7 +243,7 @@ def make_changelog(egg, changelog, distribution, use_old_changelog):
         if not changelog:
             changelog = ['Initial release.']
         try:
-            command.extend(['--create', '--package', egg['Name'], 
+            command.extend(['--create', '--package', egg['Name'],
                 '-v' + egg['Version'], changelog[0]])
             assert subprocess.call(command) == 0
         except OSError, e:
@@ -301,7 +301,7 @@ def mod2package(module):
         module_name = module_name[:-1]
 
     # bigger hammer: dpkg -S for compiled extensions
-    dpkg = subprocess.Popen(['dpkg', '-S', '*/%s.so' % module.replace('.', '/')], 
+    dpkg = subprocess.Popen(['dpkg', '-S', '*/%s.so' % module.replace('.', '/')],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = dpkg.communicate()[0]
     pkgs = set()

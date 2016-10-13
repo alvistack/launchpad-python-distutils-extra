@@ -3,7 +3,7 @@
 Implement DistutilsExtra's 'build_icons' command.
 """
 
-# Created by Sebastian Heinlein 
+# Created by Sebastian Heinlein
 
 __revision__ = "$Id$"
 

@@ -193,12 +193,12 @@ def add_info(report):
 
         (o, e, s) = self.do_install()
         self.assertFalse('following files are not recognized' in o, o)
-        
+
         f = self.installed_files()
         self.assertEqual(len(f), 3, f) # 2 hook files plus .egg-info
         self.assertTrue('/usr/share/apport/package-hooks/foo.py' in f, f)
         self.assertTrue('/usr/share/apport/package-hooks/source_foo.py' in f, f)
-        
+
     def test_po(self):
         '''gettext *.po files'''
 
@@ -299,7 +299,7 @@ Exec=/bin/foosettings''')
 
         # test broken symlink, too
         os.mkdir(os.path.join(scalable_icon_path, 'mimetypes'))
-        os.symlink('../apps/foo.svg', 
+        os.symlink('../apps/foo.svg',
                 os.path.join(scalable_icon_path, 'mimetypes', 'text-x-foo.svg'))
 
         (o, e, s) = self.do_install()
@@ -311,9 +311,9 @@ Exec=/bin/foosettings''')
         self.assertTrue('/usr/share/icons/hicolor/scalable/actions/press.png' in f)
         self.assertTrue('/usr/share/icons/hicolor/scalable/actions/crunch.png' in f)
         self.assertTrue('/usr/share/icons/hicolor/48x48/apps/foo.png' in f)
-        self.assertTrue(os.path.islink(os.path.join(self.install_tree, 
+        self.assertTrue(os.path.islink(os.path.join(self.install_tree,
            'usr/share/icons/hicolor/scalable/actions/crunch.png')))
-        self.assertTrue(os.path.islink(os.path.join(self.install_tree, 
+        self.assertTrue(os.path.islink(os.path.join(self.install_tree,
            'usr/share/icons/hicolor/scalable/mimetypes/text-x-foo.svg')))
 
     def test_data(self):
@@ -451,7 +451,7 @@ gui/foo.desktop.in
 
         self.assertFalse('msgid "no"' in pot)
         for i in range(2, 15):
-            self.assertTrue('msgid "yes%i' % i in pot or 
+            self.assertTrue('msgid "yes%i' % i in pot or
                    'msgid ""\n"yes%i' % i in pot,
                    'yes%i' % i)
         # above loop would match yes11 to yes1 as well, so test it explicitly
@@ -493,7 +493,7 @@ setup(
 
         self.assertFalse('msgid "no"' in pot)
         for i in range(2, 18):
-            self.assertTrue('msgid "yes%i' % i in pot or 
+            self.assertTrue('msgid "yes%i' % i in pot or
                    'msgid ""\n"yes%i' % i in pot,
                    'yes%i' % i)
         # above loop would match yes11 to yes1 as well, so test it explicitly
@@ -547,7 +547,7 @@ setup(
                 'backend/food', 'backend/com.example.foo.service',
                 'gtk/main.glade', 'dist/extra.tar.gz']
         bad = ['po/de.mo', '.helpers.py.swp', '.bzr/index', '.svn/index',
-               '.git/index', 'bin/foo~', 'backend/foo.pyc', 
+               '.git/index', 'bin/foo~', 'backend/foo.pyc',
                'dist/foo-0.1.tar.gz', '.shelf/1', '.bzr/revs', '.git/config']
 
         for f in good + bad:
@@ -662,7 +662,7 @@ setup(
             'cron.weekly', 'foo')))
 
         # check that we can install again into the same source tree
-        (o, e, s) = self.setup_py(['install', '--no-compile', '--prefix=/usr', 
+        (o, e, s) = self.setup_py(['install', '--no-compile', '--prefix=/usr',
             '--root=' + self.install_tree])
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
@@ -813,7 +813,7 @@ print ('import iamnota.module')
 
     def test_utf8_filenames(self):
         '''UTF-8 file names'''
-            
+
         bin_fname = b'a\xc3\xa4b.bin'.decode('UTF-8')
         with open(os.path.join(self.src, bin_fname).encode('UTF-8'), 'wb') as f:
             f.write(b'\x00\x01abc\xFF\xFE')
@@ -867,7 +867,7 @@ print ('import iamnota.module')
         '''
         self.install_tree = tempfile.mkdtemp()
 
-        return self.setup_py(['install', '--no-compile', '--prefix=/usr', 
+        return self.setup_py(['install', '--no-compile', '--prefix=/usr',
             '--root=' + self.install_tree])
 
     def installed_files(self):
@@ -935,7 +935,7 @@ msgid "Hello"
 msgstr "Hallo"''')
         self._mksrc('po/fr.po', '''msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\\n"
-        
+
 msgid "Good morning"
 msgstr "Bonjour"''')
 

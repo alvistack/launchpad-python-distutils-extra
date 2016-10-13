@@ -27,8 +27,8 @@ XB-Python-Version: ${python:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, intltool
 Suggests: devscripts
 Description: enhancements to the Python build system
- This package provides additional functions to Python's distutils and 
- setuptools. It allows you to easily integrate gettext, icons and GNOME 
+ This package provides additional functions to Python's distutils and
+ setuptools. It allows you to easily integrate gettext, icons and GNOME
  documentation into your build and installation process.
  .
  It also provides an "auto" module which provides a "do what I mean" automatic
@@ -41,8 +41,8 @@ Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, intltool
 Suggests: devscripts
 Description: enhancements to the Python3 build system
- This package provides additional functions to Python's distutils and 
- setuptools. It allows you to easily integrate gettext, icons and GNOME 
+ This package provides additional functions to Python's distutils and
+ setuptools. It allows you to easily integrate gettext, icons and GNOME
  documentation into your build and installation process.
  .
  It also provides an "auto" module which provides a "do what I mean" automatic
