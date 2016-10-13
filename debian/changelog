@@ -1,3 +1,9 @@
+python-distutils-extra (2.40) UNRELEASED; urgency=medium
+
+  * Move package from bzr to git. Adjust Vcs-* accordingly.
+
+ -- Martin Pitt <mpitt@debian.org>  Thu, 13 Oct 2016 15:19:43 +0200
+
 python-distutils-extra (2.39-1) unstable; urgency=medium
 
   * test/auto.py: Show exactly which modules are missing. Thanks Daniel Macks!
