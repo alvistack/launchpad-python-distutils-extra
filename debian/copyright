@@ -1,7 +1,4 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: python-distutils-extra
-Upstream-Contact: Martin Pitt <mpitt@debian.org>
-Source: https://launchpad.net/python-distutils-extra
 
 Files: *
 Copyright:

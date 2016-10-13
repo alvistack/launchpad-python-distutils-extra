@@ -1,6 +1,7 @@
 python-distutils-extra (2.40) UNRELEASED; urgency=medium
 
   * Move package from bzr to git. Adjust Vcs-* accordingly.
+  * Convert to native package, there is no realistic separate upstream for it.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 13 Oct 2016 15:19:43 +0200
 
