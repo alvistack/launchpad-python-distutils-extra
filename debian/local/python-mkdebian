@@ -100,7 +100,7 @@ def make_copyright(egg):
         author += ' <' + egg['Author-email'] + '>'
 
     f = open('debian/copyright', 'w')
-    f.write('''Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+    f.write('''Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: %s
 Upstream-Contact: %s
 ''' % (egg['Name'], author))
