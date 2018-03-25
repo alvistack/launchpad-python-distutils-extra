@@ -1,3 +1,12 @@
+python-distutils-extra (2.41) unstable; urgency=medium
+
+  * Update Vcs-* for the move to salsa.debian.org
+  * Bump debhelper compat level to 10
+  * debian/copyright: Use https:// format URL
+  * Bump Standards-Version to 4.1.3
+
+ -- Martin Pitt <mpitt@debian.org>  Sun, 25 Mar 2018 21:22:32 +0200
+
 python-distutils-extra (2.40) unstable; urgency=medium
 
   * Move package from bzr to git. Adjust Vcs-* accordingly.
