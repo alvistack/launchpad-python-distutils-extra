@@ -1,3 +1,9 @@
+python-distutils-extra (2.42) UNRELEASED; urgency=medium
+
+  * Remove debian/pycompat, it's not used by any modern Python helper
+
+ -- Ondřej Nový <onovy@debian.org>  Mon, 01 Oct 2018 10:12:12 +0200
+
 python-distutils-extra (2.41) unstable; urgency=medium
 
   * Update Vcs-* for the move to salsa.debian.org
