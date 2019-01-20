@@ -366,7 +366,7 @@ def __external_mod(cur_module, module, attrs):
     except RuntimeError: # When Gdk can't be initialized
         return False
 
-    if not hasattr(mod, '__file__'):
+    if not hasattr(mod, '__file__') or not mod.__file__:
         # builtin module
         return False
 

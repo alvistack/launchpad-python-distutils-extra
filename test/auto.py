@@ -181,17 +181,19 @@ Exec=/usr/bin/foo-gtk
     def test_apport_hook(self):
         '''Apport hooks'''
 
-        self._mksrc('apport/foo.py', '''import os, apport
+        self._mksrc('apport/foo.py', '''import os
 def add_info(report):
     pass
 ''')
 
-        self._mksrc('apport/source_foo.py', '''import os, apport
+        self._mksrc('apport/source_foo.py', '''import os
 def add_info(report):
     pass
 ''')
 
         (o, e, s) = self.do_install()
+        self.assertEqual(e, '')
+        self.assertEqual(s, 0)
         self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
