@@ -1,8 +1,31 @@
-python-distutils-extra (2.42) UNRELEASED; urgency=medium
+python-distutils-extra (2.42) unstable; urgency=medium
 
+  [ Ondřej Nový ]
   * Remove debian/pycompat, it's not used by any modern Python helper
 
- -- Ondřej Nový <onovy@debian.org>  Mon, 01 Oct 2018 10:12:12 +0200
+  [ Helmut Grohne ]
+  * Mark all packages Multi-Arch: foreign (Closes: #912859)
+
+  [ Matthias Klose ]
+  * python3-distutils-extra: Depend on python3-distutils (Closes: #894897)
+
+  [ Martin Pitt ]
+  * Bump Standards-Version to 4.3.0.  No changes necessary.
+  * test/auto.py: Use modern assertions
+  * Adjust dependency calculation for Python 3.7.
+    For builtin modules, their __file__ attribute is now None instead of
+    absent.
+    Make the `test/auto.py T.test_apport_hook` stricter and fail more
+    usefully. (Closes: #909992)
+  * Fix pyflakes3 errors and check it during build
+  * Add autopkgtest.
+    This re-uses the upstream tests, but runs them against the
+    system-installed module.
+  * Add missing python-pkg-resources dependency.
+    Spotted by autopkgtest.
+  * python-mkdebian: Fix output of tab instead of spaces (Closes: #862182)
+
+ -- Martin Pitt <mpitt@debian.org>  Sun, 20 Jan 2019 11:18:36 +0000
 
 python-distutils-extra (2.41) unstable; urgency=medium
 
