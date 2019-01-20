@@ -2,7 +2,11 @@
 
 # test DistUtilsExtra.auto
 
-import unittest, shutil, tempfile, os, os.path, subprocess, re
+import unittest
+import shutil
+import tempfile
+import os
+import subprocess
 
 class T(unittest.TestCase):
     def setUp(self):

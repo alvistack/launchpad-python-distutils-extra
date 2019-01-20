@@ -38,13 +38,18 @@ author, license, etc.) in ./setup.py.
 # (c) 2009 Canonical Ltd.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
-import os, os.path, fnmatch, stat, sys, subprocess
-import ast, locale
+import os
+import fnmatch
+import stat
+import sys
+import ast
+import locale
+
 import distutils.core
 from functools import reduce
 
 from DistUtilsExtra import __version__ as __pkgversion
-from DistUtilsExtra.command import *
+from DistUtilsExtra.command import build_extra, build_icons, build_help, build_i18n, pylint
 import distutils.dir_util
 import distutils.command.clean
 import distutils.command.sdist
@@ -240,7 +245,6 @@ def __data(attrs, src):
 
     assert 'name' in attrs, 'You need to set the "name" property in setup.py'
 
-    data_files = []
     for f in src.copy():
         if f.startswith('data/') and not f.startswith('data/icons/') and \
                 not f.endswith('.desktop.in') and not f.endswith('.notifyrc.in'):

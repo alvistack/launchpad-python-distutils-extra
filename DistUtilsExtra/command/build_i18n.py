@@ -2,12 +2,10 @@
 
 Implements the Distutils 'build_i18n' command."""
 
-import distutils
 import glob
 import os
-import os.path
-import re
-import sys
+
+import distutils
 import distutils.command.build
 
 class build_i18n(distutils.cmd.Command):

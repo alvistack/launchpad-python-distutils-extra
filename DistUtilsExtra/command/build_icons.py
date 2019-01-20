@@ -5,14 +5,10 @@ Implement DistutilsExtra's 'build_icons' command.
 
 # Created by Sebastian Heinlein
 
-__revision__ = "$Id$"
-
-import distutils
 import glob
 import os
-import os.path
-import re
-import sys
+
+import distutils
 import distutils.command.build
 
 class build_icons(distutils.cmd.Command):

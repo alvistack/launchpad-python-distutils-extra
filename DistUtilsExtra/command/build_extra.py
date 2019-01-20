@@ -1,9 +1,4 @@
 import distutils
-import glob
-import os
-import os.path
-import re
-import sys
 import distutils.command.build
 
 class build_extra(distutils.command.build.build):
