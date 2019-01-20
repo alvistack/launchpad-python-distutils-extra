@@ -26,7 +26,11 @@ Package: python-distutils-extra
 Architecture: all
 Multi-Arch: foreign
 XB-Python-Version: ${python:Versions}
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, intltool
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ ${python:Depends},
+ intltool,
+ python-pkg-resources,
 Suggests: devscripts
 Description: enhancements to the Python build system
  This package provides additional functions to Python's distutils and
@@ -41,7 +45,12 @@ Description: enhancements to the Python build system
 Package: python3-distutils-extra
 Architecture: all
 Multi-Arch: foreign
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, intltool, python3-distutils
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ ${python3:Depends},
+ intltool,
+ python3-distutils,
+ python3-pkg-resources,
 Suggests: devscripts
 Description: enhancements to the Python3 build system
  This package provides additional functions to Python's distutils and
