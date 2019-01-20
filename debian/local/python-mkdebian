@@ -74,9 +74,9 @@ override_dh_python2:
         f.write('''#!/usr/bin/make -f
 %%:
 ifneq ($(shell dh -l | grep -xF translations),)
-        dh $@ --with python2,translations
+\tdh $@ --with python2,translations
 else
-        dh $@ --with python2
+\tdh $@ --with python2
 endif
 
 %s
