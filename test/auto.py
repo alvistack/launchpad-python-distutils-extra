@@ -57,7 +57,7 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o)
+        self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
         # just installs the .egg_info
@@ -75,7 +75,7 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o)
+        self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
         # just installs the .egg_info
@@ -92,12 +92,12 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o)
-        self.assertTrue('\n  stuff/notme.py\n' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  stuff/notme.py\n', o)
 
         f = '\n'.join(self.installed_files())
-        self.assertTrue('-packages/yesme.py' in f)
-        self.assertFalse('notme' in f)
+        self.assertIn('-packages/yesme.py', f)
+        self.assertNotIn('notme', f)
 
     def test_packages(self):
         '''Python packages'''
@@ -110,13 +110,13 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o)
-        self.assertTrue('\n  noinit/notme.py\n' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  noinit/notme.py\n', o)
 
         f = '\n'.join(self.installed_files())
-        self.assertTrue('foopkg/__init__.py' in f)
-        self.assertTrue('foopkg/bar.py' in f)
-        self.assertFalse('noinit' in f)
+        self.assertIn('foopkg/__init__.py', f)
+        self.assertIn('foopkg/bar.py', f)
+        self.assertNotIn('noinit', f)
 
     def test_dbus(self):
         '''D-BUS configuration and service files'''
@@ -149,15 +149,15 @@ Exec=/usr/bin/foo-gtk
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o)
-        self.assertTrue('\n  stuff/super.service\n' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  stuff/super.service\n', o)
 
         f = self.installed_files()
         self.assertEqual(len(f), 4) # 3 D-BUS files plus .egg-info
-        self.assertTrue('/etc/dbus-1/system.d/com.example.foo.conf' in f)
-        self.assertTrue('/usr/share/dbus-1/system-services/com.example.foo.service' in f)
-        self.assertTrue('/usr/share/dbus-1/services/com.example.foo.gui.service' in f)
-        self.assertFalse('super.service' in '\n'.join(f))
+        self.assertIn('/etc/dbus-1/system.d/com.example.foo.conf', f)
+        self.assertIn('/usr/share/dbus-1/system-services/com.example.foo.service', f)
+        self.assertIn('/usr/share/dbus-1/services/com.example.foo.gui.service', f)
+        self.assertNotIn('super.service', '\n'.join(f))
 
     def test_gsettings(self):
         '''GSettings schema files'''
@@ -175,8 +175,8 @@ Exec=/usr/bin/foo-gtk
 
         f = self.installed_files()
         self.assertEqual(len(f), 3) # 2 schema files plus .egg-info
-        self.assertTrue('/usr/share/glib-2.0/schemas/org.test.myapp.gschema.xml' in f)
-        self.assertFalse('gschemas.compiled' in '\n'.join(f))
+        self.assertIn('/usr/share/glib-2.0/schemas/org.test.myapp.gschema.xml', f)
+        self.assertNotIn('gschemas.compiled', '\n'.join(f))
 
     def test_apport_hook(self):
         '''Apport hooks'''
@@ -192,12 +192,12 @@ def add_info(report):
 ''')
 
         (o, e, s) = self.do_install()
-        self.assertFalse('following files are not recognized' in o, o)
+        self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
         self.assertEqual(len(f), 3, f) # 2 hook files plus .egg-info
-        self.assertTrue('/usr/share/apport/package-hooks/foo.py' in f, f)
-        self.assertTrue('/usr/share/apport/package-hooks/source_foo.py' in f, f)
+        self.assertIn('/usr/share/apport/package-hooks/foo.py', f)
+        self.assertIn('/usr/share/apport/package-hooks/source_foo.py', f)
 
     def test_po(self):
         '''gettext *.po files'''
@@ -207,11 +207,11 @@ def add_info(report):
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o)
+        self.assertNotIn('following files are not recognized', o)
         f = self.installed_files()
-        self.assertTrue('/usr/share/locale/de/LC_MESSAGES/foo.mo' in f)
-        self.assertTrue('/usr/share/locale/fr/LC_MESSAGES/foo.mo' in f)
-        self.assertFalse('junk' in '\n'.join(f))
+        self.assertIn('/usr/share/locale/de/LC_MESSAGES/foo.mo', f)
+        self.assertIn('/usr/share/locale/fr/LC_MESSAGES/foo.mo', f)
+        self.assertNotIn('junk', '\n'.join(f))
 
         msgunfmt = subprocess.Popen(['msgunfmt',
             os.path.join(self.install_tree,
@@ -244,15 +244,15 @@ def add_info(report):
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o)
+        self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/polkit-1/actions/com.example.foo.policy' in f)
+        self.assertIn('/usr/share/polkit-1/actions/com.example.foo.policy', f)
         p = self._installed_contents('usr/share/polkit-1/actions/com.example.foo.policy')
-        self.assertTrue('<description>Good morning</description>' in p)
-        self.assertTrue('<description xml:lang="de">Guten Morgen</description>' in p)
-        self.assertTrue('<message>Hello</message>' in p)
-        self.assertTrue('<message xml:lang="de">Hallo</message>' in p)
+        self.assertIn('<description>Good morning</description>', p)
+        self.assertIn('<description xml:lang="de">Guten Morgen</description>', p)
+        self.assertIn('<message>Hello</message>', p)
+        self.assertIn('<message xml:lang="de">Hallo</message>', p)
 
     def test_desktop(self):
         '''*.desktop.in files'''
@@ -274,19 +274,19 @@ Exec=/bin/foosettings''')
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o)
+        self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/autostart/fooapplet.desktop' in f)
-        self.assertTrue('/usr/share/applications/foogtk.desktop' in f)
-        self.assertTrue('/usr/share/applications/foosettings.desktop' in f)
+        self.assertIn('/usr/share/autostart/fooapplet.desktop', f)
+        self.assertIn('/usr/share/applications/foogtk.desktop', f)
+        self.assertIn('/usr/share/applications/foosettings.desktop', f)
         # data/*.desktop.in shouldn't go to data dir
-        self.assertFalse('/usr/share/foo/' in f)
+        self.assertNotIn('/usr/share/foo/', f)
 
         p = self._installed_contents('usr/share/autostart/fooapplet.desktop')
-        self.assertTrue('\nName=Hello\n' in p)
-        self.assertTrue('\nName[de]=Hallo\n' in p)
-        self.assertTrue('\nComment[fr]=Bonjour\n' in p)
+        self.assertIn('\nName=Hello\n', p)
+        self.assertIn('\nName[de]=Hallo\n', p)
+        self.assertIn('\nComment[fr]=Bonjour\n', p)
 
     def test_icons(self):
         '''data/icons/'''
@@ -305,12 +305,12 @@ Exec=/bin/foosettings''')
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o)
+        self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/icons/hicolor/scalable/actions/press.png' in f)
-        self.assertTrue('/usr/share/icons/hicolor/scalable/actions/crunch.png' in f)
-        self.assertTrue('/usr/share/icons/hicolor/48x48/apps/foo.png' in f)
+        self.assertIn('/usr/share/icons/hicolor/scalable/actions/press.png', f)
+        self.assertIn('/usr/share/icons/hicolor/scalable/actions/crunch.png', f)
+        self.assertIn('/usr/share/icons/hicolor/48x48/apps/foo.png', f)
         self.assertTrue(os.path.islink(os.path.join(self.install_tree,
            'usr/share/icons/hicolor/scalable/actions/crunch.png')))
         self.assertTrue(os.path.islink(os.path.join(self.install_tree,
@@ -352,20 +352,20 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o, o)
+        self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/foo/stuff' in f)
-        self.assertTrue('/usr/share/foo/stufflink' in f)
+        self.assertIn('/usr/share/foo/stuff', f)
+        self.assertIn('/usr/share/foo/stufflink', f)
         self.assertTrue(os.path.islink(os.path.join(self.install_tree, 'usr',
             'share', 'foo', 'stufflink')))
-        self.assertTrue('/usr/share/foo/handlers/red.py' in f)
-        self.assertTrue('/usr/share/foo/handlers/blue.py' in f)
-        self.assertTrue('/lib/udev/rules.d/40-foo.rules' in f)
-        self.assertTrue('/etc/foo/blob1.conf' in f)
-        self.assertTrue('/etc/foo/blob2.conf' in f)
-        self.assertFalse('/usr/share/foo/blob1.conf' in f)
-        self.assertFalse('/usr/share/foo/40-foo.rules' in f)
+        self.assertIn('/usr/share/foo/handlers/red.py', f)
+        self.assertIn('/usr/share/foo/handlers/blue.py', f)
+        self.assertIn('/lib/udev/rules.d/40-foo.rules', f)
+        self.assertIn('/etc/foo/blob1.conf', f)
+        self.assertIn('/etc/foo/blob2.conf', f)
+        self.assertNotIn('/usr/share/foo/blob1.conf', f)
+        self.assertNotIn('/usr/share/foo/40-foo.rules', f)
 
     def test_scripts(self):
         '''scripts'''
@@ -385,22 +385,22 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o)
-        self.assertTrue('\n  foob' in o)
-        self.assertTrue('\n  bin/whisper' in o)
-        self.assertTrue('\n  daemon/food' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  foob', o)
+        self.assertIn('\n  bin/whisper', o)
+        self.assertIn('\n  daemon/food', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/bin/yell' in f)
-        self.assertTrue('/usr/bin/shout' in f)
-        self.assertTrue('/usr/bin/shoutlink' in f)
+        self.assertIn('/usr/bin/yell', f)
+        self.assertIn('/usr/bin/shout', f)
+        self.assertIn('/usr/bin/shoutlink', f)
         self.assertTrue(os.path.islink(os.path.join(self.install_tree, 'usr',
             'bin', 'shoutlink')))
-        self.assertTrue('/usr/bin/foo' in f)
+        self.assertIn('/usr/bin/foo', f)
         ftext = '\n'.join(f)
-        self.assertFalse('food' in ftext)
-        self.assertFalse('foob' in ftext)
-        self.assertFalse('whisper' in ftext)
+        self.assertNotIn('food', ftext)
+        self.assertNotIn('foob', ftext)
+        self.assertNotIn('whisper', ftext)
 
         # verify that they are executable
         binpath = os.path.join(self.install_tree, 'usr', 'bin')
@@ -423,18 +423,18 @@ gui/foo.desktop.in
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
         # POT file should not be shown as not recognized
-        self.assertFalse('\n  po/foo.pot\n' in o)
+        self.assertNotIn('\n  po/foo.pot\n', o)
 
         pot = self._src_contents('po/foo.pot')
 
-        self.assertFalse('msgid "no"' in pot)
-        self.assertTrue('msgid "yes1"' in pot)
-        self.assertTrue('msgid "yes2 %s"' in pot)
-        self.assertFalse('msgid "yes5"' in pot) # we didn't add helpers.py
-        self.assertTrue('msgid "yes7"' in pot) # we did include the desktop file
-        self.assertFalse('msgid "yes5"' in pot) # we didn't add helpers.py
-        self.assertTrue('msgid "yes11"' in pot) # we added one GTKBuilder file
-        self.assertFalse('msgid "yes12"' in pot) # ... but not the other
+        self.assertNotIn('msgid "no"', pot)
+        self.assertIn('msgid "yes1"', pot)
+        self.assertIn('msgid "yes2 %s"', pot)
+        self.assertNotIn('msgid "yes5"', pot) # we didn't add helpers.py
+        self.assertIn('msgid "yes7"', pot) # we did include the desktop file
+        self.assertNotIn('msgid "yes5"', pot) # we didn't add helpers.py
+        self.assertIn('msgid "yes11"', pot) # we added one GTKBuilder file
+        self.assertNotIn('msgid "yes12"', pot) # ... but not the other
 
     def test_pot_auto(self):
         '''PO template creation with automatic POTFILES.in'''
@@ -445,17 +445,17 @@ gui/foo.desktop.in
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
         # POT file should not be shown as not recognized
-        self.assertFalse('\n  po/foo.pot\n' in o)
+        self.assertNotIn('\n  po/foo.pot\n', o)
 
         pot = self._src_contents('po/foo.pot')
 
-        self.assertFalse('msgid "no"' in pot)
+        self.assertNotIn('msgid "no"', pot)
         for i in range(2, 15):
             self.assertTrue('msgid "yes%i' % i in pot or
                    'msgid ""\n"yes%i' % i in pot,
                    'yes%i' % i)
         # above loop would match yes11 to yes1 as well, so test it explicitly
-        self.assertTrue('msgid "yes1"' in pot)
+        self.assertIn('msgid "yes1"', pot)
 
     def test_pot_auto_explicit(self):
         '''PO template creation with automatic POTFILES.in and explicit scripts'''
@@ -487,17 +487,17 @@ setup(
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
         # POT file should not be shown as not recognized
-        self.assertFalse('\n  po/foo.pot\n' in o)
+        self.assertNotIn('\n  po/foo.pot\n', o)
 
         pot = self._src_contents('po/foo.pot')
 
-        self.assertFalse('msgid "no"' in pot)
+        self.assertNotIn('msgid "no"', pot)
         for i in range(2, 18):
             self.assertTrue('msgid "yes%i' % i in pot or
                    'msgid ""\n"yes%i' % i in pot,
                    'yes%i' % i)
         # above loop would match yes11 to yes1 as well, so test it explicitly
-        self.assertTrue('msgid "yes1"' in pot)
+        self.assertIn('msgid "yes1"', pot)
 
     def test_standard_files(self):
         '''Standard files (MANIFEST.in, COPYING, etc.)'''
@@ -515,17 +515,17 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o, o)
+        self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/doc/foo/README.txt' in f)
-        self.assertTrue('/usr/share/doc/foo/NEWS' in f)
+        self.assertIn('/usr/share/doc/foo/README.txt', f)
+        self.assertIn('/usr/share/doc/foo/NEWS', f)
         ftext = '\n'.join(f)
-        self.assertFalse('MANIFEST' in ftext)
-        self.assertFalse('COPYING' in ftext)
-        self.assertFalse('COPYING' in ftext)
-        self.assertFalse('AUTHORS' in ftext)
-        self.assertFalse('TODO' in ftext)
+        self.assertNotIn('MANIFEST', ftext)
+        self.assertNotIn('COPYING', ftext)
+        self.assertNotIn('COPYING', ftext)
+        self.assertNotIn('AUTHORS', ftext)
+        self.assertNotIn('TODO', ftext)
 
         # sub-dir READMEs shouldn't be installed by default
         self.snapshot = None
@@ -533,8 +533,8 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o)
-        self.assertTrue('\n  extra/README\n' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  extra/README\n', o)
 
     def test_sdist(self):
         '''default MANIFEST'''
@@ -554,15 +554,15 @@ setup(
             self._mksrc(f)
 
         (o, e, s) = self.setup_py(['sdist', '-o'])
-        self.assertTrue("'MANIFEST.in' does not exist" in e)
+        self.assertIn("'MANIFEST.in' does not exist", e)
         self.assertEqual(s, 0)
 
         manifest = self._src_contents('MANIFEST').splitlines()
 
         for f in good:
-            self.assertTrue(f in manifest, '%s in manifest' % f)
+            self.assertIn(f, manifest)
         for f in bad:
-            self.assertFalse(f in manifest, '%s not in manifest' % f)
+            self.assertNotIn(f, manifest)
         os.unlink(os.path.join(self.src, 'MANIFEST'))
 
     def test_ui(self):
@@ -600,15 +600,15 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o)
-        self.assertTrue('\n  someweird.ui\n' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  someweird.ui\n', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/foo/test.ui' in f)
-        self.assertTrue('/usr/share/foo/settings.ui' in f)
-        self.assertTrue('/usr/share/foo/mainwindow.ui' in f)
+        self.assertIn('/usr/share/foo/test.ui', f)
+        self.assertIn('/usr/share/foo/settings.ui', f)
+        self.assertIn('/usr/share/foo/mainwindow.ui', f)
         ftext = '\n'.join(f)
-        self.assertFalse('someweird' in ftext)
+        self.assertNotIn('someweird', ftext)
 
     def test_manpages(self):
         '''manpages'''
@@ -621,16 +621,16 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o)
-        self.assertTrue('\n  cruft/food.1\n' in o)
-        self.assertTrue('\n  daemon/notme.s\n' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  cruft/food.1\n', o)
+        self.assertIn('\n  daemon/notme.s\n', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/man/man1/foo.1' in f)
-        self.assertTrue('/usr/share/man/man8/food.8' in f)
+        self.assertIn('/usr/share/man/man1/foo.1', f)
+        self.assertIn('/usr/share/man/man8/food.8', f)
         ftext = '\n'.join(f)
-        self.assertFalse('food.1' in ftext)
-        self.assertFalse('notme' in ftext)
+        self.assertNotIn('food.1', ftext)
+        self.assertNotIn('notme', ftext)
 
     def test_etc(self):
         '''etc/*'''
@@ -646,13 +646,13 @@ setup(
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o, o)
+        self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
-        self.assertTrue('/etc/cron.daily/foo' in f)
-        self.assertTrue('/etc/cron.weekly/foo' in f)
-        self.assertTrue('/etc/init.d/foo' in f)
-        self.assertTrue('/etc/foo.conf' in f)
+        self.assertIn('/etc/cron.daily/foo', f)
+        self.assertIn('/etc/cron.weekly/foo', f)
+        self.assertIn('/etc/init.d/foo', f)
+        self.assertIn('/etc/foo.conf', f)
 
         # verify that init script is executable
         self.assertTrue(os.access(os.path.join(self.install_tree, 'etc', 'init.d',
@@ -666,7 +666,7 @@ setup(
             '--root=' + self.install_tree])
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertFalse('following files are not recognized' in o, o)
+        self.assertNotIn('following files are not recognized', o)
 
     def test_requires_provides(self):
         '''automatic requires/provides'''
@@ -716,20 +716,20 @@ print ('import iamnota.module')
         (o, e, s) = self.do_install()
         self.assertEqual(s, 0, e)
         self.assertEqual(e, 'ERROR: Python module unknown not found\n')
-        self.assertFalse('following files are not recognized' in o)
+        self.assertNotIn('following files are not recognized', o)
 
         inst = self.installed_files()
-        self.assertTrue('/usr/share/foo/example-code/template.py' in inst)
-        self.assertTrue('/usr/share/foo/example-code/mymod/shiny.py' in inst)
+        self.assertIn('/usr/share/foo/example-code/template.py', inst)
+        self.assertIn('/usr/share/foo/example-code/mymod/shiny.py', inst)
         for f in inst:
             if 'template.py' in f or 'shiny' in f:
-                self.assertFalse('packages' in f)
+                self.assertNotIn('packages', f)
 
         # parse .egg-info
         (o, e, s) = self.setup_py(['install_egg_info', '-d', self.install_tree])
         self.assertEqual(e, 'ERROR: Python module unknown not found\n')
         egg = self._installed_contents('foo-0.1.egg-info').splitlines()
-        self.assertTrue('Name: foo' in egg)
+        self.assertIn('Name: foo', egg)
 
         # check provides
         prov = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Provides: ')]
@@ -756,17 +756,17 @@ print ('import iamnota.module')
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o)
-        self.assertTrue('\n  help/weird.xml\n' in o)
-        self.assertTrue('\n  help/notme.png\n' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  help/weird.xml\n', o)
+        self.assertIn('\n  help/notme.png\n', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/help/C/foo/index.docbook' in f)
-        self.assertTrue('/usr/share/help/C/foo/legal.xml' in f)
-        self.assertTrue('/usr/share/help/C/foo/figures/mainscreen.png' in f)
-        self.assertTrue('/usr/share/help/de/foo/index.docbook' in f)
-        self.assertTrue('/usr/share/help/de/foo/legal.xml' in f)
-        self.assertTrue('/usr/share/help/de/foo/figures/mainscreen.png' in f)
+        self.assertIn('/usr/share/help/C/foo/index.docbook', f)
+        self.assertIn('/usr/share/help/C/foo/legal.xml', f)
+        self.assertIn('/usr/share/help/C/foo/figures/mainscreen.png', f)
+        self.assertIn('/usr/share/help/de/foo/index.docbook', f)
+        self.assertIn('/usr/share/help/de/foo/legal.xml', f)
+        self.assertIn('/usr/share/help/de/foo/figures/mainscreen.png', f)
 
     def test_help_mallard(self):
         '''Mallard XML help'''
@@ -784,17 +784,17 @@ print ('import iamnota.module')
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o)
-        self.assertTrue('\n  help/weird.page\n' in o)
-        self.assertTrue('\n  help/notme.png\n' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  help/weird.page\n', o)
+        self.assertIn('\n  help/notme.png\n', o)
 
         f = self.installed_files()
-        self.assertTrue('/usr/share/help/C/foo/index.page' in f)
-        self.assertTrue('/usr/share/help/C/foo/legal.page' in f)
-        self.assertTrue('/usr/share/help/C/foo/figures/mainscreen.png' in f)
-        self.assertTrue('/usr/share/help/de/foo/index.page' in f)
-        self.assertTrue('/usr/share/help/de/foo/legal.page' in f)
-        self.assertTrue('/usr/share/help/de/foo/figures/mainscreen.png' in f)
+        self.assertIn('/usr/share/help/C/foo/index.page', f)
+        self.assertIn('/usr/share/help/C/foo/legal.page', f)
+        self.assertIn('/usr/share/help/C/foo/figures/mainscreen.png', f)
+        self.assertIn('/usr/share/help/de/foo/index.page', f)
+        self.assertIn('/usr/share/help/de/foo/legal.page', f)
+        self.assertIn('/usr/share/help/de/foo/figures/mainscreen.png', f)
 
     def test_binary_files(self):
         '''Binary files are ignored'''
@@ -804,12 +804,12 @@ print ('import iamnota.module')
         (o, e, s) = self.do_install()
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
-        self.assertTrue('following files are not recognized' in o, o)
-        self.assertTrue('\n  binary_trap\n' in o)
+        self.assertIn('following files are not recognized', o)
+        self.assertIn('\n  binary_trap\n', o)
 
         f = self.installed_files()
         self.assertEqual(len(f), 1, f)
-        self.assertTrue('egg-info' in f[0])
+        self.assertIn('egg-info', f[0])
 
     def test_utf8_filenames(self):
         '''UTF-8 file names'''
@@ -824,11 +824,11 @@ print ('import iamnota.module')
 
         f = self.installed_files()
         self.assertEqual(len(f), 1, f)
-        self.assertTrue('egg-info' in f[0])
+        self.assertIn('egg-info', f[0])
 
-        self.assertTrue('following files are not recognized' in o)
+        self.assertIn('following files are not recognized', o)
         # this might not be the correct file name when the locale is e. g. C
-        self.assertTrue('b.bin\n' in o, o)
+        self.assertIn('b.bin\n', o)
 
     #
     # helper methods
