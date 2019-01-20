@@ -40,7 +40,7 @@ Description: enhancements to the Python build system
 Package: python3-distutils-extra
 Architecture: all
 Multi-Arch: foreign
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, intltool
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, intltool, python3-distutils
 Suggests: devscripts
 Description: enhancements to the Python3 build system
  This package provides additional functions to Python's distutils and
