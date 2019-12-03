@@ -71,7 +71,7 @@ class build_i18n(distutils.cmd.Command):
         if os.path.exists("%s/Makefile" % self.po_dir):
             self.announce("""
 WARNING: Intltool will use the values specified from the
-         existing po/Makefile in favor of the vaules
+         existing po/Makefile in favor of the values
          from setup.cfg.
          Remove the Makefile to avoid problems.""")
 

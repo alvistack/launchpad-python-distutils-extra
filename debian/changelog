@@ -1,3 +1,10 @@
+python-distutils-extra (2.43) UNRELEASED; urgency=medium
+
+  [ Louis-Philippe Véronneau ]
+  * Fix very minor typo.
+
+ -- Louis-Philippe Véronneau <pollo@debian.org>  Tue, 03 Dec 2019 13:18:22 -0500
+
 python-distutils-extra (2.42) unstable; urgency=medium
 
   [ Ondřej Nový ]
