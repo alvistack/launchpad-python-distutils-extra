@@ -1,9 +1,15 @@
-python-distutils-extra (2.43) UNRELEASED; urgency=medium
+python-distutils-extra (2.43) unstable; urgency=medium
 
   [ Louis-Philippe Véronneau ]
   * Fix very minor typo.
 
- -- Louis-Philippe Véronneau <pollo@debian.org>  Tue, 03 Dec 2019 13:18:22 -0500
+  [ Martin Pitt ]
+  * Move packaging VCS to python-team repository.
+    Update Vcs-* tags accordingly. (Closes: #946076)
+  * Bump Standards-Version to 4.4.1.
+    No changes necessary.
+
+ -- Martin Pitt <mpitt@debian.org>  Sun, 15 Dec 2019 21:12:03 +0000
 
 python-distutils-extra (2.42) unstable; urgency=medium
 
