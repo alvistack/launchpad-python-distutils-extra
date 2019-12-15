@@ -18,7 +18,7 @@ Build-Depends: debhelper (>= 10~),
  gir1.2-glib-2.0,
  intltool,
  pyflakes3 <!nocheck>,
-Standards-Version: 4.3.0
+Standards-Version: 4.4.1
 Vcs-Browser: https://salsa.debian.org/python-team/modules/python-distutils-extra
 Vcs-Git: https://salsa.debian.org/python-team/modules/python-distutils-extra.git
 
