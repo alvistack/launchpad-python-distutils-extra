@@ -1,3 +1,9 @@
+python-distutils-extra (2.44) UNRELEASED; urgency=medium
+
+  * Trim trailing whitespace.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Wed, 29 Jan 2020 08:05:20 +0000
+
 python-distutils-extra (2.43) unstable; urgency=medium
 
   [ Louis-Philippe Véronneau ]
