@@ -3,6 +3,7 @@ python-distutils-extra (2.44) UNRELEASED; urgency=medium
   * Trim trailing whitespace.
   * Bump debhelper from old 10 to 12.
   * Set debhelper-compat version in Build-Depends.
+  * Fix day-of-week for changelog entry 0.90.
 
  -- Debian Janitor <janitor@jelmer.uk>  Wed, 29 Jan 2020 08:05:20 +0000
 
@@ -809,4 +810,4 @@ python-distutils-extra (0.90) feisty; urgency=low
 
   * Initial Release.
 
- -- Sebastian Heinlein <glatzor@ubuntu.com>  Sun,  28 Nov 2006 20:26:28 +0200
+ -- Sebastian Heinlein <glatzor@ubuntu.com>  Tue, 28 Nov 2006 20:26:28 +0200
