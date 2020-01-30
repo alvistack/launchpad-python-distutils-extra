@@ -12,4 +12,3 @@ ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
 	done
 	pyflakes3  DistUtilsExtra/ test/
 endif
-
