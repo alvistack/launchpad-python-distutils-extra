@@ -1,4 +1,4 @@
-python-distutils-extra (2.44) UNRELEASED; urgency=medium
+python-distutils-extra (2.44) unstable; urgency=medium
 
   [ Debian Janitor ]
   * Trim trailing whitespace.
@@ -9,7 +9,7 @@ python-distutils-extra (2.44) UNRELEASED; urgency=medium
   [ Sandro Tosi ]
   * Drop python2 support; Closes: #937703, #939102
 
- -- Sandro Tosi <morph@debian.org>  Fri, 27 Mar 2020 09:47:17 -0400
+ -- Sandro Tosi <morph@debian.org>  Fri, 27 Mar 2020 10:04:30 -0400
 
 python-distutils-extra (2.43) unstable; urgency=medium
 
