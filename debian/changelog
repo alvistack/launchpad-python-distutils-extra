@@ -1,11 +1,15 @@
 python-distutils-extra (2.44) UNRELEASED; urgency=medium
 
+  [ Debian Janitor ]
   * Trim trailing whitespace.
   * Bump debhelper from old 10 to 12.
   * Set debhelper-compat version in Build-Depends.
   * Fix day-of-week for changelog entry 0.90.
 
- -- Debian Janitor <janitor@jelmer.uk>  Wed, 29 Jan 2020 08:05:20 +0000
+  [ Sandro Tosi ]
+  * Drop python2 support; Closes: #937703, #939102
+
+ -- Sandro Tosi <morph@debian.org>  Fri, 27 Mar 2020 09:47:17 -0400
 
 python-distutils-extra (2.43) unstable; urgency=medium
 

@@ -1,1 +1,1 @@
-debian/tmp/usr/lib/python3*
+debian/local/python-mkdebian /usr/bin/

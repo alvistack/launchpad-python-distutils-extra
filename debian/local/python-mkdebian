@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Create/update debian packaging from a Python .egg-info
 # Copyright (C) 2009 Canonical Ltd.
 # Author: Martin Pitt
@@ -14,7 +14,7 @@ def get_egg_info():
     '''Get egg information from ./setup.py into a dictionary.'''
 
     if not os.path.isfile('setup.py'):
-        print >> sys.stderr, 'No setup.py in current directory'
+        print('No setup.py in current directory', file=sys.stderr)
         sys.exit(1)
 
     egg = {}
@@ -22,13 +22,13 @@ def get_egg_info():
     try:
         result = subprocess.call(['python', 'setup.py', 'install_egg_info', '-d', instdir])
         if result != 0:
-            print >> sys.stderr, 'setup.py install_egg_info failed'
+            print('setup.py install_egg_info failed', file=sys.stderr)
             sys.exit(1)
 
         ls = os.listdir(instdir)
         if len(ls) != 1 or not os.path.isfile(os.path.join(instdir, ls[0])) or \
                 not ls[0].endswith('.egg-info'):
-            print >> sys.stderr, './setup.py install_egg_info did not generate an .egg-info file'
+            print('./setup.py install_egg_info did not generate an .egg-info file', file=sys.stderr)
             sys.exit(1)
 
         for l in open(os.path.join(instdir, ls[0])):
@@ -38,7 +38,7 @@ def get_egg_info():
                 egg.setdefault(k, []).append(v)
             else:
                 if k in egg:
-                    print >> sys.stderr, 'WARNING: duplicate field %s in .egg-info' % k
+                    print('WARNING: duplicate field %s in .egg-info' % k, file=sys.stderr)
                 egg[k] = v
 
         return egg
@@ -82,13 +82,13 @@ endif
 %s
 ''' % prefix_string)
         f.close()
-        os.chmod('debian/rules', 0755)
+        os.chmod('debian/rules', 0o755)
 
     if not os.path.exists('debian/copyright') or force_copyright:
         make_copyright(egg)
     if force_control not in ('none', 'deps', 'full'):
-        print >> sys.stderr, 'ERROR: --force-control takes one of the following options:\n' \
-            '"none", "deps", or "full"'
+        print('ERROR: --force-control takes one of the following options:\n' \
+            '"none", "deps", or "full"', file=sys.stderr)
         sys.exit(0)
     if force_control != 'none':
         make_control(egg, force_control, additional_dependencies)
@@ -105,9 +105,9 @@ Upstream-Name: %s
 Upstream-Contact: %s
 ''' % (egg['Name'], author))
     if 'Home-page' in egg:
-        print >> f, 'Source:', egg['Home-page']
+        print('Source:', egg['Home-page'], file=f)
 
-    print >> f, '\nFiles: *'
+    print('\nFiles: *', file=f)
 
     cgrep = subprocess.Popen("find -type f ! -name 'COPYING*' ! -name LICENSE !  -name '*.pyc' ! -path '*/.*' ! -path './debian/*' ! -name '*.pot' ! -name '*~' | xargs grep -hi '(c)' | sed 's/<\/property>//' | sed 's/&lt;/</' | sed 's/&gt;/>/' | sed 's/^.*([cC])/Copyright: (C)/' | sort -u",
             shell=True, stdout=subprocess.PIPE)
@@ -116,7 +116,7 @@ Upstream-Contact: %s
     f.write(out)
 
     if 'License' in egg:
-        print >> f, 'License:', egg['License']
+        print('License:', egg['License'], file=f)
         if 'gpl' in egg['License'].lower():
             if '2' in egg['License']:
                 l = 'GPL-2'
@@ -124,8 +124,8 @@ Upstream-Contact: %s
                 l = 'GPL-3'
             else:
                 l = 'GPL'
-            print >> f, ''' The full text of the GPL is distributed in
- /usr/share/common-licenses/%s on Debian systems.''' % l
+            print(''' The full text of the GPL is distributed in
+ /usr/share/common-licenses/%s on Debian systems.''' % l, file=f)
 
 def make_control(egg, force_control, additional_dependencies):
     author = egg.get('Author', '')
@@ -133,22 +133,22 @@ def make_control(egg, force_control, additional_dependencies):
         author += ' <' + egg['Author-email'] + '>'
 
     # calculate dependencies
-    print 'Searching packages which provide required Python modules:'
+    print('Searching packages which provide required Python modules:')
     deps = set()
     for m in egg.get('Requires', []):
-        print '  ', m, '...',
+        print('  ', m, '...', end=' ')
         p = mod2package(m)
         if p:
             deps.add(p)
-            print p
+            print(p)
         else:
-            print '[not found]'
+            print('[not found]')
 
     # calculate extra build dependencies
     bdeps = ''
     if subprocess.call('find -name "*.ui" | xargs grep -q \'<widget class="K\'',
             shell=True) == 0:
-        print 'Package uses KDE *.ui files, adding python-kde4-dev build dependency'
+        print('Package uses KDE *.ui files, adding python-kde4-dev build dependency')
         bdeps += ',\n python-kde4-dev'
 
     # prepare tags
@@ -235,8 +235,8 @@ def make_changelog(egg, changelog, distribution, use_old_changelog):
     command.append('-D' + release)
 
     if not os.path.exists('/usr/bin/debchange'):
-        print >> sys.stderr, 'ERROR: Could not find "debchange".\n' \
-            'You need to install the "devscripts" package for this.'
+        print('ERROR: Could not find "debchange".\n' \
+            'You need to install the "devscripts" package for this.', file=sys.stderr)
         sys.exit(0)
 
     if not os.path.exists('debian/changelog'):
@@ -246,9 +246,9 @@ def make_changelog(egg, changelog, distribution, use_old_changelog):
             command.extend(['--create', '--package', egg['Name'],
                 '-v' + egg['Version'], changelog[0]])
             assert subprocess.call(command) == 0
-        except OSError, e:
-            print >> sys.stderr, 'ERROR: Could not run "debchange": %s\n' \
-                'You need to install the "devscripts" package for this.' % str(e)
+        except OSError as e:
+            print('ERROR: Could not run "debchange": %s\n' \
+                'You need to install the "devscripts" package for this.' % str(e), file=sys.stderr)
             sys.exit(0)
     else:
         if not changelog:
@@ -258,7 +258,7 @@ def make_changelog(egg, changelog, distribution, use_old_changelog):
         command.append(changelog[0])
 
         if (subprocess.call(command, stderr=subprocess.PIPE) != 0):
-            print >> sys.stderr, "Can\'t update changelog."
+            print("Can\'t update changelog.", file=sys.stderr)
             sys.exit(1)
     for message in changelog[1:]:
         subprocess.call(['debchange', message])
@@ -285,7 +285,7 @@ def mod2package(module):
         try:
             _module = __import__(module, fromlist=[module_name])
         except RuntimeError: # thrown by Gtk without $DISPLAY
-            print '[cannot import, ignoring]',
+            print('[cannot import, ignoring]', end=' ')
             return None
         pkg = _get_pkg_from_path(_module.__path__)
         if pkg:
@@ -314,7 +314,7 @@ def mod2package(module):
     if len(pkgs) == 1:
         return list(pkgs)[0]
     elif len(pkgs) > 1:
-        print '[dpkg -S found more than one extension: %s; ignoring]' % ', '.join(pkgs),
+        print('[dpkg -S found more than one extension: %s; ignoring]' % ', '.join(pkgs), end=' ')
 
     return None
 
@@ -333,7 +333,7 @@ def _get_pkg_from_path(path):
         if len(py_pkgs) == 1:
             return py_pkgs[0]
         else:
-            print '[dpkg -S found more than one package: %s; ignoring]' % ', '.join(pkgs),
+            print('[dpkg -S found more than one package: %s; ignoring]' % ', '.join(pkgs), end=' ')
     return None
 
 #
