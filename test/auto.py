@@ -1029,4 +1029,6 @@ Exec=/usr/bin/foo''')
         f.close()
         return contents
 
-unittest.main()
+
+if __name__ == '__main__':
+    unittest.main()
