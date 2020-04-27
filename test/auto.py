@@ -734,7 +734,9 @@ print ('import iamnota.module')
         # parse .egg-info
         (o, e, s) = self.setup_py(['install_egg_info', '-d', self.install_tree])
         self.assertEqual(e, 'ERROR: Python module unknown not found\n')
-        egg = self._installed_contents('foo-0.1.egg-info').splitlines()
+        egg_paths = [x for x in inst if x.endswith('.egg-info')]
+        self.assertEqual(len(egg_paths), 1)
+        egg = self._installed_contents(egg_paths[0].strip(os.path.sep)).splitlines()
         self.assertIn('Name: foo', egg)
 
         # check provides
