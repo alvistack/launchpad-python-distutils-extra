@@ -873,8 +873,9 @@ print ('import iamnota.module')
         '''
         self.install_tree = tempfile.mkdtemp()
 
-        return self.setup_py(['install', '--no-compile', '--prefix=/usr',
-            '--root=' + self.install_tree])
+        self.setup_py(['build'])
+        return self.setup_py(['install', '--no-compile', '--skip-build',
+            '--prefix=/usr', '--root=' + self.install_tree])
 
     def installed_files(self):
         '''Return list of file paths in install tree.'''
