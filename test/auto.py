@@ -856,6 +856,9 @@ print ('import iamnota.module')
             env['PYTHONPATH'] = oldcwd + os.pathsep + env['PYTHONPATH']
         else:
             env['PYTHONPATH'] = oldcwd
+        # unset envvars that alter results
+        env.pop('LINGUAS', '')
+        env.pop('PYTHONDONTWRITEBYTECODE', '')
         os.chdir(self.src)
         s = subprocess.Popen(['/proc/self/exe', 'setup.py'] + args, env=env,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
