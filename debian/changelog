@@ -1,3 +1,20 @@
+python-distutils-extra (2.45) unstable; urgency=medium
+
+  [ Michał Górny ]
+  * Run unittest.main() only when running script directly.
+  * test: Find .egg-info file rather than guessing path (wrong)
+    This fixes the test failure due to looking for wrong .egg-info filename,
+    in the top directory rather than site-packages.
+  * Fix install_auto command with --skip-build
+    python-distutils-extra seems to rely on a very bad practice of modifying
+    internal state (file lists) in middle of `build` commands.  As a result,
+    if the package is installed via `build` command followed by `install
+    --skip-build` (since everything was built already!), most of the files
+    are not installed.
+  * Unset environment variables that break tests
+
+ -- Martin Pitt <mpitt@debian.org>  Sun, 21 Jun 2020 21:37:06 +0200
+
 python-distutils-extra (2.44) unstable; urgency=medium
 
   [ Debian Janitor ]
