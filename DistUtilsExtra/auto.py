@@ -711,6 +711,13 @@ class sdist_auto(distutils.command.sdist.sdist):
 
 class install_auto(distutils.command.install.install):
     def run(self):
+        # run build_* subcommands to get file lists if install command
+        # won't run 'build' for us
+        if self.skip_build:
+            self.run_command('build_help')
+            self.run_command('build_i18n')
+            self.run_command('build_icons')
+
         # install files from etc/
         if os.path.isdir('etc'):
             # work around a bug in copy_tree() which fails with "File exists" on
