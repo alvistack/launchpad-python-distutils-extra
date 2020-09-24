@@ -1,3 +1,10 @@
+python-distutils-extra (2.46) UNRELEASED; urgency=medium
+
+  * d/control: Update Maintainer field with new Debian Python Team
+    contact address.
+
+ -- Ondřej Nový <onovy@debian.org>  Thu, 24 Sep 2020 08:43:09 +0200
+
 python-distutils-extra (2.45) unstable; urgency=medium
 
   [ Michał Górny ]
