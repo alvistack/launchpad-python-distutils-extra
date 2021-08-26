@@ -10,6 +10,7 @@ python-distutils-extra (2.46) UNRELEASED; urgency=medium
   * Update standards version to 4.5.0, no changes needed.
   * Bump debhelper from old 12 to 13.
   * Set field Upstream-Name in debian/copyright.
+  * Update standards version to 4.5.1, no changes needed.
 
  -- Ondřej Nový <onovy@debian.org>  Thu, 24 Sep 2020 08:43:09 +0200
 
