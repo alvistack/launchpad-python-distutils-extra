@@ -3,7 +3,7 @@ Section: python
 Priority: optional
 Maintainer: Debian Python Team <team+python@tracker.debian.org>
 Uploaders: Martin Pitt <mpitt@debian.org>, Sebastian Heinlein <devel@glatzor.de>
-Build-Depends: debhelper-compat (= 12),
+Build-Depends: debhelper-compat (= 13),
  dh-python,
  python3-all (>= 3.1.2-10~),
  python3-setuptools,

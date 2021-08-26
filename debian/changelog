@@ -8,6 +8,7 @@ python-distutils-extra (2.46) UNRELEASED; urgency=medium
 
   [ Debian Janitor ]
   * Update standards version to 4.5.0, no changes needed.
+  * Bump debhelper from old 12 to 13.
 
  -- Ondřej Nový <onovy@debian.org>  Thu, 24 Sep 2020 08:43:09 +0200
 
