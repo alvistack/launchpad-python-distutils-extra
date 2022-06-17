@@ -621,6 +621,7 @@ class build_i18n_auto(build_i18n.build_i18n):
         global src_all
         try:
             if not os.path.exists(os.path.join('po', 'POTFILES.in')):
+                prefix = {}
                 files = src_fileglob(src_all, '*.py')
                 files.update(src_fileglob(src_all, '*.desktop.in'))
                 files.update(src_fileglob(src_all, '*.notifyrc.in'))
@@ -629,7 +630,8 @@ class build_i18n_auto(build_i18n.build_i18n):
                 for f in src_fileglob(src_all, '*.ui'):
                     contents = open(f, 'rb').read()
                     if (b'<interface>\n' in contents or b'<interface ' in contents) and b'class="Gtk' in contents:
-                        files.add('[type: gettext/glade]' + f)
+                        prefix[f] = '[type: gettext/glade]'
+                        files.add(f)
 
                 # find extensionless executable scripts which are Python files, and
                 # generate a temporary *.py alias, so that they get caught by
@@ -649,8 +651,8 @@ class build_i18n_auto(build_i18n.build_i18n):
                         os.mkdir('po')
                     potfiles_in = open('po/POTFILES.in', 'w')
                     potfiles_in.write('[encoding: UTF-8]\n')
-                    for f in files:
-                        potfiles_in.write(f + '\n')
+                    for f in sorted(files):
+                        potfiles_in.write(prefix.get(f, '') + f + '\n')
                     potfiles_in.close()
 
                     auto_potfiles_in = True
@@ -760,4 +762,3 @@ class install_auto(distutils.command.install.install):
                     os.symlink(os.readlink(f), dest)
 
         distutils.command.install.install.run(self)
-
