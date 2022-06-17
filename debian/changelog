@@ -1,3 +1,12 @@
+python-distutils-extra (2.47) unstable; urgency=medium
+
+  * Team upload.
+  * Sort files in POTFILES.in (for stable .pot files)
+  * Set Rules-Requires-Root: no
+  * Bump Standards-Version to 4.6.1
+
+ -- Benjamin Drung <bdrung@ubuntu.com>  Fri, 17 Jun 2022 13:40:59 +0200
+
 python-distutils-extra (2.46) unstable; urgency=medium
 
   [ Ondřej Nový ]
