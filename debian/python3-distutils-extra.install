@@ -1,1 +1,1 @@
-debian/local/python-mkdebian /usr/bin/
+usr/lib/python*/*-packages/*
