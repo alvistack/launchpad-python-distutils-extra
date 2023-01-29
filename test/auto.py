@@ -882,7 +882,10 @@ print ('import iamnota.module')
 
         self.setup_py(['build'])
         return self.setup_py(['install', '--no-compile', '--skip-build',
-            '--prefix=/usr', '--install-data=/usr', '--root=' + self.install_tree])
+            '--prefix=/usr',
+            '--install-data=/usr',
+            '--install-scripts=/usr/bin',
+            '--root=' + self.install_tree])
 
     def installed_files(self):
         '''Return list of file paths in install tree.'''
