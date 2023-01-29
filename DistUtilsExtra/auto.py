@@ -85,6 +85,9 @@ def setup(**attrs):
         for d in ignore_dirs:
             if f.startswith(d + os.path.sep):
                 src.remove(f)
+        # Also remove files from the .egg-info directory
+        if '.egg-info/' in f:
+            src.remove(f)
 
     __cmdclass(attrs)
     __modules(attrs, src)

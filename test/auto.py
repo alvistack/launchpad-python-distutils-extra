@@ -51,6 +51,17 @@ setup(
             self.snapshot = None
             self.install_tree = None
 
+    def assert_egg_info_directory_is_present_and_well(self):
+        '''Check that no .egg-info file is present, that an egg_info directory is present and that it contains the expected files'''
+
+        f = self.installed_files()
+        # All files are in an .egg-info directory; no .egg-info file is created
+        self.assertFalse(any([_.endswith('.egg-info') for _ in f ]))
+        # There are 4 files in said directory
+        self.assertEqual(len(f), 4)
+        # Check that the four exist
+        self.assertTrue(all([any([_.endswith(c) for c in ['PKG-INFO', 'SOURCES.txt', 'dependency_links.txt', 'top_level.txt']]) for _ in f]))
+
     #
     # actual tests come here
     #
@@ -63,10 +74,7 @@ setup(
         self.assertEqual(s, 0)
         self.assertNotIn('following files are not recognized', o)
 
-        f = self.installed_files()
-        # just installs the .egg_info
-        self.assertEqual(len(f), 1)
-        self.assertTrue(f[0].endswith('.egg-info'))
+        self.assert_egg_info_directory_is_present_and_well()
 
     def test_vcs(self):
         '''Ignores revision control files'''
@@ -81,10 +89,7 @@ setup(
         self.assertEqual(s, 0)
         self.assertNotIn('following files are not recognized', o)
 
-        f = self.installed_files()
-        # just installs the .egg_info
-        self.assertEqual(len(f), 1)
-        self.assertTrue(f[0].endswith('.egg-info'))
+        self.assert_egg_info_directory_is_present_and_well()
 
     def test_modules(self):
         '''Python modules'''
@@ -157,7 +162,7 @@ Exec=/usr/bin/foo-gtk
         self.assertIn('\n  stuff/super.service\n', o)
 
         f = self.installed_files()
-        self.assertEqual(len(f), 4) # 3 D-BUS files plus .egg-info
+        self.assertEqual(len(f), 7) # 3 D-BUS files plus 4 files in egg-info directory
         self.assertIn('/etc/dbus-1/system.d/com.example.foo.conf', f)
         self.assertIn('/usr/share/dbus-1/system-services/com.example.foo.service', f)
         self.assertIn('/usr/share/dbus-1/services/com.example.foo.gui.service', f)
@@ -178,7 +183,7 @@ Exec=/usr/bin/foo-gtk
         self.assertEqual(s, 0)
 
         f = self.installed_files()
-        self.assertEqual(len(f), 3) # 2 schema files plus .egg-info
+        self.assertEqual(len(f), 6) # 2 schema files plus 4 files in .egg-info directory
         self.assertIn('/usr/share/glib-2.0/schemas/org.test.myapp.gschema.xml', f)
         self.assertNotIn('gschemas.compiled', '\n'.join(f))
 
@@ -201,7 +206,7 @@ def add_info(report):
         self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
-        self.assertEqual(len(f), 3, f) # 2 hook files plus .egg-info
+        self.assertEqual(len(f), 6, f) # 2 hook files plus 4 in .egg-info
         self.assertIn('/usr/share/apport/package-hooks/foo.py', f)
         self.assertIn('/usr/share/apport/package-hooks/source_foo.py', f)
 
@@ -513,7 +518,7 @@ setup(
         self._mksrc('LICENSE')
         self._mksrc('COPYING.LIB')
         self._mksrc('README.txt')
-        self._mksrc('MANIFEST.in')
+        self._mksrc('MANIFEST.in', content="# dummy")
         self._mksrc('MANIFEST')
         self._mksrc('NEWS')
         self._mksrc('TODO')
@@ -731,22 +736,23 @@ print ('import iamnota.module')
             if 'template.py' in f or 'shiny' in f:
                 self.assertNotIn('packages', f)
 
-        # parse .egg-info
+        # parse .egg-info directory
         (o, e, s) = self.setup_py(['install_egg_info', '-d', self.install_tree])
         self.assertEqual(e, 'ERROR: Python module unknown not found\n')
-        egg_paths = [x for x in inst if x.endswith('.egg-info')]
-        self.assertEqual(len(egg_paths), 1)
-        egg = self._installed_contents(egg_paths[0].strip(os.path.sep)).splitlines()
-        self.assertIn('Name: foo', egg)
+        in_egg_paths = [x for x in inst if '.egg-info/' in x]
+        self.assertEqual(len(in_egg_paths), 4) # Always 4 files in .egg-info directory
+
+        pkginfo = self._installed_contents([x for x in in_egg_paths if x.endswith('PKG-INFO')][0].strip(os.path.sep)).splitlines()
+        self.assertIn('Name: foo', pkginfo)
 
         # check provides
-        prov = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Provides: ')]
+        prov = [prop.split(' ', 1)[1] for prop in pkginfo if prop.startswith('Provides: ')]
         self.assertEqual(set(prov), set(['foo', 'mymod', 'broken', 'grab_cli', 'pygi']))
 
         # check requires
-        req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
+        req = [prop.split(' ', 1)[1] for prop in pkginfo if prop.startswith('Requires: ')]
         self.assertEqual(set(req), set(['httplib2', 'pkg_resources',
-            'gi.repository.GLib', 'gi.repository.GObject']))
+            'gi.repository.GLib', 'gi.repository.GObject', 'distutils.command.register']))
 
     def test_help_docbook(self):
         '''Docbook XML help'''
@@ -815,9 +821,7 @@ print ('import iamnota.module')
         self.assertIn('following files are not recognized', o)
         self.assertIn('\n  binary_trap\n', o)
 
-        f = self.installed_files()
-        self.assertEqual(len(f), 1, f)
-        self.assertIn('egg-info', f[0])
+        self.assert_egg_info_directory_is_present_and_well()
 
     def test_utf8_filenames(self):
         '''UTF-8 file names'''
@@ -830,9 +834,7 @@ print ('import iamnota.module')
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
 
-        f = self.installed_files()
-        self.assertEqual(len(f), 1, f)
-        self.assertIn('egg-info', f[0])
+        self.assert_egg_info_directory_is_present_and_well()
 
         self.assertIn('following files are not recognized', o)
         # this might not be the correct file name when the locale is e. g. C
@@ -880,7 +882,10 @@ print ('import iamnota.module')
 
         self.setup_py(['build'])
         return self.setup_py(['install', '--no-compile', '--skip-build',
-            '--prefix=/usr', '--root=' + self.install_tree])
+            '--prefix=/usr',
+            '--install-data=/usr',
+            '--install-scripts=/usr/bin',
+            '--root=' + self.install_tree])
 
     def installed_files(self):
         '''Return list of file paths in install tree.'''
@@ -921,12 +926,17 @@ print ('import iamnota.module')
         shutil.copytree(self.src, os.path.join(self.snapshot, 's'), symlinks=True)
 
     def diff_snapshot(self):
-        '''Compare source tree to snapshot.
+        '''Compare source tree to snapshot, excluding known offenders.
+
+        Check https://github.com/pypa/setuptools/issues/1347 for reference
 
         Return diff -Nur output.
         '''
         assert self.snapshot, 'no snapshot taken'
-        diff = subprocess.Popen(['diff', '-x', 'foo.pot', '-x', '*.pyc',
+        diff = subprocess.Popen(['diff',
+            '-x', 'foo.pot',
+            '-x', '*.pyc',
+            '-x', '*.egg-info',
             '-Nur', os.path.join(self.snapshot, 's'), self.src],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (out, err) = diff.communicate()
