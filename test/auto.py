@@ -162,7 +162,7 @@ Exec=/usr/bin/foo-gtk
         self.assertIn('\n  stuff/super.service\n', o)
 
         f = self.installed_files()
-        self.assertEqual(len(f), 4) # 3 D-BUS files plus .egg-info
+        self.assertEqual(len(f), 7) # 3 D-BUS files plus 4 files in egg-info directory
         self.assertIn('/etc/dbus-1/system.d/com.example.foo.conf', f)
         self.assertIn('/usr/share/dbus-1/system-services/com.example.foo.service', f)
         self.assertIn('/usr/share/dbus-1/services/com.example.foo.gui.service', f)
@@ -183,7 +183,7 @@ Exec=/usr/bin/foo-gtk
         self.assertEqual(s, 0)
 
         f = self.installed_files()
-        self.assertEqual(len(f), 3) # 2 schema files plus .egg-info
+        self.assertEqual(len(f), 6) # 2 schema files plus 4 files in .egg-info directory
         self.assertIn('/usr/share/glib-2.0/schemas/org.test.myapp.gschema.xml', f)
         self.assertNotIn('gschemas.compiled', '\n'.join(f))
 
@@ -206,7 +206,7 @@ def add_info(report):
         self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
-        self.assertEqual(len(f), 3, f) # 2 hook files plus .egg-info
+        self.assertEqual(len(f), 6, f) # 2 hook files plus 4 in .egg-info
         self.assertIn('/usr/share/apport/package-hooks/foo.py', f)
         self.assertIn('/usr/share/apport/package-hooks/source_foo.py', f)
 
@@ -736,11 +736,11 @@ print ('import iamnota.module')
             if 'template.py' in f or 'shiny' in f:
                 self.assertNotIn('packages', f)
 
-        # parse .egg-info
+        # parse .egg-info directory
         (o, e, s) = self.setup_py(['install_egg_info', '-d', self.install_tree])
         self.assertEqual(e, 'ERROR: Python module unknown not found\n')
-        egg_paths = [x for x in inst if x.endswith('.egg-info')]
-        self.assertEqual(len(egg_paths), 1)
+        in_egg_paths = [x for x in inst if '.egg-info/' in x]
+        self.assertEqual(len(in_egg_paths), 4) # Always 4 files in .egg-info directory
         egg = self._installed_contents(egg_paths[0].strip(os.path.sep)).splitlines()
         self.assertIn('Name: foo', egg)
 
@@ -820,9 +820,7 @@ print ('import iamnota.module')
         self.assertIn('following files are not recognized', o)
         self.assertIn('\n  binary_trap\n', o)
 
-        f = self.installed_files()
-        self.assertEqual(len(f), 1, f)
-        self.assertIn('egg-info', f[0])
+        self.assert_egg_info_directory_is_present_and_well()
 
     def test_utf8_filenames(self):
         '''UTF-8 file names'''
@@ -835,9 +833,7 @@ print ('import iamnota.module')
         self.assertEqual(e, '')
         self.assertEqual(s, 0)
 
-        f = self.installed_files()
-        self.assertEqual(len(f), 1, f)
-        self.assertIn('egg-info', f[0])
+        self.assert_egg_info_directory_is_present_and_well()
 
         self.assertIn('following files are not recognized', o)
         # this might not be the correct file name when the locale is e. g. C
