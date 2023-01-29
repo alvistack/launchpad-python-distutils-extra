@@ -64,9 +64,12 @@ setup(
         self.assertNotIn('following files are not recognized', o)
 
         f = self.installed_files()
-        # just installs the .egg_info
-        self.assertEqual(len(f), 1)
-        self.assertTrue(f[0].endswith('.egg-info'))
+        # All files are in an .egg-info directory; no .egg-info file is created
+        self.assertFalse(any([_.endswith('.egg-info') for _ in f ]))
+        # There are 4 files in said directory
+        self.assertEqual(len(f), 4)
+        # Check that the four exist
+        self.assertTrue(all([any([_.endswith(c) for c in ['PKG-INFO', 'SOURCES.txt', 'dependency_links.txt', 'top_level.txt']]) for _ in f]))
 
     def test_vcs(self):
         '''Ignores revision control files'''
