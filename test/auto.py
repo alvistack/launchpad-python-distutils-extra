@@ -926,12 +926,17 @@ print ('import iamnota.module')
         shutil.copytree(self.src, os.path.join(self.snapshot, 's'), symlinks=True)
 
     def diff_snapshot(self):
-        '''Compare source tree to snapshot.
+        '''Compare source tree to snapshot, excluding known offenders.
+
+        Check https://github.com/pypa/setuptools/issues/1347 for reference
 
         Return diff -Nur output.
         '''
         assert self.snapshot, 'no snapshot taken'
-        diff = subprocess.Popen(['diff', '-x', 'foo.pot', '-x', '*.pyc',
+        diff = subprocess.Popen(['diff',
+            '-x', 'foo.pot',
+            '-x', '*.pyc',
+            '-x', '*.egg-info',
             '-Nur', os.path.join(self.snapshot, 's'), self.src],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (out, err) = diff.communicate()
