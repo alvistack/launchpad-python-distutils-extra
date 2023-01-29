@@ -741,17 +741,18 @@ print ('import iamnota.module')
         self.assertEqual(e, 'ERROR: Python module unknown not found\n')
         in_egg_paths = [x for x in inst if '.egg-info/' in x]
         self.assertEqual(len(in_egg_paths), 4) # Always 4 files in .egg-info directory
-        egg = self._installed_contents(egg_paths[0].strip(os.path.sep)).splitlines()
-        self.assertIn('Name: foo', egg)
+
+        pkginfo = self._installed_contents([x for x in in_egg_paths if x.endswith('PKG-INFO')][0].strip(os.path.sep)).splitlines()
+        self.assertIn('Name: foo', pkginfo)
 
         # check provides
-        prov = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Provides: ')]
+        prov = [prop.split(' ', 1)[1] for prop in pkginfo if prop.startswith('Provides: ')]
         self.assertEqual(set(prov), set(['foo', 'mymod', 'broken', 'grab_cli', 'pygi']))
 
         # check requires
-        req = [prop.split(' ', 1)[1] for prop in egg if prop.startswith('Requires: ')]
+        req = [prop.split(' ', 1)[1] for prop in pkginfo if prop.startswith('Requires: ')]
         self.assertEqual(set(req), set(['httplib2', 'pkg_resources',
-            'gi.repository.GLib', 'gi.repository.GObject']))
+            'gi.repository.GLib', 'gi.repository.GObject', 'distutils.command.register']))
 
     def test_help_docbook(self):
         '''Docbook XML help'''
