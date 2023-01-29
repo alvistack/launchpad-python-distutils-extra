@@ -518,7 +518,7 @@ setup(
         self._mksrc('LICENSE')
         self._mksrc('COPYING.LIB')
         self._mksrc('README.txt')
-        self._mksrc('MANIFEST.in')
+        self._mksrc('MANIFEST.in', content="# dummy")
         self._mksrc('MANIFEST')
         self._mksrc('NEWS')
         self._mksrc('TODO')
