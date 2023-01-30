@@ -1,3 +1,9 @@
+python-distutils-extra (2.49) unstable; urgency=medium
+
+  * Add missing python3-setuptools Depends, fixes autopkgtest
+
+ -- Didier Raboud <odyx@debian.org>  Mon, 30 Jan 2023 06:52:11 +0100
+
 python-distutils-extra (2.48) unstable; urgency=medium
 
   * Team upload
