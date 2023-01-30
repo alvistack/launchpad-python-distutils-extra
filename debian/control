@@ -6,7 +6,7 @@ Uploaders: Martin Pitt <mpitt@debian.org>, Sebastian Heinlein <devel@glatzor.de>
 Build-Depends: debhelper-compat (= 13),
  dh-python,
  python3-all (>= 3.1.2-10~),
- python3-setuptools (>= 54.0.0~),,
+ python3-setuptools (>= 54.0.0~),
  python3-httplib2,
  python3-pkg-resources,
  python3-gi,
@@ -27,6 +27,7 @@ Depends: ${shlibs:Depends},
  intltool,
  python3-distutils,
  python3-pkg-resources,
+ python3-setuptools (>= 54.0.0~),
 Suggests: devscripts
 Breaks: python-distutils-extra (<< 2.44)
 Replaces: python-distutils-extra (<< 2.44)
