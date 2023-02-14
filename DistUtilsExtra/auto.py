@@ -81,13 +81,14 @@ def setup(**attrs):
     # ignore packaging
     ignore_dirs = ['etc', 'DistUtilsExtra', 'debian']
 
-    for f in src.copy():
+    def should_be_ignored(f: str) -> bool:
         for d in ignore_dirs:
             if f.startswith(d + os.path.sep):
-                src.remove(f)
+                return True
         # Also remove files from the .egg-info directory
-        if '.egg-info/' in f:
-            src.remove(f)
+        return '.egg-info/' in f
+
+    src = {f for f in src if not should_be_ignored(f)}
 
     __cmdclass(attrs)
     __modules(attrs, src)
