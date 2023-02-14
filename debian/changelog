@@ -1,3 +1,12 @@
+python-distutils-extra (2.50) unstable; urgency=medium
+
+  * Team upload.
+  * Fix KeyError on .egg-info files in debian directory (regression in 2.48)
+  * setup.py: Check that Debian version starts with DistUtilsExtra version
+    (LP: #1919004)
+
+ -- Benjamin Drung <bdrung@ubuntu.com>  Tue, 14 Feb 2023 12:37:27 +0100
+
 python-distutils-extra (2.49) unstable; urgency=medium
 
   * Add missing python3-setuptools Depends, fixes autopkgtest
