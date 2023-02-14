@@ -1,11 +1,38 @@
 #!/usr/bin/env python
 
+import pathlib
+import re
 import sys
 
 from setuptools import setup
 
 sys.path.insert(0, ".")
 from DistUtilsExtra import __version__ as pkgversion
+
+
+def get_debian_version() -> str:
+    """Look what Debian version we have."""
+    changelog = pathlib.Path(__file__).parent / "debian" / "changelog"
+    with changelog.open("r", encoding="utf-8") as changelog_f:
+        head = changelog_f.readline()
+    match = re.compile(r".*\((.*)\).*").match(head)
+    if not match:
+        raise ValueError(f"Failed to extract Debian version from '{head}'.")
+    return match.group(1)
+
+
+def _check_debian_version() -> None:
+    debian_version = get_debian_version()
+    if not debian_version.startswith(pkgversion):
+        print(
+            f"Error: Debian version '{debian_version}' does not"
+            f" start with DistUtilsExtra.__version__ '{pkgversion}'.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+
+_check_debian_version()
 
 setup(
     name="python-distutils-extra",
