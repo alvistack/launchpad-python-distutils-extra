@@ -8,11 +8,10 @@ Implement DistutilsExtra's 'build_icons' command.
 import glob
 import os
 
-import distutils
-import distutils.command.build
+from setuptools import Command
 
 
-class build_icons(distutils.cmd.Command):
+class build_icons(Command):
     description = "select all icons for installation"
 
     user_options = [("icon-dir=", "i", "icon directory of the source tree")]

@@ -11,7 +11,7 @@ Implements the DistUtilsExtra 'pylint' command.
 import os
 import subprocess
 
-from distutils.core import Command
+from setuptools import Command
 
 
 class pylint(Command):

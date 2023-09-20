@@ -3,10 +3,10 @@
 import os.path
 from glob import glob
 
-import distutils.cmd
+from setuptools import Command
 
 
-class build_help(distutils.cmd.Command):
+class build_help(Command):
     description = "install Mallard or DocBook XML based documentation"
     user_options = [("help-dir", None, "help directory in the source tree")]
 

@@ -5,11 +5,10 @@ Implements the Distutils 'build_i18n' command."""
 import glob
 import os
 
-import distutils
-import distutils.command.build
+from setuptools import Command
 
 
-class build_i18n(distutils.cmd.Command):
+class build_i18n(Command):
     description = "integrate the gettext framework"
 
     user_options = [
