@@ -49,9 +49,9 @@ from functools import reduce
 import distutils.command.clean
 import distutils.command.install
 import distutils.command.sdist
-import distutils.core
 import distutils.dir_util
 import distutils.filelist
+import setuptools
 
 from DistUtilsExtra import __version__ as __pkgversion
 from DistUtilsExtra.command import (
@@ -70,7 +70,7 @@ src_all = {}
 
 
 def setup(**attrs):
-    """Auto-inferring extension of standard distutils.core.setup()"""
+    """Auto-inferring extension of standard setuptools.setup()"""
     global src
     global src_all
     src_all = src_find(attrs)
@@ -113,7 +113,7 @@ def setup(**attrs):
     if "clean" not in sys.argv:
         __requires(attrs, src_all)
 
-    distutils.core.setup(**attrs)
+    setuptools.setup(**attrs)
 
     if src:
         print("WARNING: the following files are not recognized by DistUtilsExtra.auto:")
