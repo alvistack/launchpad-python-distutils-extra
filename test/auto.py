@@ -21,6 +21,7 @@ class T(unittest.TestCase):
 import warnings
 warnings.filterwarnings('ignore', 'Module DistUtilsExtra was already imported from.*')
 warnings.filterwarnings('ignore', 'pipe2 set errno ENOSYS.*')
+warnings.filterwarnings('ignore', 'setup.py install is deprecated.*')
 
 from DistUtilsExtra.auto import setup
 
@@ -412,8 +413,11 @@ Exec=/bin/foosettings""",
         self._mksrc(
             "setup.py",
             """
+import warnings
 from DistUtilsExtra.auto import setup
 from glob import glob
+
+warnings.filterwarnings('ignore', 'setup.py install is deprecated.*')
 
 setup(
     name='foo',

@@ -47,11 +47,11 @@ import sys
 from functools import reduce
 
 import distutils.command.clean
-import distutils.command.install
 import distutils.command.sdist
 import distutils.dir_util
 import distutils.filelist
 import setuptools
+import setuptools.command.install
 
 from DistUtilsExtra import __version__ as __pkgversion
 from DistUtilsExtra.command import (
@@ -777,7 +777,7 @@ class sdist_auto(distutils.command.sdist.sdist):
 #
 
 
-class install_auto(distutils.command.install.install):
+class install_auto(setuptools.command.install.install):
     def run(self):
         # run build_* subcommands to get file lists if install command
         # won't run 'build' for us
@@ -842,4 +842,4 @@ class install_auto(distutils.command.install.install):
                         os.unlink(dest)
                     os.symlink(os.readlink(f), dest)
 
-        distutils.command.install.install.run(self)
+        setuptools.command.install.install.run(self)
