@@ -42,6 +42,7 @@ import ast
 import fnmatch
 import locale
 import os
+import pathlib
 import stat
 import sys
 from functools import reduce
@@ -49,7 +50,6 @@ from functools import reduce
 import distutils.command.clean
 import distutils.command.sdist
 import distutils.dir_util
-import distutils.filelist
 import setuptools
 import setuptools.command.install
 
@@ -761,9 +761,11 @@ class sdist_auto(distutils.command.sdist.sdist):
 
         self.filter_prefix.append(os.path.join("dist", self.distribution.get_name()))
 
-        for f in distutils.filelist.findall():
+        for path in pathlib.Path(".").rglob("*"):
+            f = str(path)
             if (
-                f in self.filelist.files
+                path.is_dir()
+                or f in self.filelist.files
                 or any(map(f.startswith, self.filter_prefix))
                 or any(map(f.endswith, self.filter_suffix))
             ):
@@ -790,7 +792,10 @@ class install_auto(setuptools.command.install.install):
         if os.path.isdir("etc"):
             # work around a bug in copy_tree() which fails with "File exists" on
             # previously existing symlinks
-            for f in distutils.filelist.findall("etc"):
+            for path in pathlib.Path("etc").rglob("*"):
+                if path.is_dir():
+                    continue
+                f = str(path)
                 if not f.startswith("etc" + os.path.sep) or not os.path.islink(f):
                     continue
                 try:
