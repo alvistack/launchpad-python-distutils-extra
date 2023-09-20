@@ -41,10 +41,13 @@ author, license, etc.) in ./setup.py.
 import ast
 import fnmatch
 import locale
+import logging
 import os
 import pathlib
+import shutil
 import stat
 import sys
+import typing
 from functools import reduce
 
 import distutils.command.clean
@@ -133,13 +136,18 @@ def setup(**attrs):
 #
 
 
+def _log_error(unused_function: typing.Any, path: str, excinfo: typing.Tuple) -> None:
+    logger = logging.getLogger(__name__)
+    logger.warning("error removing %s: %s", path, excinfo[1])
+
+
 class clean_build_tree(distutils.command.clean.clean):
     description = "clean up build/ directory"
 
     def run(self):
         # clean build/mo
         if os.path.isdir("build"):
-            distutils.dir_util.remove_tree("build")
+            shutil.rmtree("build", onerror=_log_error)
         distutils.command.clean.clean.run(self)
 
 

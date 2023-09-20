@@ -2,11 +2,18 @@
 
 Implements the Distutils 'clean_i18n' command."""
 
+import logging
 import os
 import os.path
+import shutil
+import typing
 
 import distutils.command.clean
-from distutils.dir_util import remove_tree
+
+
+def _log_error(unused_function: typing.Any, path: str, excinfo: typing.Tuple) -> None:
+    logger = logging.getLogger(__name__)
+    logger.warning("error removing %s: %s", path, excinfo[1])
 
 
 class clean_i18n(distutils.command.clean.clean):
@@ -16,7 +23,7 @@ class clean_i18n(distutils.command.clean.clean):
         # clean build/mo
         mo_dir = os.path.join("build", "mo")
         if os.path.isdir(mo_dir):
-            remove_tree("build/mo")
+            shutil.rmtree("build/mo", onerror=_log_error)
 
         # clean built i18n files
         for setname in (
