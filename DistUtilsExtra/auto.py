@@ -38,29 +38,29 @@ author, license, etc.) in ./setup.py.
 # (c) 2009 Canonical Ltd.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
-import os
+import ast
 import fnmatch
+import locale
+import os
 import stat
 import sys
-import ast
-import locale
-
-import distutils.core
 from functools import reduce
+
+import distutils.command.clean
+import distutils.command.install
+import distutils.command.sdist
+import distutils.core
+import distutils.dir_util
+import distutils.filelist
 
 from DistUtilsExtra import __version__ as __pkgversion
 from DistUtilsExtra.command import (
     build_extra,
-    build_icons,
     build_help,
     build_i18n,
+    build_icons,
     pylint,
 )
-import distutils.dir_util
-import distutils.command.clean
-import distutils.command.sdist
-import distutils.command.install
-import distutils.filelist
 
 __version__ = __pkgversion
 

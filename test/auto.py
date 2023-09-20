@@ -2,11 +2,11 @@
 
 # test DistUtilsExtra.auto
 
-import unittest
-import shutil
-import tempfile
 import os
+import shutil
 import subprocess
+import tempfile
+import unittest
 
 
 class T(unittest.TestCase):

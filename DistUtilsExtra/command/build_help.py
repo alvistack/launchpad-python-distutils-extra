@@ -1,7 +1,8 @@
 """Implement the Distutils "build_help" command."""
 
-from glob import glob
 import os.path
+from glob import glob
+
 import distutils.cmd
 
 

@@ -2,9 +2,11 @@
 
 Implements the Distutils 'clean_i18n' command."""
 
-import os.path, os
-from distutils.dir_util import remove_tree
+import os
+import os.path
+
 import distutils.command.clean
+from distutils.dir_util import remove_tree
 
 
 class clean_i18n(distutils.command.clean.clean):
