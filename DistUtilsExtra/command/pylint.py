@@ -14,25 +14,23 @@ import subprocess
 from distutils.core import Command
 
 
-class pylint (Command):
+class pylint(Command):
     """Command to run pylint and tests on a module."""
 
     description = "integrate pylint checks"
 
-    user_options = [("config-file=", None,
-                     "pylint config file to use"),
-                    ("exclude-files=", None,
-                     "list of files to exclude from lint checks"),
-                    ("lint-files=", None,
-                     "list of modules or packages to run lint checks on")
-                   ]
+    user_options = [
+        ("config-file=", None, "pylint config file to use"),
+        ("exclude-files=", None, "list of files to exclude from lint checks"),
+        ("lint-files=", None, "list of modules or packages to run lint checks on"),
+    ]
 
-    def initialize_options (self):
+    def initialize_options(self):
         self.config_file = None
         self.exclude_files = None
         self.lint_files = None
 
-    def finalize_options (self):
+    def finalize_options(self):
         if self.config_file is None:
             self.config_file = ""
         if self.exclude_files is None:
@@ -40,9 +38,8 @@ class pylint (Command):
         if self.lint_files is None:
             self.lint_files = "[" + self.__find_files() + "]"
 
-    def run (self):
-        pylint_args = ["--output-format=parseable",
-                       "--include-ids=yes"]
+    def run(self):
+        pylint_args = ["--output-format=parseable", "--include-ids=yes"]
 
         if self.config_file:
             pylint_args.append("--rcfile=" + self.config_file)
@@ -50,8 +47,9 @@ class pylint (Command):
         for file in eval(self.lint_files):
             pylint_args.append(file)
 
-        p = subprocess.Popen(["pylint"] + pylint_args,
-                             bufsize=4096, stdout=subprocess.PIPE)
+        p = subprocess.Popen(
+            ["pylint"] + pylint_args, bufsize=4096, stdout=subprocess.PIPE
+        )
         notices = p.stdout
 
         output = "".join(notices.readlines())
@@ -68,8 +66,9 @@ class pylint (Command):
             current = line.split(":", 3)
             if line.startswith("    "):
                 outputs.append("    " + current[0] + "")
-            elif line.startswith("build/") or current[0] in excludes or \
-                    len(current) < 3:
+            elif (
+                line.startswith("build/") or current[0] in excludes or len(current) < 3
+            ):
                 pass
             elif filename == current[0]:
                 outputs.append("    " + current[1] + ": " + current[2])
