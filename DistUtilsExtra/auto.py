@@ -52,9 +52,9 @@ from functools import reduce
 
 import distutils.command.clean
 import distutils.command.sdist
-import distutils.dir_util
 import setuptools
 import setuptools.command.install
+from setuptools.errors import FileError
 
 from DistUtilsExtra import __version__ as __pkgversion
 from DistUtilsExtra.command import (
@@ -787,6 +787,48 @@ class sdist_auto(distutils.command.sdist.sdist):
 #
 
 
+def copy_tree(src: pathlib.Path, dst: pathlib.Path) -> None:
+    """Copy an entire directory tree 'src' to a new location 'dst'.
+
+    Both 'src' and 'dst' must be directory names.  If 'src' is not a
+    directory, raise FileError.  If 'dst' does not exist, it is
+    created.  The end result of the copy is that every file in 'src'
+    is copied to 'dst', and directories under 'src' are recursively
+    copied to 'dst'.
+    """
+    log = logging.getLogger(__name__)
+
+    if not src.is_dir():
+        raise FileError(f"cannot copy tree '{src}': not a directory")
+
+    if not dst.exists():
+        log.info("creating %s", dst)
+        dst.mkdir(parents=True, exist_ok=True)
+
+    for src_path in sorted(src.iterdir()):
+        dst_path = dst / src_path.name
+
+        if src_path.is_dir():
+            copy_tree(src_path, dst_path)
+
+        elif src_path.is_symlink():
+            link_dest = src_path.readlink()
+            log.info("linking %s -> %s", dst_path, link_dest)
+            try:
+                dst_path.unlink(missing_ok=True)
+            except OSError as error:
+                raise FileError(f"could not delete '{dst_path}': {error}") from error
+            dst_path.symlink_to(link_dest)
+
+        else:
+            log.info("copying %s -> %s", src_path, dst_path)
+            try:
+                dst_path.unlink(missing_ok=True)
+            except OSError as error:
+                raise FileError(f"could not delete '{dst_path}': {error}") from error
+            shutil.copy(src_path, dst_path)
+
+
 class install_auto(setuptools.command.install.install):
     def run(self):
         # run build_* subcommands to get file lists if install command
@@ -812,13 +854,7 @@ class install_auto(setuptools.command.install.install):
                     pass
             if not self.root:
                 self.root = ""
-            distutils.dir_util.copy_tree(
-                "etc",
-                os.path.join(self.root, "etc"),
-                preserve_times=0,
-                preserve_symlinks=1,
-                verbose=1,
-            )
+            copy_tree(pathlib.Path("etc"), pathlib.Path(os.path.join(self.root, "etc")))
 
         # install data/scripts symlinks
         for path, dirs, files in os.walk("."):
