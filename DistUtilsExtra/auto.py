@@ -148,7 +148,7 @@ class clean_build_tree(distutils.command.clean.clean):
         # clean build/mo
         if os.path.isdir("build"):
             shutil.rmtree("build", onerror=_log_error)
-        distutils.command.clean.clean.run(self)
+        super().run()
 
 
 def __cmdclass(attrs):
@@ -614,7 +614,7 @@ def src_markglob(src, pathglob):
 
 class build_help_auto(build_help.build_help):
     def finalize_options(self):
-        build_help.build_help.finalize_options(self)
+        super().finalize_options()
         global src
 
         for data_set in self.get_data_files():
@@ -624,7 +624,7 @@ class build_help_auto(build_help.build_help):
 
 class build_i18n_auto(build_i18n.build_i18n):
     def finalize_options(self):
-        build_i18n.build_i18n.finalize_options(self)
+        super().finalize_options()
         global src
         global src_all
 
@@ -725,7 +725,7 @@ class build_i18n_auto(build_i18n.build_i18n):
 
                     auto_potfiles_in = True
 
-            build_i18n.build_i18n.run(self)
+            super().run()
         finally:
             for f in exe_symlinks:
                 os.unlink(f)
@@ -762,7 +762,7 @@ class sdist_auto(distutils.command.sdist.sdist):
     filter_suffix = [".pyc", ".mo", "~", ".swp"]
 
     def add_defaults(self):
-        distutils.command.sdist.sdist.add_defaults(self)
+        super().add_defaults()
 
         if os.path.exists("MANIFEST.in"):
             return
@@ -891,4 +891,4 @@ class install_auto(setuptools.command.install.install):
                         os.unlink(dest)
                     os.symlink(os.readlink(f), dest)
 
-        setuptools.command.install.install.run(self)
+        super().run()

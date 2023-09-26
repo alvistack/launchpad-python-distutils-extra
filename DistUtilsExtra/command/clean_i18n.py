@@ -52,4 +52,4 @@ class clean_i18n(distutils.command.clean.clean):
                 if os.path.exists(build_target):
                     os.removedirs(build_target)
 
-        distutils.command.clean.clean.run(self)
+        super().run()

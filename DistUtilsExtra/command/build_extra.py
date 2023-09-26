@@ -7,7 +7,7 @@ class build_extra(distutils.command.build.build):
     with the core distutils"""
 
     def __init__(self, dist):
-        distutils.command.build.build.__init__(self, dist)
+        super().__init__(dist)
 
         self.user_options.extend(
             [
@@ -19,7 +19,7 @@ class build_extra(distutils.command.build.build):
         )
 
     def initialize_options(self):
-        distutils.command.build.build.initialize_options(self)
+        super().initialize_options()
         self.i18n = False
         self.icons = False
         self.help = False
@@ -47,7 +47,7 @@ class build_extra(distutils.command.build.build):
                 and not self.kdeui == "False"
             )
 
-        distutils.command.build.build.finalize_options(self)
+        super().finalize_options()
         self.sub_commands.append(("build_i18n", has_i18n))
         self.sub_commands.append(("build_icons", has_icons))
         self.sub_commands.append(("build_help", has_help))
@@ -73,7 +73,7 @@ class build(build_extra):
         def has_kdeui(command):
             return self.kdeui == "True"
 
-        distutils.command.build.build.finalize_options(self)
+        super().finalize_options()
         self.sub_commands.append(("build_i18n", has_i18n))
         self.sub_commands.append(("build_icons", has_icons))
         self.sub_commands.append(("build_help", has_help))
