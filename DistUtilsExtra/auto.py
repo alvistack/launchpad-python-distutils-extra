@@ -887,8 +887,7 @@ class install_auto(setuptools.command.install.install):
                     d = os.path.dirname(dest)
                     if not os.path.isdir(d):
                         os.makedirs(d)
-                    if os.path.exists(dest):
-                        os.unlink(dest)
+                    pathlib.Path(dest).unlink(missing_ok=True)
                     os.symlink(os.readlink(f), dest)
 
         super().run()

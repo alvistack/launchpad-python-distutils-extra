@@ -5,6 +5,7 @@ Implements the Distutils 'clean_i18n' command."""
 import logging
 import os
 import os.path
+import pathlib
 import shutil
 import typing
 
@@ -46,9 +47,8 @@ class clean_i18n(distutils.command.clean.clean):
                         file_merged = os.path.basename(file[:-3])
                     else:
                         file_merged = os.path.basename(file)
-                    file_merged = os.path.join(build_target, file_merged)
-                    if os.path.exists(file_merged):
-                        os.unlink(file_merged)
+                    file_merged = pathlib.Path(build_target) / file_merged
+                    file_merged.unlink(missing_ok=True)
                 if os.path.exists(build_target):
                     os.removedirs(build_target)
 
