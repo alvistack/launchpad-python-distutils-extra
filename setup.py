@@ -45,7 +45,7 @@ setup(
     platforms="posix",
     entry_points={
         "distutils.commands": [
-            "build = DistUtilsExtra.command.build_extra:build",
+            "build = DistUtilsExtra.command.build_extra:build_extra",
             "build_i18n = DistUtilsExtra.command.build_i18n:build_i18n",
             "build_icons = DistUtilsExtra.command.build_icons:build_icons",
             "build_help = DistUtilsExtra.command.build_help:build_help",
