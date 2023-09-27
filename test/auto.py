@@ -694,9 +694,12 @@ setup(
         self.assertEqual(s, 0)
 
         tarball = pathlib.Path(self.src) / "dist" / "foo-0.1.tar.gz"
+        tar = subprocess.run(
+            ["tar", "tf", str(tarball)], capture_output=True, text=True, check=True
+        )
         tarball.unlink()
 
-        manifest = self._src_contents("MANIFEST").splitlines()
+        manifest = [re.sub(r"^foo-0\.1/", "", f) for f in tar.stdout.splitlines()]
 
         for f in good:
             self.assertIn(f, manifest)
