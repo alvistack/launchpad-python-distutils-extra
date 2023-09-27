@@ -3,6 +3,8 @@
 # test DistUtilsExtra.auto
 
 import os
+import pathlib
+import re
 import shutil
 import subprocess
 import tempfile
@@ -678,7 +680,7 @@ setup(
             ".git/index",
             "bin/foo~",
             "backend/foo.pyc",
-            "dist/foo-0.1.tar.gz",
+            "dist/foo-0.2.tar.gz",
             ".shelf/1",
             ".bzr/revs",
             ".git/config",
@@ -687,9 +689,12 @@ setup(
         for f in good + bad:
             self._mksrc(f)
 
-        (o, e, s) = self.setup_py(["sdist", "-o"])
+        (o, e, s) = self.setup_py(["sdist"])
         self.assertIn("'MANIFEST.in' does not exist", e)
         self.assertEqual(s, 0)
+
+        tarball = pathlib.Path(self.src) / "dist" / "foo-0.1.tar.gz"
+        tarball.unlink()
 
         manifest = self._src_contents("MANIFEST").splitlines()
 
