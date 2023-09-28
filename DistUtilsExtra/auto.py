@@ -240,11 +240,11 @@ def __dbus(attrs, src):
     system_service = []
     # dbus services
     for f in src_fileglob(src, "*.service"):
-        lines = [l.strip() for l in open(f).readlines()]
+        lines = [line.strip() for line in open(f).readlines()]
         if "[D-BUS Service]" not in lines:
             continue
-        for l in lines:
-            if l.startswith("User="):
+        for line in lines:
+            if line.startswith("User="):
                 src_mark(src, f)
                 system_service.append(f)
                 break
@@ -756,7 +756,7 @@ class build_i18n_auto(build_i18n.build_i18n):
             os.unlink("po/POTFILES.in")
             try:
                 os.rmdir("po")
-            except:
+            except OSError:
                 pass
 
 

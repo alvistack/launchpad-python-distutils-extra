@@ -90,7 +90,7 @@ WARNING: Intltool will use the values specified from the
         max_po_mtime = 0
         for po_file in glob.glob("%s/*.po" % self.po_dir):
             lang = os.path.basename(po_file[:-3])
-            if selected_languages and not lang in selected_languages:
+            if selected_languages and lang not in selected_languages:
                 continue
             mo_dir = os.path.join("build", "mo", lang, "LC_MESSAGES")
             mo_file = os.path.join(mo_dir, "%s.mo" % self.domain)
@@ -118,7 +118,7 @@ WARNING: Intltool will use the values specified from the
         ):
             try:
                 file_set = eval(option)
-            except:
+            except Exception:
                 continue
             for target, files in file_set:
                 build_target = os.path.join("build", target)
