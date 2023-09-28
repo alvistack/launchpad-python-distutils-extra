@@ -2,14 +2,21 @@
 
 Implements the Distutils 'build_i18n' command."""
 
+# TODO: Address following pylint complaints
+# pylint: disable=attribute-defined-outside-init,broad-except,eval-used,missing-function-docstring
+
 import glob
 import os
+import pathlib
 
 from setuptools import Command
 
 
+# pylint: disable-next=invalid-name,too-many-instance-attributes
 class build_i18n(Command):
-    description = "integrate the gettext framework"
+    """integrate the gettext framework"""
+
+    description = __doc__
 
     user_options = [
         ("desktop-files=", None, ".desktop.in files that should be merged"),
@@ -49,6 +56,8 @@ class build_i18n(Command):
         Update the language files, generate mo files and add them
         to the to be installed files
         """
+        # TODO: split into smaller methods
+        # pylint: disable=too-many-branches,too-many-locals,too-many-statements
         if not os.path.isdir(self.po_dir):
             return
 
@@ -74,19 +83,19 @@ WARNING: Intltool will use the values specified from the
         # If there is a po/LINGUAS file, or the LINGUAS environment variable
         # is set, only compile the languages listed there.
         selected_languages = None
-        linguas_file = os.path.join(self.po_dir, "LINGUAS")
-        if os.path.isfile(linguas_file):
-            selected_languages = open(linguas_file).read().split()
+        linguas_file = pathlib.Path(self.po_dir) / "LINGUAS"
+        if linguas_file.is_file():
+            selected_languages = linguas_file.read_text().split()
         if "LINGUAS" in os.environ:
             selected_languages = os.environ["LINGUAS"].split()
 
         # Update po(t) files and print a report
         # We have to change the working dir to the po dir for intltool
         cmd = ["intltool-update", (self.merge_po and "-r" or "-p"), "-g", self.domain]
-        wd = os.getcwd()
+        cwd = os.getcwd()
         os.chdir(self.po_dir)
         self.spawn(cmd)
-        os.chdir(wd)
+        os.chdir(cwd)
         max_po_mtime = 0
         for po_file in glob.glob(f"{self.po_dir}/*.po"):
             lang = os.path.basename(po_file[:-3])

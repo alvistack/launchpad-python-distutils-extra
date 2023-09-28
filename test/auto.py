@@ -1,6 +1,9 @@
 #!/usr/bin/python
 
-# test DistUtilsExtra.auto
+"""Test DistUtilsExtra.auto."""
+
+# TODO: Address following pylint complaints
+# pylint: disable=consider-using-with,invalid-name,too-many-lines,use-a-generator
 
 import os
 import pathlib
@@ -11,7 +14,10 @@ import tempfile
 import unittest
 
 
+# pylint: disable-next=too-many-public-methods
 class T(unittest.TestCase):
+    """Test DistUtilsExtra.auto."""
+
     def setUp(self):
         self.maxDiff = None
         self.src = tempfile.mkdtemp()
@@ -215,7 +221,7 @@ Exec=/usr/bin/foo-gtk
         self._mksrc("data/org.test.myapp2.gschema.xml")
         self._mksrc("data/gschemas.compiled")
 
-        (o, e, s) = self.do_install()
+        (_, e, s) = self.do_install()
         self.assertEqual(e, "")
         self.assertEqual(s, 0)
 
@@ -691,7 +697,7 @@ setup(
         for f in good + bad:
             self._mksrc(f)
 
-        (o, e, s) = self.setup_py(["sdist"])
+        (_, e, s) = self.setup_py(["sdist"])
         self.assertEqual(e, "")
         self.assertEqual(s, 0)
 
@@ -1093,9 +1099,9 @@ print ('import iamnota.module')
         """Create a file in the test source tree."""
 
         path = os.path.join(self.src, path)
-        dir = os.path.dirname(path)
-        if not os.path.isdir(dir):
-            os.makedirs(dir)
+        directory = os.path.dirname(path)
+        if not os.path.isdir(directory):
+            os.makedirs(directory)
         with open(path, "wb") as f:
             if content is None:
                 # default content, to spot with diff
@@ -1124,7 +1130,7 @@ print ('import iamnota.module')
         Return diff -Nur output.
         """
         assert self.snapshot, "no snapshot taken"
-        diff = subprocess.Popen(
+        diff = subprocess.run(
             [
                 "diff",
                 "-x",
@@ -1137,12 +1143,11 @@ print ('import iamnota.module')
                 os.path.join(self.snapshot, "s"),
                 self.src,
             ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
+            check=False,
+            text=True,
         )
-        (out, err) = diff.communicate()
-        out = out.decode("UTF-8")
-        return out
+        return diff.stdout
 
     def _mkpo(self):
         """Create some example po files."""
@@ -1260,16 +1265,12 @@ Exec=/usr/bin/foo""",
         self._mksrc("daemon/foobarize", '#!/usr/bin/flex\np _("no8")', executable=True)
 
     def _src_contents(self, path):
-        f = open(os.path.join(self.src, path))
-        contents = f.read()
-        f.close()
-        return contents
+        full_path = pathlib.Path(self.src) / path
+        return full_path.read_text("utf-8")
 
     def _installed_contents(self, path):
-        f = open(os.path.join(self.install_tree, path))
-        contents = f.read()
-        f.close()
-        return contents
+        full_path = pathlib.Path(self.install_tree) / path
+        return full_path.read_text("utf-8")
 
 
 if __name__ == "__main__":

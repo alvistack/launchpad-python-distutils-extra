@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
 import glob
-import os
 
 from setuptools import setup
 
-from DistUtilsExtra.command import *
+from DistUtilsExtra.command import build_extra, build_help, build_i18n, build_icons
 
 setup(
     name="software-properties",

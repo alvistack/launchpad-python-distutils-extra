@@ -1,6 +1,7 @@
 import setuptools.command.build
 
 
+# pylint: disable-next=invalid-name
 class build_extra(setuptools.command.build.build):
     """Adds the extra commands to the build target. This class should be
     used with setuptools."""
@@ -25,25 +26,24 @@ class build_extra(setuptools.command.build.build):
         self.kdeui = False
 
     def finalize_options(self):
-        def has_help(command):
+        def has_help(unused_command):
             return self.help == "True" or (
-                "build_help" in self.distribution.cmdclass and not self.help == "False"
+                "build_help" in self.distribution.cmdclass and self.help != "False"
             )
 
-        def has_icons(command):
+        def has_icons(unused_command):
             return self.icons == "True" or (
-                "build_icons" in self.distribution.cmdclass and not self.help == "False"
+                "build_icons" in self.distribution.cmdclass and self.help != "False"
             )
 
-        def has_i18n(command):
+        def has_i18n(unused_command):
             return self.i18n == "True" or (
-                "build_i18n" in self.distribution.cmdclass and not self.i18n == "False"
+                "build_i18n" in self.distribution.cmdclass and self.i18n != "False"
             )
 
-        def has_kdeui(command):
+        def has_kdeui(unused_command):
             return self.kdeui == "True" or (
-                "build_kdeui" in self.distribution.cmdclass
-                and not self.kdeui == "False"
+                "build_kdeui" in self.distribution.cmdclass and self.kdeui != "False"
             )
 
         super().finalize_options()

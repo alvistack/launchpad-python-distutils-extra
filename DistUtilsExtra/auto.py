@@ -38,6 +38,11 @@ author, license, etc.) in ./setup.py.
 # (c) 2009 Canonical Ltd.
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 
+# TODO: Address following pylint complaints
+# pylint: disable=attribute-defined-outside-init,consider-using-with,eval-used
+# pylint: disable=global-variable-not-assigned,invalid-name,missing-docstring
+# pylint: disable=redefined-outer-name,too-many-branches,unspecified-encoding
+
 import ast
 import fnmatch
 import locale
@@ -68,6 +73,7 @@ from DistUtilsExtra.command import (
 __version__ = __pkgversion
 
 # FIXME: global variable, to share with build_i18n_auto
+# pylint: disable=global-statement
 src = {}
 src_all = {}
 
@@ -400,6 +406,7 @@ def __manpages(attrs, src):
         v.append((os.path.join("share", "man", f"man{section}"), files))
 
 
+# pylint: disable-next=too-many-return-statements
 def __external_mod(cur_module, module, attrs):
     """Check if given Python module is not included in Python or locally"""
 
@@ -419,17 +426,17 @@ def __external_mod(cur_module, module, attrs):
             if cur_module:
                 mod = __import__(f"{cur_module}.{module}")
             else:
-                raise ImportError
+                raise
         except ImportError:
             sys.stderr.write(f"ERROR: Python module {module} not found\n")
             return False
-        except ValueError:  # weird ctypes case with wintypes
+        except (RuntimeError, ValueError):
+            # RuntimeError: When Gdk can't be initialized
+            # ValueError: weird ctypes case with wintypes
             return False
-        except RuntimeError:  # When Gdk can't be initialized
-            return False
-    except ValueError:  # weird ctypes case with wintypes
-        return False
-    except RuntimeError:  # When Gdk can't be initialized
+    except (RuntimeError, ValueError):
+        # RuntimeError: When Gdk can't be initialized
+        # ValueError: weird ctypes case with wintypes
         return False
 
     if not hasattr(mod, "__file__") or not mod.__file__:
@@ -546,7 +553,7 @@ def __requires(attrs, src_all):
     attrs["requires"] = __filter_namespace(imports)
 
 
-def __provides(attrs, src_all):
+def __provides(attrs, unused_src_all):
     """Determine provides (if not set explicitly)"""
 
     if "provides" in attrs:
@@ -573,10 +580,10 @@ def src_find(attrs):
 
     # files explicitly covered in setup() call
     explicit = set(attrs.get("scripts", []))
-    for destdir, files in attrs.get("data_files", []):
+    for _, files in attrs.get("data_files", []):
         explicit.update(files)
 
-    for root, dirs, files in os.walk("."):
+    for root, _, files in os.walk("."):
         if root.startswith("./"):
             root = root[2:]
         if root == ".":
@@ -862,8 +869,11 @@ class install_auto(setuptools.command.install.install):
             self.run_command("build_help")
             self.run_command("build_i18n")
             self.run_command("build_icons")
+        self._install_files_from_etc()
+        self._install_data_and_scripts_symlinks()
+        super().run()
 
-        # install files from etc/
+    def _install_files_from_etc(self) -> None:
         if os.path.isdir("etc"):
             # work around a bug in copy_tree() which fails with "File exists" on
             # previously existing symlinks
@@ -881,8 +891,8 @@ class install_auto(setuptools.command.install.install):
                 self.root = ""
             copy_tree(pathlib.Path("etc"), pathlib.Path(os.path.join(self.root, "etc")))
 
-        # install data/scripts symlinks
-        for path, dirs, files in os.walk("."):
+    def _install_data_and_scripts_symlinks(self) -> None:
+        for path, _, files in os.walk("."):
             for f in files:
                 f = os.path.join(path, f)
                 if not os.path.islink(f):
@@ -890,23 +900,23 @@ class install_auto(setuptools.command.install.install):
 
                 if f.startswith("./bin/") or f.startswith("./data/"):
                     if f.startswith("./bin"):
-                        dir = self.install_scripts
+                        target_dir = self.install_scripts
                         dest = os.path.join(
-                            dir, os.path.sep.join(f.split(os.path.sep)[2:])
+                            target_dir, os.path.sep.join(f.split(os.path.sep)[2:])
                         )
                     elif f.startswith("./data/icons"):
-                        dir = os.path.join(
+                        target_dir = os.path.join(
                             self.install_data, "share", "icons", "hicolor"
                         )
                         dest = os.path.join(
-                            dir, os.path.sep.join(f.split(os.path.sep)[3:])
+                            target_dir, os.path.sep.join(f.split(os.path.sep)[3:])
                         )
                     else:
-                        dir = os.path.join(
+                        target_dir = os.path.join(
                             self.install_data, "share", self.distribution.get_name()
                         )
                         dest = os.path.join(
-                            dir, os.path.sep.join(f.split(os.path.sep)[2:])
+                            target_dir, os.path.sep.join(f.split(os.path.sep)[2:])
                         )
 
                     d = os.path.dirname(dest)
@@ -914,5 +924,3 @@ class install_auto(setuptools.command.install.install):
                         os.makedirs(d)
                     pathlib.Path(dest).unlink(missing_ok=True)
                     os.symlink(os.readlink(f), dest)
-
-        super().run()

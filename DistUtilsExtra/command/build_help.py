@@ -1,13 +1,19 @@
 """Implement the Distutils "build_help" command."""
 
+# TODO: Address following pylint complaints
+# pylint: disable=attribute-defined-outside-init,missing-function-docstring
+
 import os.path
 from glob import glob
 
 from setuptools import Command
 
 
+# pylint: disable-next=invalid-name
 class build_help(Command):
-    description = "install Mallard or DocBook XML based documentation"
+    """install Mallard or DocBook XML based documentation"""
+
+    description = __doc__
     user_options = [("help-dir", None, "help directory in the source tree")]
 
     def initialize_options(self):

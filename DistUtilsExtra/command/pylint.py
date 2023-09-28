@@ -8,12 +8,16 @@
 Implements the DistUtilsExtra 'pylint' command.
 """
 
+# TODO: Address following pylint complaints
+# pylint: disable=attribute-defined-outside-init,eval-used,missing-function-docstring
+
 import os
 import subprocess
 
 from setuptools import Command
 
 
+# pylint: disable-next=invalid-name
 class pylint(Command):
     """Command to run pylint and tests on a module."""
 
@@ -47,22 +51,21 @@ class pylint(Command):
         for file in eval(self.lint_files):
             pylint_args.append(file)
 
-        p = subprocess.Popen(
+        with subprocess.Popen(
             ["pylint"] + pylint_args, bufsize=4096, stdout=subprocess.PIPE
-        )
-        notices = p.stdout
+        ) as process:
+            output = "".join(process.stdout.readlines())
 
-        output = "".join(notices.readlines())
         if output != "":
             print("== Pylint notices ==")
             print(self.__group_lines_by_file(output))
 
-    def __group_lines_by_file(self, input):
+    def __group_lines_by_file(self, input_):
         """Format file:line:message output as lines grouped by file."""
         outputs = []
         filename = ""
         excludes = eval(self.exclude_files)
-        for line in input.splitlines():
+        for line in input_.splitlines():
             current = line.split(":", 3)
             if line.startswith("    "):
                 outputs.append(f"    {current[0]}")
@@ -83,7 +86,7 @@ class pylint(Command):
     def __find_files(self):
         """Find all Python files under the current tree."""
         pyfiles = []
-        for root, dirs, files in os.walk(os.getcwd(), topdown=False):
+        for root, _, files in os.walk(os.getcwd(), topdown=False):
             for file in files:
                 if file.endswith(".py"):
                     pyfiles.append(f"'{os.path.join(root, file)}'")

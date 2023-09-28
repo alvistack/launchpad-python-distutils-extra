@@ -5,14 +5,20 @@ Implement DistutilsExtra's 'build_icons' command.
 
 # Created by Sebastian Heinlein
 
+# TODO: Address following pylint complaints
+# pylint: disable=attribute-defined-outside-init,missing-function-docstring
+
 import glob
 import os
 
 from setuptools import Command
 
 
+# pylint: disable-next=invalid-name
 class build_icons(Command):
-    description = "select all icons for installation"
+    """select all icons for installation"""
+
+    description = __doc__
 
     user_options = [("icon-dir=", "i", "icon directory of the source tree")]
 
