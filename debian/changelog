@@ -1,3 +1,24 @@
+python-distutils-extra (3.0) unstable; urgency=medium
+
+  * Team upload.
+  * Port code to setuptools. It will not work with distutils any more.
+  * Format code with black and imports with isort.
+  * Address pycodestyle and pylint complaints.
+  * Use python3 in shebangs.
+  * Fix TypeError when calling pylint command.
+  * Drop obsolete python3-distutils dependency.
+
+ -- Benjamin Drung <bdrung@ubuntu.com>  Thu, 28 Sep 2023 17:25:47 +0200
+
+python-distutils-extra (2.50) unstable; urgency=medium
+
+  * Team upload.
+  * Fix KeyError on .egg-info files in debian directory (regression in 2.48)
+  * setup.py: Check that Debian version starts with DistUtilsExtra version
+    (LP: #1919004)
+
+ -- Benjamin Drung <bdrung@ubuntu.com>  Tue, 14 Feb 2023 12:37:27 +0100
+
 python-distutils-extra (2.49) unstable; urgency=medium
 
   * Add missing python3-setuptools Depends, fixes autopkgtest
