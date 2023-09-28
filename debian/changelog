@@ -1,3 +1,15 @@
+python-distutils-extra (3.0) unstable; urgency=medium
+
+  * Team upload.
+  * Port code to setuptools. It will not work with distutils any more.
+  * Format code with black and imports with isort.
+  * Address pycodestyle and pylint complaints.
+  * Use python3 in shebangs.
+  * Fix TypeError when calling pylint command.
+  * Drop obsolete python3-distutils dependency.
+
+ -- Benjamin Drung <bdrung@ubuntu.com>  Thu, 28 Sep 2023 17:25:47 +0200
+
 python-distutils-extra (2.50) unstable; urgency=medium
 
   * Team upload.
