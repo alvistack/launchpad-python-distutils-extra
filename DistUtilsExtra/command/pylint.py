@@ -43,7 +43,7 @@ class pylint(Command):
             self.lint_files = f"[{self.__find_files()}]"
 
     def run(self):
-        pylint_args = ["--output-format=parseable", "--include-ids=yes"]
+        pylint_args = ["--output-format=parseable"]
 
         if self.config_file:
             pylint_args.append(f"--rcfile={self.config_file}")
