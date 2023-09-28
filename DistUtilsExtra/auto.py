@@ -54,6 +54,7 @@ import distutils.command.clean
 import distutils.command.sdist
 import setuptools
 import setuptools.command.install
+from setuptools import Distribution
 from setuptools.errors import FileError
 
 from DistUtilsExtra import __version__ as __pkgversion
@@ -761,9 +762,12 @@ class sdist_auto(distutils.command.sdist.sdist):
     filter_prefix = ["build", ".git", ".svn", ".CVS", ".bzr", ".shelf"]
     filter_suffix = [".pyc", ".mo", "~", ".swp"]
 
-    def add_defaults(self):
-        super().add_defaults()
+    def __init__(self, dist: Distribution, **kwargs: dict[str, typing.Any]) -> None:
+        super().__init__(dist, **kwargs)
+        self.distribution = dist
+        self.sub_commands.append(("add_extra", sdist_auto.add_extra))
 
+    def add_extra(self) -> None:
         if os.path.exists("MANIFEST.in"):
             return
 
