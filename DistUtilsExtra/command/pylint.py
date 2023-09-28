@@ -52,7 +52,7 @@ class pylint(Command):
             pylint_args.append(file)
 
         with subprocess.Popen(
-            ["pylint"] + pylint_args, bufsize=4096, stdout=subprocess.PIPE
+            ["pylint"] + pylint_args, bufsize=4096, stdout=subprocess.PIPE, text=True
         ) as process:
             output = "".join(process.stdout.readlines())
 
