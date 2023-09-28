@@ -841,7 +841,7 @@ setup(
         self._mksrc(
             "foo/stuff.py",
             """import xml.parsers.expat
-import os, os.path, email.mime, distutils.command.register
+import os, os.path, email.mime, setuptools.command.register
 from email import header as h
 import httplib2.iri2uri, unknown
 from . bar import poke
@@ -928,7 +928,7 @@ print ('import iamnota.module')
                     "pkg_resources",
                     "gi.repository.GLib",
                     "gi.repository.GObject",
-                    "distutils.command.register",
+                    "setuptools.command.register",
                 ]
             ),
         )
