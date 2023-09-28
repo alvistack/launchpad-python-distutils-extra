@@ -129,11 +129,7 @@ def setup(**attrs):
         enc = locale.getpreferredencoding()
         for f in sorted(src):
             # ensure that we can always print the file name
-            if sys.version_info[0] < 3:
-                # hack to make this work with Python 2
-                f_loc = f.decode("ascii", "ignore")
-            else:
-                f_loc = f.encode(enc, errors="replace").decode(enc, errors="replace")
+            f_loc = f.encode(enc, errors="replace").decode(enc, errors="replace")
             print(f"  {f_loc}")
 
 
@@ -468,12 +464,7 @@ def __add_imports(imports, file, attrs):
 
     try:
         with open(file, "rb") as f:
-            # send binary blob for python2, otherwise sending an unicode object with
-            # "encoding" directive makes ast triggering an exception in python2
-            if sys.version_info[0] < 3:
-                file_content = f.read()
-            else:
-                file_content = f.read().decode("UTF-8")
+            file_content = f.read().decode("UTF-8")
             tree = ast.parse(file_content, file)
 
         for node in ast.walk(tree):
