@@ -128,7 +128,7 @@ def setup(**attrs):
                 f_loc = f.decode("ascii", "ignore")
             else:
                 f_loc = f.encode(enc, errors="replace").decode(enc, errors="replace")
-            print("  " + f_loc)
+            print(f"  {f_loc}")
 
 
 #
@@ -215,7 +215,7 @@ def __packages(attrs, src):
     packages = attrs.setdefault("packages", [])
 
     for f in src_fileglob(src, "__init__.py"):
-        if f.startswith("data" + os.path.sep):
+        if f.startswith(f"data{os.path.sep}"):
             continue
         pkg = os.path.dirname(f)
         packages.append(pkg)
@@ -397,7 +397,7 @@ def __manpages(attrs, src):
 
     v = attrs.setdefault("data_files", [])
     for section, files in mans.items():
-        v.append((os.path.join("share", "man", "man" + section), files))
+        v.append((os.path.join("share", "man", f"man{section}"), files))
 
 
 def __external_mod(cur_module, module, attrs):
@@ -417,11 +417,11 @@ def __external_mod(cur_module, module, attrs):
         # try relative import
         try:
             if cur_module:
-                mod = __import__(cur_module + "." + module)
+                mod = __import__(f"{cur_module}.{module}")
             else:
                 raise ImportError
         except ImportError:
-            sys.stderr.write("ERROR: Python module %s not found\n" % module)
+            sys.stderr.write(f"ERROR: Python module {module} not found\n")
             return False
         except ValueError:  # weird ctypes case with wintypes
             return False
@@ -477,12 +477,12 @@ def __add_imports(imports, file, attrs):
             if isinstance(node, ast.ImportFrom):
                 if node.module == "gi.repository":
                     for name in node.names:
-                        imports.add("gi.repository.%s" % name.name)
+                        imports.add(f"gi.repository.{name.name}")
 
                 elif node.module and __external_mod(cur_module, node.module, attrs):
                     imports.add(node.module)
     except SyntaxError as e:
-        sys.stderr.write("WARNING: syntax errors in %s: %s\n" % (file, str(e)))
+        sys.stderr.write(f"WARNING: syntax errors in {file}: {str(e)}\n")
 
 
 def _module_parents(mod):
@@ -528,7 +528,7 @@ def __requires(attrs, src_all):
     for s in src_all:
         if s == "setup.py":
             continue
-        if s.startswith("data" + os.path.sep):
+        if s.startswith(f"data{os.path.sep}"):
             continue
         ext = os.path.splitext(s)[1]
         if ext == "":
@@ -685,13 +685,13 @@ class build_i18n_auto(build_i18n.build_i18n):
         if autostart_files:
             df.append(("share/autostart", autostart_files))
         if notify_files:
-            df.append(("share/kde4/apps/" + self.distribution.get_name(), notify_files))
+            df.append((f"share/kde4/apps/{self.distribution.get_name()}", notify_files))
         self.desktop_files = repr(df)
 
         # mark PO template as known to handle
         try:
             src_mark(
-                src, os.path.join(self.po_dir, self.distribution.get_name() + ".pot")
+                src, os.path.join(self.po_dir, f"{self.distribution.get_name()}.pot")
             )
         except KeyError:
             pass
@@ -724,7 +724,7 @@ class build_i18n_auto(build_i18n.build_i18n):
                 for f in reduce(
                     lambda x, y: x.union(y[1]), self.distribution.data_files, src_all
                 ):
-                    f_py = f + ".py"
+                    f_py = f"{f}.py"
                     if (
                         os.access(f, os.X_OK)
                         and os.path.splitext(f)[1] == ""
@@ -742,7 +742,7 @@ class build_i18n_auto(build_i18n.build_i18n):
                     potfiles_in = open("po/POTFILES.in", "w")
                     potfiles_in.write("[encoding: UTF-8]\n")
                     for f in sorted(files):
-                        potfiles_in.write(prefix.get(f, "") + f + "\n")
+                        potfiles_in.write(f"{prefix.get(f, '') + f}\n")
                     potfiles_in.close()
 
                     auto_potfiles_in = True
@@ -871,7 +871,7 @@ class install_auto(setuptools.command.install.install):
                 if path.is_dir():
                     continue
                 f = str(path)
-                if not f.startswith("etc" + os.path.sep) or not os.path.islink(f):
+                if not f.startswith(f"etc{os.path.sep}") or not os.path.islink(f):
                     continue
                 try:
                     os.unlink(os.path.join(self.root, f))

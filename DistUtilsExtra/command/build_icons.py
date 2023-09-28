@@ -35,8 +35,8 @@ class build_icons(Command):
                 if icons:
                     data_files.append(
                         (
-                            "share/icons/hicolor/%s/%s"
-                            % (os.path.basename(size), os.path.basename(category)),
+                            f"share/icons/hicolor/{os.path.basename(size)}"
+                            f"/{os.path.basename(category)}",
                             icons,
                         )
                     )

@@ -36,13 +36,13 @@ class pylint(Command):
         if self.exclude_files is None:
             self.exclude_files = "[]"
         if self.lint_files is None:
-            self.lint_files = "[" + self.__find_files() + "]"
+            self.lint_files = f"[{self.__find_files()}]"
 
     def run(self):
         pylint_args = ["--output-format=parseable", "--include-ids=yes"]
 
         if self.config_file:
-            pylint_args.append("--rcfile=" + self.config_file)
+            pylint_args.append(f"--rcfile={self.config_file}")
 
         for file in eval(self.lint_files):
             pylint_args.append(file)
@@ -65,18 +65,18 @@ class pylint(Command):
         for line in input.splitlines():
             current = line.split(":", 3)
             if line.startswith("    "):
-                outputs.append("    " + current[0] + "")
+                outputs.append(f"    {current[0]}")
             elif (
                 line.startswith("build/") or current[0] in excludes or len(current) < 3
             ):
                 pass
             elif filename == current[0]:
-                outputs.append("    " + current[1] + ": " + current[2])
+                outputs.append(f"    {current[1]}: {current[2]}")
             elif filename != current[0]:
                 filename = current[0]
                 outputs.append("")
-                outputs.append(filename + ":")
-                outputs.append("    " + current[1] + ": " + current[2])
+                outputs.append(f"{filename}:")
+                outputs.append(f"    {current[1]}: {current[2]}")
 
         return "\n".join(outputs)
 
@@ -86,6 +86,6 @@ class pylint(Command):
         for root, dirs, files in os.walk(os.getcwd(), topdown=False):
             for file in files:
                 if file.endswith(".py"):
-                    pyfiles.append("'" + os.path.join(root, file) + "'")
+                    pyfiles.append(f"'{os.path.join(root, file)}'")
         pyfiles.sort()
         return ",".join(pyfiles)

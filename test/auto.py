@@ -47,7 +47,7 @@ setup(
             (o, e, s) = self.setup_py(["clean", "-a"])
             self.assertEqual(s, 0, o + e)
             cruft = self.diff_snapshot()
-            self.assertEqual(cruft, "", "no cruft after cleaning:\n" + cruft)
+            self.assertEqual(cruft, "", f"no cruft after cleaning:\n{cruft}")
         finally:
             shutil.rmtree(self.src)
             if self.snapshot:
@@ -560,7 +560,8 @@ gui/foo.desktop.in
         self.assertNotIn('msgid "no"', pot)
         for i in range(2, 15):
             self.assertTrue(
-                'msgid "yes%i' % i in pot or 'msgid ""\n"yes%i' % i in pot, "yes%i" % i
+                f'msgid "yes{int(i)}' in pot or f'msgid ""\n"yes{int(i)}' in pot,
+                f"yes{int(i)}",
             )
         # above loop would match yes11 to yes1 as well, so test it explicitly
         self.assertIn('msgid "yes1"', pot)
@@ -605,7 +606,8 @@ setup(
         self.assertNotIn('msgid "no"', pot)
         for i in range(2, 18):
             self.assertTrue(
-                'msgid "yes%i' % i in pot or 'msgid ""\n"yes%i' % i in pot, "yes%i" % i
+                f'msgid "yes{int(i)}' in pot or f'msgid ""\n"yes{int(i)}' in pot,
+                f"yes{int(i)}",
             )
         # above loop would match yes11 to yes1 as well, so test it explicitly
         self.assertIn('msgid "yes1"', pot)
@@ -819,7 +821,7 @@ setup(
 
         # check that we can install again into the same source tree
         (o, e, s) = self.setup_py(
-            ["install", "--no-compile", "--prefix=/usr", "--root=" + self.install_tree]
+            ["install", "--no-compile", "--prefix=/usr", f"--root={self.install_tree}"]
         )
         self.assertEqual(e, "")
         self.assertEqual(s, 0)
@@ -833,8 +835,8 @@ setup(
                 __import__(needed_pkg)
             except ImportError:
                 self.fail(
-                    "You need to have %s installed for this test suite to work"
-                    % needed_pkg
+                    f"You need to have {needed_pkg} installed"
+                    f" for this test suite to work"
                 )
 
         self._mksrc("foo/__init__.py", "")
@@ -1072,7 +1074,7 @@ print ('import iamnota.module')
                 "--prefix=/usr",
                 "--install-data=/usr",
                 "--install-scripts=/usr/bin",
-                "--root=" + self.install_tree,
+                f"--root={self.install_tree}",
             ]
         )
 
@@ -1099,7 +1101,7 @@ print ('import iamnota.module')
                 # default content, to spot with diff
                 f.write(b"dummy")
             else:
-                f.write((content + "\n").encode("UTF-8"))
+                f.write(f"{content}\n".encode("UTF-8"))
 
         if executable:
             os.chmod(path, 0o755)

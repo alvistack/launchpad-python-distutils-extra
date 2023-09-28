@@ -58,11 +58,11 @@ class build_i18n(Command):
             self.distribution.data_files = data_files = []
 
         if self.bug_contact is not None:
-            os.environ["XGETTEXT_ARGS"] = "--msgid-bugs-address=%s " % self.bug_contact
+            os.environ["XGETTEXT_ARGS"] = f"--msgid-bugs-address={self.bug_contact} "
 
         # Print a warning if there is a Makefile that would overwrite our
         # values
-        if os.path.exists("%s/Makefile" % self.po_dir):
+        if os.path.exists(f"{self.po_dir}/Makefile"):
             self.announce(
                 """
 WARNING: Intltool will use the values specified from the
@@ -88,12 +88,12 @@ WARNING: Intltool will use the values specified from the
         self.spawn(cmd)
         os.chdir(wd)
         max_po_mtime = 0
-        for po_file in glob.glob("%s/*.po" % self.po_dir):
+        for po_file in glob.glob(f"{self.po_dir}/*.po"):
             lang = os.path.basename(po_file[:-3])
             if selected_languages and lang not in selected_languages:
                 continue
             mo_dir = os.path.join("build", "mo", lang, "LC_MESSAGES")
-            mo_file = os.path.join(mo_dir, "%s.mo" % self.domain)
+            mo_file = os.path.join(mo_dir, f"{self.domain}.mo")
             if not os.path.exists(mo_dir):
                 os.makedirs(mo_dir)
             cmd = ["msgfmt", po_file, "-o", mo_file]
