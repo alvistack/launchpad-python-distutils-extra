@@ -1,6 +1,6 @@
 """DistUtilsExtra.auto
 
-This provides a setup() method for distutils and DistUtilsExtra which infers as
+This provides a setup() method for setuptools and DistUtilsExtra which infers as
 many setup() arguments as possible. The idea is that your setup.py only needs
 to have the metadata and some tweaks for unusual files/paths, in a "convention
 over configuration" paradigm.
