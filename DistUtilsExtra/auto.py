@@ -50,11 +50,10 @@ import sys
 import typing
 from functools import reduce
 
-import distutils.command.clean
 import setuptools
 import setuptools.command.install
 import setuptools.command.sdist
-from setuptools import Distribution
+from setuptools import Command, Distribution
 from setuptools.errors import FileError
 
 from DistUtilsExtra import __version__ as __pkgversion
@@ -142,14 +141,36 @@ def _log_error(unused_function: typing.Any, path: str, excinfo: typing.Tuple) ->
     logger.warning("error removing %s: %s", path, excinfo[1])
 
 
-class clean_build_tree(distutils.command.clean.clean):
+class clean_build_tree(Command):
     description = "clean up build/ directory"
+    user_options = [
+        ("build-base=", "b", "base build directory (default: 'build.build-base')"),
+        (
+            "build-lib=",
+            None,
+            "build directory for all modules (default: 'build.build-lib')",
+        ),
+        ("all", "a", "remove all build output, not just temporary by-products"),
+    ]
+    boolean_options = ["all"]
 
-    def run(self):
+    def __init__(self, dist: Distribution, **kwargs: dict[str, typing.Any]) -> None:
+        super().__init__(dist, **kwargs)
+        self.initialize_options()
+
+    def initialize_options(self) -> None:
+        self.all = False
+        self.build_base: typing.Optional[str] = None
+
+    def finalize_options(self) -> None:
+        self.set_undefined_options("build", ("build_base", "build_base"))
+
+    def run(self) -> None:
+        assert self.build_base
         # clean build/mo
-        if os.path.isdir("build"):
-            shutil.rmtree("build", onerror=_log_error)
-        super().run()
+        if os.path.exists(self.build_base):
+            logging.getLogger(__name__).info("removing '%s'", self.build_base)
+            shutil.rmtree(self.build_base, onerror=_log_error)
 
 
 def __cmdclass(attrs):
