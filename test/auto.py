@@ -690,7 +690,7 @@ setup(
             self._mksrc(f)
 
         (o, e, s) = self.setup_py(["sdist"])
-        self.assertIn("'MANIFEST.in' does not exist", e)
+        self.assertEqual(e, "")
         self.assertEqual(s, 0)
 
         tarball = pathlib.Path(self.src) / "dist" / "foo-0.1.tar.gz"
@@ -705,7 +705,6 @@ setup(
             self.assertIn(f, manifest)
         for f in bad:
             self.assertNotIn(f, manifest)
-        os.unlink(os.path.join(self.src, "MANIFEST"))
 
     def test_ui(self):
         """GtkBuilder/Qt *.ui"""

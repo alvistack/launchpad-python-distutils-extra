@@ -51,9 +51,9 @@ import typing
 from functools import reduce
 
 import distutils.command.clean
-import distutils.command.sdist
 import setuptools
 import setuptools.command.install
+import setuptools.command.sdist
 from setuptools import Distribution
 from setuptools.errors import FileError
 
@@ -744,7 +744,7 @@ class build_i18n_auto(build_i18n.build_i18n):
 #
 
 
-class sdist_auto(distutils.command.sdist.sdist):
+class sdist_auto(setuptools.command.sdist.sdist):
     """Default values for the 'sdist' command.
 
     Replace the manually maintained MANIFEST.in file by providing information
