@@ -2,17 +2,20 @@ Source: python-distutils-extra
 Section: python
 Priority: optional
 Maintainer: Debian Python Team <team+python@tracker.debian.org>
-Uploaders: Martin Pitt <mpitt@debian.org>, Sebastian Heinlein <devel@glatzor.de>
-Build-Depends: debhelper-compat (= 13),
+Uploaders:
+ Martin Pitt <mpitt@debian.org>,
+ Sebastian Heinlein <devel@glatzor.de>
+Build-Depends:
+ debhelper-compat (= 13),
  dh-python,
- python3-all (>= 3.1.2-10~),
- python3-setuptools (>= 54.0.0~),
- python3-httplib2,
- python3-pkg-resources,
- python3-gi,
  gir1.2-glib-2.0,
  intltool,
  pyflakes3 <!nocheck>,
+ python3-all (>= 3.1.2-10~),
+ python3-gi,
+ python3-httplib2,
+ python3-pkg-resources,
+ python3-setuptools (>= 54.0.0~)
 Rules-Requires-Root: no
 Standards-Version: 4.6.1
 Vcs-Browser: https://salsa.debian.org/python-team/packages/python-distutils-extra
@@ -21,13 +24,14 @@ Vcs-Git: https://salsa.debian.org/python-team/packages/python-distutils-extra.gi
 Package: python3-distutils-extra
 Architecture: all
 Multi-Arch: foreign
-Depends: ${shlibs:Depends},
- ${misc:Depends},
- ${python3:Depends},
+Depends:
  intltool,
  python3-distutils,
  python3-pkg-resources,
  python3-setuptools (>= 54.0.0~),
+ ${misc:Depends},
+ ${python3:Depends},
+ ${shlibs:Depends}
 Suggests: devscripts
 Breaks: python-distutils-extra (<< 2.44)
 Replaces: python-distutils-extra (<< 2.44)
