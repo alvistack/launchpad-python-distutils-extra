@@ -1,0 +1,4 @@
+python3-distutils-extra: copyright-without-copyright-notice
+python3-distutils-extra: initial-upload-closes-no-bugs
+python3-distutils-extra: no-manual-page
+python3-distutils-extra: zero-byte-file-in-doc-directory
