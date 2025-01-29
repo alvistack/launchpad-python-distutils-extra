@@ -7,7 +7,7 @@ Uploaders:
  Sebastian Heinlein <devel@glatzor.de>
 Build-Depends:
  debhelper-compat (= 13),
- dh-python,
+ dh-sequence-python3,
  gir1.2-glib-2.0,
  intltool,
  pyflakes3 <!nocheck>,
