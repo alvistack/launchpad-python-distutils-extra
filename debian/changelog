@@ -1,3 +1,11 @@
+python-distutils-extra (3.2) unstable; urgency=medium
+
+  * Team upload.
+  * Use dh-sequence-python3
+  * Remove runtime dep on python3-pkg-resources (Closes: #1083630)
+
+ -- Alexandre Detiste <tchet@debian.org>  Mon, 10 Feb 2025 07:21:23 +0100
+
 python-distutils-extra (3.1) unstable; urgency=medium
 
   * Team upload.
