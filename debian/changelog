@@ -1,6 +1,8 @@
 python-distutils-extra (3.2) unstable; urgency=medium
 
   * Team upload.
+  * Removal of old python-mkdebian tool that generated Python2/python-support
+    package templates. The tool heavily relied on ancient setup.py semantics.
   * Use dh-sequence-python3
   * Remove runtime dep on python3-pkg-resources (Closes: #1083630)
 
