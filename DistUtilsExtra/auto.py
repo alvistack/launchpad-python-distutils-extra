@@ -635,7 +635,6 @@ def src_markglob(src, pathglob):
 class build_help_auto(build_help.build_help):
     def finalize_options(self):
         super().finalize_options()
-        global src
 
         for data_set in self.get_data_files():
             for filepath in data_set[1]:
@@ -645,8 +644,6 @@ class build_help_auto(build_help.build_help):
 class build_i18n_auto(build_i18n.build_i18n):
     def finalize_options(self):
         super().finalize_options()
-        global src
-        global src_all
 
         # add polkit files
         policy_files = []
@@ -699,7 +696,6 @@ class build_i18n_auto(build_i18n.build_i18n):
 
         auto_potfiles_in = False
         exe_symlinks = []
-        global src_all
         try:
             if not os.path.exists(os.path.join("po", "POTFILES.in")):
                 prefix = {}
