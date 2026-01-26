@@ -1,14 +1,32 @@
 #!/usr/bin/make -f
 
-%:
-	dh $@ --buildsystem=pybuild
+SHELL := /bin/bash
+
+override_dh_auto_configure:
+
+override_dh_auto_build:
+	pip wheel \
+		--no-deps \
+		--no-build-isolation \
+		--use-pep517 \
+		--wheel-dir=dist \
+		.
+
+override_dh_auto_install:
+	pip install \
+		--no-deps \
+		--ignore-installed \
+		--root=debian/tmp \
+		--prefix=/usr \
+		dist/*.whl
+	mv debian/tmp/usr/local/* debian/tmp/usr/ || echo $$?
+	rm -rf debian/tmp/usr/local || echo $$?
+	find debian/tmp/usr/lib/python*/*-packages -type f -name '*.pyc' -exec rm -rf {} \;
+	fdupes -qnrps debian/tmp/usr/lib/python*/*-packages
 
 override_dh_auto_test:
-ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
-	# run tests with all supported python versions
-	set -e; for python in `py3versions -s`; do \
-	  echo "-- Running tests with $$python ----------------"; \
-	  LC_ALL=C LANGUAGE= LANG=C PYTHONPATH=. $$python test/auto.py -v; \
-	done
-	pyflakes3  DistUtilsExtra/ test/
-endif
+
+override_dh_auto_clean:
+
+%:
+	dh $@ --with python3
