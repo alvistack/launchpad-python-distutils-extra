@@ -1,1 +1,6 @@
-/files
+*.substvars
+*debhelper*
+.debhelper
+files
+python3-distutils-extra
+tmp
