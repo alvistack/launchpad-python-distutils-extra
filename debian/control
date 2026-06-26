@@ -1,6 +1,5 @@
 Source: python-distutils-extra
 Section: python
-Priority: optional
 Maintainer: Debian Python Team <team+python@tracker.debian.org>
 Uploaders:
  Martin Pitt <mpitt@debian.org>,
@@ -15,7 +14,7 @@ Build-Depends:
  python3-gi,
  python3-httplib2,
  python3-setuptools (>= 54.0.0~)
-Standards-Version: 4.6.2
+Standards-Version: 4.7.4
 Vcs-Browser: https://salsa.debian.org/python-team/packages/python-distutils-extra
 Vcs-Git: https://salsa.debian.org/python-team/packages/python-distutils-extra.git
 
