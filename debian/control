@@ -11,8 +11,8 @@ Build-Depends:
  intltool,
  pyflakes3 <!nocheck>,
  python3-all (>= 3.1.2-10~),
- python3-gi,
- python3-httplib2,
+ python3-gi <!nocheck>,
+ python3-httplib2 <!nocheck>,
  python3-setuptools (>= 54.0.0~)
 Standards-Version: 4.7.4
 Vcs-Browser: https://salsa.debian.org/python-team/packages/python-distutils-extra
