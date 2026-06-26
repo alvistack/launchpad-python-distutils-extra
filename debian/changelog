@@ -1,8 +1,19 @@
+python-distutils-extra (3.4) unstable; urgency=medium
+
+  * Team upload.
+  * Add debian/salsa-ci.yml
+  * Mark test build-deps as <!nocheck>
+  * Drop "Rules-Requires-Root: no": it is the default now
+  * Bump Standards-Version to 4.7.4, drop Priority: tag
+  * Replace FSF postal address with a reference to https://www.gnu.org/licenses/.
+
+ -- Alexandre Detiste <tchet@debian.org>  Fri, 26 Jun 2026 08:09:12 +0200
+
 python-distutils-extra (3.3) unstable; urgency=medium
 
   * Team upload.
-  * Remove unnecessary `global` statements, fixing pyflakes3 test (closes:
-    #1126227).
+  * Remove unnecessary `global` statements, fixing pyflakes3 test
+    (Closes: #1126227).
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 25 Jan 2026 20:14:40 +0000
 
