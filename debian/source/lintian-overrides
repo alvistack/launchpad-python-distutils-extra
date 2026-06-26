@@ -1,0 +1,4 @@
+python-distutils-extra source: file-without-copyright-information
+python-distutils-extra source: no-debian-changes
+python-distutils-extra source: source-contains-prebuilt-windows-binary
+python-distutils-extra source: source-package-encodes-python-version
